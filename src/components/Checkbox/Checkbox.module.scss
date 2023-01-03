@@ -1,0 +1,46 @@
+@import '@styles/var';
+
+.checkbox {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox:not(.disabled):hover .checkboxBlock {
+    border-color: $dark-gray;
+}
+
+.checkboxInput {
+    display: none;
+}
+
+.checkboxBlock {
+    align-self: flex-start;
+    width: $checkbox-size;
+    height: $checkbox-size;
+    text-align: center;
+    line-height: $checkbox-size;
+    border-radius: $checkbox-border-radius;
+    border: 1px solid $light-gray;
+    box-sizing: border-box;
+    display: inline-block;
+    transition: ease .3s;
+    transition-property: border-color, background-color;
+    cursor: pointer;
+    color: $white;
+}
+.disabled .checkboxBlock {
+    cursor: auto;
+}
+.checkboxIcon {
+    opacity: 0;
+}
+.checkboxInput:checked + .checkboxBlock {
+    background-color: $primary-light;
+}
+.checkboxInput:checked + .checkboxBlock .checkboxIcon {
+    opacity: 1;
+}
+
+.checkboxContent {
+    margin-left: 10px;
+}

@@ -1,0 +1,42 @@
+@import '@styles/var';
+
+.button {
+    font-family: 'Roboto';
+    font-size: 18px;
+    font-weight: 700;
+    border-radius: $button-border-radius;
+    background-color: $button-bg;
+    height: $button-large;
+    transition: ease .3s background-color;
+    color: $white;
+    border: none;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: $button-bg-hover;
+}
+
+.button:acitve {
+    outline: none;
+}
+
+.button[disabled] {
+    cursor: auto;
+    background-color: $button-bg-disabled;
+}
+
+.fullsize {
+    width: 100%;
+    display: block;
+}
+
+.large {
+    height: 100px;
+    font-size: 22px;
+}
+
+.white {
+    background-color: $white;
+    color: $primary-color;
+}
