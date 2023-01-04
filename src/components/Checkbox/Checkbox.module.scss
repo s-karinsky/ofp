@@ -15,9 +15,10 @@
 
 .checkboxBlock {
     align-self: flex-start;
-    width: $checkbox-size;
-    height: $checkbox-size;
     text-align: center;
+    flex-shrink: 0;
+    flex-basis: $checkbox-size;
+    height: $checkbox-size;
     line-height: $checkbox-size;
     border-radius: $checkbox-border-radius;
     border: 1px solid $light-gray;
@@ -27,6 +28,15 @@
     transition-property: border-color, background-color;
     cursor: pointer;
     color: $white;
+}
+.small .checkboxBlock {
+    flex-basis: $checkbox-size-small;
+    height: $checkbox-size-small;
+    line-height: $checkbox-size-small;
+    border-radius: $checkbox-border-radius-small;
+}
+.small svg {
+    transform: scale(0.8);
 }
 .disabled .checkboxBlock {
     cursor: auto;
@@ -43,4 +53,8 @@
 
 .checkboxContent {
     margin-left: 10px;
+}
+.small .checkboxContent {
+    font-size: 14px;
+    margin-left: 5px;
 }

@@ -7,6 +7,7 @@ export default function Checkbox(props = {}) {
         onChange = () => {},
         children,
         disabled,
+        size,
         ...rest
     } = props
 
@@ -16,6 +17,7 @@ export default function Checkbox(props = {}) {
         <label
             className={cn({
                 [styles.checkbox]: true,
+                [styles[size]]: !!size,
                 [styles.disabled]: disabled
             })}>
             <input
