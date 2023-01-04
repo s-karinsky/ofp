@@ -1,0 +1,49 @@
+@import '@styles/var';
+
+.overlay {
+    position: fixed;
+    left: -100%;
+    top: -100%;
+    right: 100%;
+    bottom: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0);
+    z-index: 100;
+    transition: ease .3s background-color;
+}
+.overlayVisible {
+    background-color: rgba(0, 0, 0, .5);
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+.popupWrapper {
+    z-index: 101;
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    padding: 80px 0;
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+}
+.popup {
+    align-self: flex-start;
+    padding: 60px 50px 30px;
+    position: relative;
+    background: #fff;
+    border-radius: 20px;
+}
+.close {
+    position: absolute;
+    right: 30px;
+    top: 30px;
+    color: $gray;
+    cursor: pointer;
+}
+.close:hover {
+    color: $dark-gray;
+}
