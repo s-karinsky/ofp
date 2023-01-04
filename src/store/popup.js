@@ -12,6 +12,7 @@ const modalSlice = createSlice({
             state.isVisible = true;
         },
         hidePopup(state) {
+            state.popupName = null;
             state.isVisible = false;
         }
     }
