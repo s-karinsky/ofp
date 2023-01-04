@@ -9,6 +9,7 @@ export default function Button(props = {}) {
         color,
         width,
         height,
+        className,
         ...rest
     } = props
 
@@ -18,7 +19,8 @@ export default function Button(props = {}) {
                 [styles.button]: true,
                 [styles.fullsize]: fullSize,
                 [styles[size]]: !!size,
-                [styles[color]]: !!color
+                [styles[color]]: !!color,
+                [className]: !!className
             })}
             style={{
                 width,
