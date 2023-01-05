@@ -31,19 +31,13 @@ function MainNav(props) {
     )
 }
 
-export default function Header() {
+export default function Header({ navItems = [] }) {
     const dispatch = useDispatch()
 
     return (
-        <header className={styles.header}>
+        <header className={cn('container', styles.header)}>
             <Link href="/" className={styles.logo}></Link>
-            <MainNav items={[
-                { link: '/', title: 'Главная' },
-                { link: '/map', title: 'Карта' },
-                { link: '/partners', title: 'Партнерам' },
-                { link: '/documents', title: 'Документы' },
-                { link: '/contacts', title: 'Контакты' },
-            ]} />
+            <MainNav items={navItems} />
             <div className={styles.contacts}>
                 <div className={styles.contactsNumber}>+7 962 800 9090</div>
                 бесплатно по России
