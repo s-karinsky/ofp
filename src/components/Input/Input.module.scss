@@ -26,6 +26,16 @@
 .input {
     display: block;
     position: relative;
+    background-color: $white;
+}
+.xsmallInput {
+    border-radius: $input-border-radius-xsmall;
+}
+.smallInput {
+    border-radius: $input-border-radius-small;
+}
+.normalInput {
+    border-radius: $input-border-radius;
 }
 .inputField {
     display: block;

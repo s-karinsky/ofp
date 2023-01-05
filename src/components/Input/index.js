@@ -132,7 +132,12 @@ class Input extends React.Component {
                 {!!label && <div className={styles.label}>
                     {label}
                 </div>}
-                <label className={styles.input}>
+                <label
+                    className={cn({
+                        [styles.input]: true,
+                        [styles[size + 'Input']]: !!size
+                    })
+                }>
                     {options ? this.renderSelect() : this.renderInput()}
                     {required && <span
                         className={cn({
