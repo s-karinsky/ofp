@@ -13,7 +13,12 @@ body {
   font-family: 'Roboto', sans-serif;
   font-size: 18px;
 }
-
+.container {
+  max-width: 1700px;
+  min-width: 940px;
+  padding: 0 40px;
+  margin: 0 auto;
+}
 .popup_header {
   font-size: 22px;
   line-height: 28px;
