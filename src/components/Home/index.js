@@ -32,7 +32,7 @@ export default function Home() {
                                 <div
                                     className={styles.howWorkBlock}
                                     style={{
-                                        backgroundImage: 'url(/how1.svg)'
+                                        backgroundImage: 'url(/images/how1.svg)'
                                     }}
                                 />
                                 <div className={styles.howWorkTitle}>Покупка</div>
@@ -61,7 +61,7 @@ export default function Home() {
                                 <div
                                     className={styles.howWorkBlock}
                                     style={{
-                                        backgroundImage: 'url(/how2.svg)'
+                                        backgroundImage: 'url(/images/how2.svg)'
                                     }}
                                 />
                                 <div className={styles.howWorkTitle}>Поиск</div>
@@ -85,7 +85,7 @@ export default function Home() {
                                 <div
                                     className={styles.howWorkBlock}
                                     style={{
-                                        backgroundImage: 'url(/how3.svg)'
+                                        backgroundImage: 'url(/images/how3.svg)'
                                     }}
                                 />
                                 <div className={styles.howWorkTitle}>Заказ</div>
@@ -108,7 +108,7 @@ export default function Home() {
                                 <div
                                     className={styles.howWorkBlock}
                                     style={{
-                                        backgroundImage: 'url(/how4.svg)'
+                                        backgroundImage: 'url(/images/how4.svg)'
                                     }}
                                 />
                                 <div className={styles.howWorkTitle}>Предварительный просмотр</div>
@@ -140,7 +140,7 @@ export default function Home() {
                         <ul className={styles.benefitsList}>
                             <li className={styles.benefitsItem}>
                                 <div
-                                    style={{ backgroundImage: 'url(/benefits1.svg)' }}
+                                    style={{ backgroundImage: 'url(/images/benefits1.svg)' }}
                                     className={styles.benefitsIcon}
                                 />
                                 <div className={styles.benefitsText}>
@@ -149,7 +149,7 @@ export default function Home() {
                             </li>
                             <li className={styles.benefitsItem}>
                                 <div
-                                    style={{ backgroundImage: 'url(/benefits2.svg)' }}
+                                    style={{ backgroundImage: 'url(/images/benefits2.svg)' }}
                                     className={styles.benefitsIcon}
                                 />
                                 <div className={styles.benefitsText}>
@@ -158,7 +158,7 @@ export default function Home() {
                             </li>
                             <li className={styles.benefitsItem}>
                                 <div
-                                    style={{ backgroundImage: 'url(/benefits3.svg)' }}
+                                    style={{ backgroundImage: 'url(/images/benefits3.svg)' }}
                                     className={styles.benefitsIcon}
                                 />
                                 <div className={styles.benefitsText}>
@@ -167,7 +167,7 @@ export default function Home() {
                             </li>
                             <li className={styles.benefitsItem}>
                                 <div
-                                    style={{ backgroundImage: 'url(/benefits4.svg)' }}
+                                    style={{ backgroundImage: 'url(/images/benefits4.svg)' }}
                                     className={styles.benefitsIcon}
                                 />
                                 <div className={styles.benefitsText}>
@@ -176,7 +176,7 @@ export default function Home() {
                             </li>
                             <li className={styles.benefitsItem}>
                                 <div
-                                    style={{ backgroundImage: 'url(/benefits5.svg)' }}
+                                    style={{ backgroundImage: 'url(/images/benefits5.svg)' }}
                                     className={styles.benefitsIcon}
                                 />
                                 <div className={styles.benefitsText}>
@@ -197,7 +197,7 @@ export default function Home() {
                             <Slider slidesToShow={3}>
                                 <div>
                                     <div className={styles.slideImage}>
-                                        <img src="/slide1.png" width="100%" />
+                                        <img src="/images/slide1.png" width="100%" />
                                     </div>
                                     <div className={styles.slideText}>
                                         Промышленные объекты
@@ -205,7 +205,7 @@ export default function Home() {
                                 </div>
                                 <div>
                                     <div className={styles.slideImage}>
-                                        <img src="/slide2.png" width="100%" />
+                                        <img src="/images/slide2.png" width="100%" />
                                     </div>
                                     <div className={styles.slideText}>
                                         Сельское хозяйство
@@ -213,7 +213,7 @@ export default function Home() {
                                 </div>
                                 <div>
                                     <div className={styles.slideImage}>
-                                        <img src="/slide3.png" width="100%" />
+                                        <img src="/images/slide3.png" width="100%" />
                                     </div>
                                     <div className={styles.slideText}>
                                         Строительство

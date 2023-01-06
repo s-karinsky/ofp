@@ -31,7 +31,7 @@ class Accrodion extends React.Component {
             >
                 <div className={styles.title} onClick={this.toggleState}>
                     {title}
-                    <img src="/arrow.svg" className={styles.arrow} />
+                    <img src="/images/arrow.svg" className={styles.arrow} />
                 </div>
                 <div
                     className={styles.textWrapper}
