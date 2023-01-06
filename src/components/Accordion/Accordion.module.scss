@@ -1,0 +1,46 @@
+@import '@styles/var';
+
+.accordion {
+    border-bottom: 1px solid #f0f0f0;
+}
+.title {
+    position: relative;
+    padding-right: 100px;
+    cursor: pointer;
+    padding: 20px 0 0;
+    font-size: 18px;
+}
+.accrodionOpened .title {
+    font-weight: bold;
+}
+.arrow {
+    position: absolute;
+    right: 50px;
+    top: 50%;
+    margin-top: 3px;
+    transition: ease .3s transform;
+    transform: rotate(180deg);
+}
+.accrodionOpened .arrow {
+    transform: rotate(0);
+}
+.textWrapper {
+    overflow: hidden;
+    transition: ease .3s height;
+    margin-bottom: 15px;
+}
+.text {
+    padding-top: 30px;
+    position: relative;
+    font-size: 16px;
+    line-height: 22px;
+}
+.text:before {
+    position: absolute;
+    left: 0;
+    top: 15px;
+    width: 60px;
+    height: 2px;
+    background-color: $dark-gray;
+    content: '';
+}
