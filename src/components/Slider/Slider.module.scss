@@ -1,0 +1,29 @@
+@import '@styles/var';
+
+.slider {
+    width: 100%;
+    font-size: 0;
+    overflow: hidden;
+}
+.slides {
+    white-space: nowrap;
+}
+.slide {
+    white-space: normal;
+    vertical-align: top;
+    display: inline-block;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+.nav {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 100px;
+    margin-right: 20px;
+}
+.navButton {
+    margin-left: 15px;
+    border: 1px solid $black;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
