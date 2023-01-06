@@ -198,7 +198,7 @@ export default function Home() {
                         <PartnersSlider />
                         
                         <div className={styles.partnerButton}>
-                            <Button width="530px" height="100px" href="/">
+                            <Button width="530px" height="100px" href="/partners">
                                 Стать партнёром
                             </Button>
                         </div>
@@ -233,7 +233,7 @@ export default function Home() {
                         </div>
                     </div>
                     
-                    <div className="container">
+                    <div className={cn("container", styles.askTitle)}>
                         <h1 className="title">
                             Проконсультируем по любым вопросам
                             <div className="subtitle">Заполни форму обратной связи</div>
