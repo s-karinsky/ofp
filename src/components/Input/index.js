@@ -68,16 +68,18 @@ class Input extends React.Component {
     }
 
     renderInput() {
-        const { error, size = 'normal', type, ...rest } = this.props;
+        const { error, size = 'normal', type, className, ...rest } = this.props
+        const Tag = type === 'textarea' ? type : 'input'
         return (
             <React.Fragment>
                 {type === 'password' && this.renderShowPasswordIcon()}
-                <input
+                <Tag
                     type={this.getInputType()}
                     className={cn({
                         [styles.inputField]: true,
                         [styles.inputError]: !!error,
-                        [styles[size]]: !!size
+                        [styles[size]]: !!size,
+                        [className]: !!className
                     })}
                     {...rest}
                     onChange={this.handleChangeInput}

@@ -38,6 +38,8 @@
     border-radius: $input-border-radius;
 }
 .inputField {
+    font-family: $font-roboto;
+    resize: none;
     display: block;
     width: 100%;
     position: relative;
@@ -46,6 +48,10 @@
     border: 1px solid $light-gray;
     transition: ease .3s border-color;
     background: rgba(0, 0, 0, 0);
+}
+textarea.inputField {
+    padding-top: 15px;
+    line-height: 1.4em;
 }
 .inputField:hover,
 .inputField:focus {
@@ -81,23 +87,29 @@
 .label {
     font-size: 14px;
 }
-.normal {
+input.normal, select.normal {
     height: $input-size;
     line-height: $input-size;
+}
+input.small, select.small {
+    height: $input-small;
+    line-height: $input-small;
+}
+input.xsmall, select.xsmall {
+    height: $input-xsmall;
+    line-height: $input-xsmall;
+}
+.normal {
     border-radius: $input-border-radius;
     padding: $input-padding;
     font-size: $input-font-size;
 }
 .small {
-    height: $input-small;
-    line-height: $input-small;
     border-radius: $input-border-radius-small;
     padding: $input-padding-small;
     font-size: $input-font-small;
 }
 .xsmall {
-    height: $input-xsmall;
-    line-height: $input-xsmall;
     border-radius: $input-border-radius-xsmall;
     padding: $input-padding-xsmall;
     font-size: $input-font-xsmall;
