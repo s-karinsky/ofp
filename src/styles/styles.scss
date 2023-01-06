@@ -42,6 +42,10 @@ body {
   &_noline:after {
     display: none;
   }
+
+  &_white {
+    color: $white;
+  }
 }
 .title:after {
   position: absolute;

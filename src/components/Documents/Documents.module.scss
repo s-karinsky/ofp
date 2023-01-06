@@ -1,0 +1,28 @@
+@import '@styles/mixins';
+@import '@styles/var';
+
+.documents {
+    box-sizing: border-box;
+    padding-top: 150px;
+    height: 40vw;
+    background-image: url('/images/docs_bg.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: $white;
+
+    @include screenLess(1440px) {
+        padding-top: 50px;
+    }
+}
+.links {
+    margin-top: 80px;
+    font-size: 18px;
+}
+.linkWrap {
+    margin-bottom: 20px;
+}
+.link {
+    color: #fff;
+    text-decoration: underline;
+}
