@@ -1,0 +1,20 @@
+@import '@styles/var';
+
+.slideImage {
+    margin: 0 auto;
+    padding: 0 20px;
+}
+.slideText {
+    margin: 55px 40px 0;
+    padding-top: 15px;
+    border-top: 1px solid $black;
+    font-size: 24px;
+    font-weight: bold;
+    color: $primary-color;
+    text-align: center;
+}
+.sliderWrapper {
+    position: relative;
+    z-index: 15;
+    margin-top: -52px;
+}

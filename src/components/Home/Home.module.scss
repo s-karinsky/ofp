@@ -49,32 +49,6 @@
     font-size: 30px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
 }
-.title {
-    font-family: $font-ubuntu;
-    font-size: 40px;
-    font-weight: bold;
-    color: #144854;
-    text-transform: uppercase;
-    position: relative;
-    padding-bottom: 30px;
-    margin: 0;
-}
-.title:after {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 372px;
-    height: 1px;
-    background-color: $black;
-    content: '';
-}
-.subtitle {
-    font-family: $font-roboto;
-    font-size: 22px;
-    color: #444;
-    text-transform: none;
-    font-weight: 400;
-}
 
 .howWork {
     display: flex;
@@ -247,24 +221,6 @@
     background: linear-gradient(to bottom, rgba(196, 196, 196, 0.38), rgba(206, 206, 206, 0));
     content: '';
 }
-.slideImage {
-    margin: 0 auto;
-    padding: 0 20px;
-}
-.slideText {
-    margin: 55px 40px 0;
-    padding-top: 15px;
-    border-top: 1px solid $black;
-    font-size: 24px;
-    font-weight: bold;
-    color: $primary-color;
-    text-align: center;
-}
-.sliderWrapper {
-    position: relative;
-    z-index: 15;
-    margin-top: -52px;
-}
 .partnerButton {
     margin-top: 80px;
     text-align: center;
@@ -275,19 +231,6 @@
 }
 .accordion {
     padding: 60px 0 100px;
-}
-.contactForm {
-    margin-top: 100px;
-    padding: 180px 0 90px;
-    background-image: url('/images/home_bottom.jpg');
-    background-size: cover;
-    background-position: top right;
-    background-repeat: no-repeat;
-}
-.contactInput {
-    width: 45vw;
-    margin-bottom: 40px;
-    color: $white;
 }
 .contactText {
     height: 200px;

@@ -3,7 +3,8 @@ import Accordion from '@components/Accordion'
 import Button from '@components/Button'
 import Checkbox from '@components/Checkbox'
 import Input from '@components/Input'
-import Slider from '@components/Slider'
+import GreenForm from '@components/GreenForm'
+import PartnersSlider from '@components/PartnersSlider'
 import styles from './Home.module.scss'
 
 export default function Home() {
@@ -26,7 +27,7 @@ export default function Home() {
                 </div>
                 <div className={styles.homeHow}>
                     <div className="container">
-                        <h1 className={styles.title}>Как это работает?</h1>
+                        <h1 className="title">Как это работает?</h1>
                         <ul className={styles.howWork}>
                             <li className={styles.howWorkItem}>
                                 <div
@@ -133,9 +134,9 @@ export default function Home() {
 
                 <div className={styles.benefits}>
                     <div className="container">
-                        <h1 className={styles.title}>
+                        <h1 className="title">
                             Наши преимущества
-                            <div className={styles.subtitle}>Почему нас выбирают</div>
+                            <div className="subtitle">Почему нас выбирают</div>
                         </h1>
                         <ul className={styles.benefitsList}>
                             <li className={styles.benefitsItem}>
@@ -189,38 +190,13 @@ export default function Home() {
 
                 <div className={styles.usage}>
                     <div className={cn("container", styles.usageContainer)}>
-                        <h1 className={styles.title}>
+                        <h1 className="title">
                             Где применяется?
-                            <div className={styles.subtitle}>Области применения</div>
+                            <div className="subtitle">Области применения</div>
                         </h1>
-                        <div className={styles.sliderWrapper}>
-                            <Slider slidesToShow={3}>
-                                <div>
-                                    <div className={styles.slideImage}>
-                                        <img src="/images/slide1.png" width="100%" />
-                                    </div>
-                                    <div className={styles.slideText}>
-                                        Промышленные объекты
-                                    </div>
-                                </div>
-                                <div>
-                                    <div className={styles.slideImage}>
-                                        <img src="/images/slide2.png" width="100%" />
-                                    </div>
-                                    <div className={styles.slideText}>
-                                        Сельское хозяйство
-                                    </div>
-                                </div>
-                                <div>
-                                    <div className={styles.slideImage}>
-                                        <img src="/images/slide3.png" width="100%" />
-                                    </div>
-                                    <div className={styles.slideText}>
-                                        Строительство
-                                    </div>
-                                </div>
-                            </Slider>
-                        </div>
+
+                        <PartnersSlider />
+                        
                         <div className={styles.partnerButton}>
                             <Button width="530px" height="100px" href="/">
                                 Стать партнёром
@@ -229,9 +205,9 @@ export default function Home() {
                     </div>
 
                     <div className={cn("container", styles.faq)}>
-                        <h1 className={styles.title}>
+                        <h1 className="title">
                             Часто задаваемые вопросы
-                            <div className={styles.subtitle}>Основные и дополнительные</div>
+                            <div className="subtitle">Основные и дополнительные</div>
                         </h1>
                         <div className={styles.accordion}>
                             <Accordion title="Сколько стоит доставка с примеркой в пределах МКАД?">
@@ -258,33 +234,19 @@ export default function Home() {
                     </div>
                     
                     <div className="container">
-                        <h1 className={styles.title}>
+                        <h1 className="title">
                             Проконсультируем по любым вопросам
-                            <div className={styles.subtitle}>Заполни форму обратной связи</div>
+                            <div className="subtitle">Заполни форму обратной связи</div>
                         </h1>
                     </div>
-                    <div className={styles.contactForm}>
-                        <div className="container">
-                            <div className={styles.contactInput}>
-                                <Input placeholder="Имя" />
-                            </div>
-                            <div className={styles.contactInput}>
-                                <Input placeholder="E-mail" type="email" />
-                            </div>
-                            <div className={styles.contactInput}>
-                                <Input placeholder="Телефон" />
-                            </div>
-                            <div className={styles.contactInput}>
-                                <Input type="textarea" placeholder="Введите данные вашего запроса" className={styles.contactText} />
-                            </div>
-                            <div className={styles.contactInput}>
-                                <Checkbox>Я даю согласие на обработку  персональных данных</Checkbox>
-                            </div>
-                            <div className={styles.contactInput}>
-                                <Button color="white" width="335px">Отправить</Button>
-                            </div>
-                        </div>
-                    </div>
+                    <GreenForm>
+                        <Input placeholder="Имя" />
+                        <Input placeholder="E-mail" type="email" />
+                        <Input placeholder="Телефон" />
+                        <Input type="textarea" placeholder="Введите данные вашего запроса" className={styles.contactText} />
+                        <Checkbox>Я даю согласие на обработку  персональных данных</Checkbox>
+                        <Button color="white" width="335px">Отправить</Button>
+                    </GreenForm>
                 </div>
             </div>
         </div>

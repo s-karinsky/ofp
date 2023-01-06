@@ -29,3 +29,33 @@ body {
   line-height: 28px;
   color: #2C2C2C;
 }
+.title {
+  font-family: $font-ubuntu;
+  font-size: 40px;
+  font-weight: bold;
+  color: #144854;
+  text-transform: uppercase;
+  position: relative;
+  padding-bottom: 30px;
+  margin: 0;
+
+  &_noline:after {
+    display: none;
+  }
+}
+.title:after {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 372px;
+  height: 1px;
+  background-color: $black;
+  content: '';
+}
+.subtitle {
+  font-family: $font-roboto;
+  font-size: 22px;
+  color: #444;
+  text-transform: none;
+  font-weight: 400;
+}

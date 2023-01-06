@@ -1,0 +1,15 @@
+@import '@styles/var';
+
+.greenForm {
+    margin-top: 100px;
+    padding: 180px 0 90px;
+    background-image: url('/images/home_bottom.jpg');
+    background-size: cover;
+    background-position: top right;
+    background-repeat: no-repeat;
+}
+.greenFormInput {
+    width: 45vw;
+    margin-bottom: 40px;
+    color: $white;
+}
