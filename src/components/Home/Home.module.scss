@@ -93,12 +93,22 @@
     height: 1px;
     background-color: #CFCFCF;
     content: '';
+
+    @include screenMore(1920px) {
+        left: 7vw;
+        right: 7vw;
+        top: 518px;
+    }
 }
 .howWorkItem {
     width: 16vw;
     flex-shrink: 0;
     flex-grow: 0;
     position: relative;
+
+    @include screenMore(1920px) {
+        width: 350px;
+    }
 }
 .howWorkItem:after {
     counter-increment: howNumber;
@@ -116,6 +126,10 @@
     line-height: 96px;
     font-size: 24px;
     font-weight: bold;
+
+    @include screenMore(1920px) {
+        top: 470px;
+    }
 }
 .howWorkBlock {
     height: 16vw;
@@ -125,6 +139,10 @@
     background-size: auto 50%;
     background-position: center;
     background-repeat: no-repeat;
+
+    @include screenMore(1920px) {
+        height: 350px;
+    }
 }
 .howWorkTitle {
     text-align: center;
@@ -263,7 +281,7 @@
     padding: 180px 0 90px;
     background-image: url('/images/home_bottom.jpg');
     background-size: cover;
-    background-position: center top;
+    background-position: top right;
     background-repeat: no-repeat;
 }
 .contactInput {

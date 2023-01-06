@@ -87,15 +87,15 @@ textarea.inputField {
 .label {
     font-size: 14px;
 }
-input.normal, select.normal {
+input.normal, select.normal, span.normal {
     height: $input-size;
     line-height: $input-size;
 }
-input.small, select.small {
+input.small, select.small, span.small {
     height: $input-small;
     line-height: $input-small;
 }
-input.xsmall, select.xsmall {
+input.xsmall, select.xsmall, span.xsmall {
     height: $input-xsmall;
     line-height: $input-xsmall;
 }

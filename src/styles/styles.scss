@@ -6,7 +6,11 @@
 *::after {
   box-sizing: border-box;
 }
+::-ms-reveal {
+    display: none;
+}
 body {
+  min-width: 1000px;
   margin: 0;
   color: #000;
   font-family: $font-roboto;
