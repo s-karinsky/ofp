@@ -1,5 +1,6 @@
-import styles from './Button.module.scss'
 import cn from 'classnames'
+import Link from 'next/link'
+import styles from './Button.module.scss'
 
 export default function Button(props = {}) {
     var {
@@ -12,9 +13,10 @@ export default function Button(props = {}) {
         className,
         ...rest
     } = props
+    const Tag = rest.href ? Link : 'button'
 
     return (
-        <button
+        <Tag
             className={cn({
                 [styles.button]: true,
                 [styles.fullsize]: fullSize,
@@ -24,11 +26,12 @@ export default function Button(props = {}) {
             })}
             style={{
                 width,
-                height
+                height,
+                lineHeight: height
             }}
             {...rest}
         >
             {children}
-        </button>
+        </Tag>
     )
 }
