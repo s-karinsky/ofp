@@ -67,7 +67,7 @@
     color: $primary-color;
     font-size: 34px;
     font-weight: bold;
-    font-family: 'Ubuntu', sans-serif;
+    font-family: $font-ubuntu;
 
     @include screenLess(1360px) {
         font-size: 28px;
