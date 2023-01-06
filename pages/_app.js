@@ -18,9 +18,7 @@ export default function MyApp({ Component, pageProps }) {
         <Provider store={store}>
             <PopupOverlay />
             <Header navItems={navItems} />
-            <div className="container">
-                <Component {...pageProps} />
-            </div>
+            <Component {...pageProps} />
             <Footer navItems={navItems} />
         </Provider>
     )
