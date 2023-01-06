@@ -1,0 +1,276 @@
+@import '@styles/mixins';
+@import '@styles/var';
+
+.homeTop {
+    position: relative;
+    background-image: url('/home_top.jpg');
+    background-size: contain;
+    background-position: center top;
+    background-repeat: no-repeat;
+}
+.homeHow {
+    padding-top: 60vw;
+}
+.homeTopTitle {
+    position: absolute;
+    left: 40vw;
+    top: 6vw;
+    font-family: $font-ubuntu;
+    color: $white;
+    font-size: 40px;
+    font-weight: bold;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    text-transform: uppercase;
+    line-height: 120%;
+
+    @include screenMore(1280px) {
+        font-size: 48px;
+    }
+
+    @include screenMore(1440px) {
+        font-size: 56px;
+    }
+
+    @include screenMore(1920px) {
+        font-size: 64px;
+    }
+}
+.homeTopButton {
+    position: absolute;
+    right: 28vw;
+    left: 44vw;
+    top: 42vw;
+
+    @include screenMore(1920px) {
+        top: 45vw;
+    }
+}
+.homeTopMapButton {
+    font-size: 30px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+}
+.title {
+    font-family: $font-ubuntu;
+    font-size: 40px;
+    font-weight: bold;
+    color: #144854;
+    text-transform: uppercase;
+    position: relative;
+    padding-bottom: 30px;
+    margin: 0;
+}
+.title:after {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 372px;
+    height: 1px;
+    background-color: $black;
+    content: '';
+}
+.subtitle {
+    font-family: $font-roboto;
+    font-size: 22px;
+    color: #444;
+    text-transform: none;
+    font-weight: 400;
+}
+
+.howWork {
+    display: flex;
+    justify-content: space-between;
+    list-style: none;
+    margin: 75px 0 0;
+    padding: 0;
+    counter-reset: howNumber;
+    position: relative;
+}
+.howWork:before {
+    position: absolute;
+    left: 10vw;
+    right: 10vw;
+    top: calc(16vw + 168px);
+    height: 1px;
+    background-color: #CFCFCF;
+    content: '';
+}
+.howWorkItem {
+    width: 16vw;
+    flex-shrink: 0;
+    flex-grow: 0;
+    position: relative;
+}
+.howWorkItem:after {
+    counter-increment: howNumber;
+    content: counter(howNumber);
+    position: absolute;
+    left: 50%;
+    top: calc(16vw + 120px);
+    width: 96px;
+    height: 96px;
+    border-radius: 100%;
+    background-color: #436D76;
+    text-align: center;
+    color: #fff;
+    margin-left: -48px;
+    line-height: 96px;
+    font-size: 24px;
+    font-weight: bold;
+}
+.howWorkBlock {
+    height: 16vw;
+    background: #F2F2F2;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    background-size: auto 50%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.howWorkTitle {
+    text-align: center;
+    margin-top: 35px;
+    font-size: 22px;
+    text-transform: uppercase;
+    line-height: 24px;
+    height: 50px;
+
+    @include screenLess(1440px) {
+        font-size: 18px;
+    }
+
+    @include screenLess(1280px) {
+        font-size: 16px;
+    }
+}
+.howWorkText {
+    padding: 170px 0 0;
+    font-size: 14px;
+
+    @include screenMore(1440px) {
+        font-size: 16px;
+    }
+
+    @include screenMore(1920px) {
+        font-size: 18px;
+    }
+}
+.howWorkText p {
+    margin: 0 0 10px;
+}
+.homeMiddle {
+    height: 58vw;
+    background-image: url('/home_middle.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center top;
+}
+.benefits {
+    padding: 80px 0 100px;
+    background-image: url('/home_middle_map.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center top;
+}
+.benefitsList {
+    list-style: none;
+    padding: 0;
+    margin: 100px auto 0;
+    display: flex;
+    justify-content: space-between;
+    max-width: 1300px;
+}
+.benefitsItem {
+    flex: 0 0 200px;
+    
+    @include screenLess(1280px) {
+        flex: 0 0 160px;
+    }
+}
+.benefitsIcon {
+    width: 160px;
+    height: 160px;
+    margin: 0 auto;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    @include screenLess(1280px) {
+        width: 130px;
+        height: 130px;
+        background-size: contain;
+    }
+}
+.benefitsText {
+    font-size: 22px;
+    text-align: center;
+    margin-top: 40px;
+
+    @include screenLess(1280px) {
+        font-size: 16px;
+    }
+}
+.usage {
+    padding-top: 70px;
+    position: relative;
+    background-image: url('/home_faq.jpg');
+    background-position: top 630px center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+.usageContainer {
+    position: relative;
+    z-index: 10;
+}
+.usage:before {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    height: 700px;
+    background: linear-gradient(to bottom, rgba(196, 196, 196, 0.38), rgba(206, 206, 206, 0));
+    content: '';
+}
+.slideImage {
+    margin: 0 auto;
+    padding: 0 20px;
+}
+.slideText {
+    margin: 55px 40px 0;
+    padding-top: 15px;
+    border-top: 1px solid $black;
+    font-size: 24px;
+    font-weight: bold;
+    color: $primary-color;
+    text-align: center;
+}
+.sliderWrapper {
+    position: relative;
+    z-index: 15;
+    margin-top: -52px;
+}
+.partnerButton {
+    margin-top: 80px;
+    text-align: center;
+    text-transform: uppercase;
+}
+.faq {
+    margin-top: 250px;
+}
+.accordion {
+    padding: 60px 0 100px;
+}
+.contactForm {
+    margin-top: 100px;
+    padding: 180px 0 90px;
+    background-image: url('/home_bottom.jpg');
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+}
+.contactInput {
+    width: 45vw;
+    margin-bottom: 40px;
+    color: $white;
+}
+.contactText {
+    height: 200px;
+}
