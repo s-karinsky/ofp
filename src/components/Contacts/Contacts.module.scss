@@ -1,0 +1,66 @@
+.contacts {
+    background-image: url('/images/dron.png');
+    background-position: left -206px bottom;
+    background-repeat: no-repeat;
+    background-size: 576px auto;
+    height: 850px;
+    padding-top: 145px;
+    box-sizing: border-box;
+}
+
+.blocks {
+    display: flex;
+    align-items: flex-start;
+}
+.block {
+    flex: 1 1 0px;
+    margin: 0 25px 0 0;
+    border: 1px solid #F0F0F0;
+    border-radius: 40px;
+    padding: 30px;
+    position: relative;
+    background: #fff;
+}
+.block:last-child {
+    margin-right: 0;
+}
+.icon {
+    position: absolute;
+    right: 30px;
+    top: 30px;
+}
+.blockTitle {
+    padding-top: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+.blockText {
+    font-size: 18px;
+    color: #444;
+}
+.blockText p {
+    margin: 0 0 13px 0;
+}
+.blockText a {
+    color: #444;
+    text-decoration: underline;
+}
+.blockReq {
+    margin-top: 40px;
+}
+.toggleVisible {
+    color: #21A5B5;
+    margin-top: 30px;
+}
+.toggleVisible span {
+    cursor: pointer;
+}
+.toggleVisible svg {
+    position: relative;
+    top: -2px;
+}
+.hide svg {
+    transform: rotate(180deg);
+    top: 0;
+}

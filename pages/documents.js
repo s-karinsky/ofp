@@ -1,6 +1,6 @@
 import Documents from '@components/Documents'
 
-export default function HomePage() {
+export default function DocumentsPage() {
     return (
         <Documents />
     )

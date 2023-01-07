@@ -87,7 +87,7 @@ class Slider extends React.Component {
         const width = 100 / slidesToShow
         const slides = this.getSlidesForRender()
         const transform = `translateX(${-width * slideDir - width}%)`
-        const transition = slideDir !== 0 && 'ease .3s transform'
+        const transition = slideDir !== 0 ? 'ease .3s transform' : null
         return (
             <>
                 <div className={styles.nav}>
