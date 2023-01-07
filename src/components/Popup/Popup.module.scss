@@ -37,6 +37,10 @@
     background: #fff;
     border-radius: 20px;
 }
+.popup.noBorder {
+    border-radius: 0;
+    padding: 0;
+}
 .close {
     position: absolute;
     right: 30px;

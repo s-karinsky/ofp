@@ -1,0 +1,62 @@
+@import '@styles/var';
+
+.order {
+    background: #FFFFFF;
+    border: 1px solid #F0F0F0;
+    border-radius: 20px;
+    display: flex;
+    align-items: flex-start;
+    padding: 30px 35px;
+    font-size: 18px;
+    color: $dark-gray;
+}
+.orderSummary {
+    margin-right: 30px;
+}
+.orderSummaryItem {
+    white-space: nowrap;
+    margin-bottom: 20px;
+}
+.label {
+    display: block;
+    margin-bottom: 5px;
+}
+.orderDetails {
+    flex-grow: 1;
+}
+.orderItem {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid $xlight-gray;
+    padding: 15px 0;
+}
+.checkbox {
+    width: 28px;
+    margin-right: 10px;
+}
+.icon {
+    width: 150px;
+    text-align: center;
+}
+.previewIcon {
+    vertical-align: middle;
+    cursor: pointer;
+}
+.trashIcon {
+    margin-left: auto;
+    cursor: pointer;
+}
+.removeHeader {
+    color: $nav-link;
+    padding-top: 50px;
+    margin-bottom: 15px;
+    font-size: 22px;
+}
+.removeText {
+    color: $gray;
+    font-size: 18px;
+    margin-bottom: 50px;
+}
+.removeButton {
+    margin-top: 20px;
+}

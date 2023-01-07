@@ -1,0 +1,43 @@
+@import '@styles/var';
+@import '@styles/mixins';
+
+.orderSubmit {
+    padding: 20px 30px;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+    background-color: $white;
+    border: 1px solid #F0F0F0;
+    border-radius: 20px;
+}
+.title {
+    font-size: 20px;
+    font-weight: bold;
+    color: $black;
+    border-bottom: 2px solid #f0f0f0;
+    margin: 0 -30px;
+    padding: 0 30px 20px;
+}
+.list {
+    margin: 0 -30px 15px;
+    padding: 0 30px 15px;
+    border-bottom: 2px solid #f0f0f0;
+    list-style: none;
+    counter-reset: list;
+}
+.item {
+    margin-top: 20px;
+    font-size: 18px;
+    display: flex;
+
+    @include screenLess(1280px) {
+        font-size: 14px;
+    }
+}
+.item span:last-child {
+    margin-left: auto;
+}
+.item:before {
+    display: inline-block;
+    margin-right: 5px;
+    counter-increment: list;
+    content: counter(list)'.';
+}

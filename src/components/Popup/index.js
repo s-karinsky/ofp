@@ -10,6 +10,7 @@ function Popup(props = {}) {
     const {
         name,
         title,
+        noBorder,
         children
     } = props
     const dispatch = useDispatch()
@@ -22,7 +23,7 @@ function Popup(props = {}) {
     if (popupName !== name) return null;
     return (
         <div className={styles.popupWrapper} onClick={handleWrapperClick}>
-            <div className={styles.popup}>
+            <div className={cn(styles.popup, { [styles.noBorder]: noBorder })}>
                 <span className={styles.close} onClick={() => dispatch(hidePopup())}>
                     <IconClose />
                 </span>

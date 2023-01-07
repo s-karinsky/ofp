@@ -1,5 +1,6 @@
 @import '@styles/fonts';
 @import '@styles/var';
+@import '@styles/mixins';
 
 *,
 *::before,
@@ -62,4 +63,32 @@ body {
   color: #444;
   text-transform: none;
   font-weight: 400;
+}
+.cart {
+  background-image: url('/images/cart_bg.jpg');
+  background-position: left bottom;
+  background-repeat: no-repeat;
+  background-size: contain;
+  min-height: 50vw;
+
+  &_layout {
+    display: flex;
+    align-items: flex-start;
+  }
+  &_submit {
+    margin-right: 60px;
+    width: 400px;
+    flex-shrink: 0;
+    flex-grow: 0;
+
+    @include screenLess(1280px) {
+      width: 300px;
+    }
+  }
+  &_details {
+    flex-grow: 1;
+  }
+  &_summary {
+    margin-bottom: 10px;
+  }
 }

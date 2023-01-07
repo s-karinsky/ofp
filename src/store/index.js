@@ -1,4 +1,5 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import cart from './cart';
 import popup from './popup';
 
 const middleware = getDefaultMiddleware({
@@ -9,6 +10,7 @@ const middleware = getDefaultMiddleware({
 
 export const store = configureStore({
     reducer: { 
+        cart,
         popup
     },
     middleware,
