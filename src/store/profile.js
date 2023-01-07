@@ -6,7 +6,8 @@ const profileSlice = createSlice({
         user: {
             name: 'Иванов Иван Иванович',
             email: 'ivanov@ivan.iv',
-            phone: '+79235554411'
+            phone: '+79235554411',
+            birthdate: '22.11.1980'
         },
         orders: [
             {

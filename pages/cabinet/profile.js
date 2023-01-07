@@ -1,7 +1,7 @@
-export default function Profile() {
+import Profile from '@components/Profile'
+
+export default function PageProfile() {
     return (
-        <div>
-            dfgsd
-        </div>
+        <Profile />
     )
 }

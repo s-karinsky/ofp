@@ -101,7 +101,7 @@ class Input extends React.Component {
                         [styles.inputError]: !!error,
                         [styles[size]]: !!size
                     })}>
-                    {valueLabel}
+                    {valueLabel || ''}
                 </div>
                 <select
                     className={cn({
