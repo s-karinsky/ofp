@@ -1,6 +1,7 @@
 @import '@styles/var';
 
 .order {
+    position: relative;
     background: #FFFFFF;
     border: 1px solid #F0F0F0;
     border-radius: 20px;
@@ -59,4 +60,18 @@
 }
 .removeButton {
     margin-top: 20px;
+}
+.collapse {
+    position: absolute;
+    right: 35px;
+    top: 25px;
+    width: 28px;
+    height: 28px;
+    line-height: 26px;
+    text-align: center;
+    box-sizing: border-box;
+    border-radius: 10px;
+    color: $primary-color;
+    border: 1px solid $primary-color;
+    cursor: pointer;
 }

@@ -1,0 +1,43 @@
+@import '@styles/var';
+
+.cabinetNav {
+    width: 300px;
+    margin-right: 80px;
+}
+.title {
+    padding-top: 90px;
+    padding-bottom: 70px;
+    font-weight: bold;
+    font-size: 24px;
+}
+.nav {
+    margin: 0;
+    background: $white;
+    border: 1px solid #F0F0F0;
+    border-radius: 20px;
+    padding: 25px 30px;
+    list-style: none;
+}
+.item {
+    margin-bottom: 15px;
+
+    &_active {
+        font-weight: bold;
+
+        & a {
+            font-weight: bold;
+            color: $primary-color;
+        }
+    }
+
+    & a {
+        color: $nav-link;
+        font-size: 18px;
+        text-decoration: none;
+    }
+}
+.icon {
+    display: inline-block;
+    margin-right: 10px;
+    vertical-align: middle;
+}

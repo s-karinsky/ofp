@@ -126,3 +126,22 @@ body {
     margin-bottom: 10px;
   }
 }
+.cabinet {
+  min-height: 50vw;
+  background-image: url('/images/cabinet_bg.jpg');
+  background-position: left top;
+  background-repeat: no-repeat;
+  background-size: 80% auto;
+
+  &_layout {
+    display: flex;
+  }
+
+  &_orders {
+    flex-grow: 1;
+  }
+
+  &_order {
+    margin-bottom: 10px;
+  }
+}

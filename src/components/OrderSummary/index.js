@@ -1,7 +1,8 @@
 import styles from './OrderSummary.module.scss'
 
 export default function OrderSummary(props) {
-    const { index, date, count, status } = props
+    const { index, date, count, status, onExpand } = props
+    const isExpanded = typeof onExpand === 'function'
 
     return (
         <div className={styles.orderSummary}>
@@ -20,6 +21,9 @@ export default function OrderSummary(props) {
                 <span className={styles.label}>Статус </span>
                 {status}
             </div>
+            {isExpanded && <div>
+                <span className={styles.expand} onClick={onExpand}>+</span>
+            </div>}
         </div>
     )
 }

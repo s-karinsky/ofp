@@ -25,19 +25,22 @@ export default function Order(props) {
         withRemove,
         checkedItems = {},
         onCheck,
-        onRemove
+        onRemove,
+        onCollapse
     } = props
     const isCheckedAll = items.reduce((res, item) => res && checkedItems[item.id], true)
     const [previewImage, setPreviewImage] = useState()
     const [itemToRemove, setItemToRemove] = useState()
     const dispatch = useDispatch()
+    const isCollapsing = typeof onCollapse === 'function'
 
     return (
         <div className={styles.order}>
-            <Popup name="order-preview" noBorder>
+            {isCollapsing && <span className={styles.collapse} onClick={onCollapse}>-</span>}
+            <Popup name={`order-preview-${index}`} noBorder>
                 <img src={previewImage} width="900" />
             </Popup>
-            {withRemove && <Popup name="confirm-remove">
+            {withRemove && <Popup name={`confirm-remove-${index}`}>
                 <div className={styles.removeHeader}>Уверены?</div>
                 <div className={styles.removeText}>Это удалит товар из корзины</div>
                 <div className={styles.removeButton}>
@@ -100,7 +103,7 @@ export default function Order(props) {
                                         className={styles.previewIcon}
                                         onClick={() => {
                                             setPreviewImage(item.preview)
-                                            dispatch(showPopup('order-preview'))
+                                            dispatch(showPopup(`order-preview-${index}`))
                                         }}
                                     >
                                         <IconPreview />
@@ -113,7 +116,7 @@ export default function Order(props) {
                             className={styles.trashIcon}
                             onClick={() => {
                                 setItemToRemove(item.id)
-                                dispatch(showPopup('confirm-remove'))
+                                dispatch(showPopup(`confirm-remove-${index}`))
                             }}
                         >
                             <IconTrash />

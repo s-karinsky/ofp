@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const cartSlice = createSlice({
-    name: 'modal',
+    name: 'cart',
     initialState: {
         orderId: '3319775',
         date: '23.01.2023',
