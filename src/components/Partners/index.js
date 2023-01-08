@@ -1,8 +1,7 @@
 import cn from 'classnames'
 import GreenForm from '@components/GreenForm'
 import PartnersSlider from '@components/PartnersSlider'
-import Input from '@components/Input'
-import Checkbox from '@components/Checkbox'
+import { Checkbox, Input } from '@components/Form'
 import Button from '@components/Button'
 import styles from './Partners.module.scss'
 

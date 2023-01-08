@@ -1,6 +1,5 @@
-import React from 'react'
-import pt from 'prop-types'
-import { connect, useDispatch, useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import cn from 'classnames'
 import { hidePopup } from '@store/popup'
 import IconClose from './close.svg'
@@ -36,42 +35,29 @@ function Popup(props = {}) {
     )
 }
 
-class Overlay extends React.Component {
-    static propTypes = {
-        isVisible: pt.bool,
-        hidePopup: pt.func
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (!this.props.isVisible && nextProps.isVisible) {
+function PopupOverlay() {
+    const dispatch = useDispatch()
+    const isVisible = useSelector(state => state.popup.isVisible)
+    useEffect(() => {
+        if (isVisible) {
             document.body.style.overflow = 'hidden'
             document.body.style.marginRight = '17px'
-        }
-        if (this.props.isVisible && !nextProps.isVisible) {
+        } else {
             document.body.style.overflow = 'auto'
             document.body.style.marginRight = null
         }
-    }
+    }, [isVisible])
 
-    render() {
-        const { isVisible } = this.props
-        return (
-            <div
-                className={cn({
-                    [styles.overlay]: true,
-                    [styles.overlayVisible]: isVisible
-                })}
-                onClick={this.props.hidePopup}
-            />
-        )
-    }
+    return (
+        <div
+            className={cn({
+                [styles.overlay]: true,
+                [styles.overlayVisible]: isVisible
+            })}
+            onClick={() => dispatch(hidePopup())}
+        />
+    )
 }
-
-const PopupOverlay = connect(state => ({
-    isVisible: state.popup.isVisible
-}), {
-    hidePopup
-})(Overlay)
 
 export { PopupOverlay }
 export default Popup

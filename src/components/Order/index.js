@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import Button from '@components/Button'
-import Checkbox from '@components/Checkbox'
+import { Checkbox } from '@components/Form'
 import Popup from '@components/Popup'
 import { showPopup, hidePopup } from '@store/popup'
 import IconPlan from './plan.svg'

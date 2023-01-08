@@ -5,31 +5,14 @@ import IconHide from './hide.svg'
 import IconShow from './show.svg'
 import styles from './Form.module.scss'
 
-class Input extends React.Component {
+class Textarea extends React.Component {
     static propTypes = {
-        type: pt.string,
         value: pt.oneOfType([pt.string, pt.number]),
         defaultValue: pt.oneOfType([pt.string, pt.number]),
         onChange: pt.func,
         required: pt.bool,
         error: pt.oneOfType([pt.string, pt.bool]),
         placeholder: pt.string
-    }
-
-    state = {
-        isPasswordVisible: false
-    }
-
-    toggleShowPassword = () => {
-        this.setState({
-            isPasswordVisible: !this.state.isPasswordVisible
-        })
-    }
-
-    getInputType() {
-        const { type } = this.props
-        if (type !== 'password') return type || 'text'
-        return this.state.isPasswordVisible ? 'text' : type
     }
 
     handleChange = e => {
@@ -39,26 +22,15 @@ class Input extends React.Component {
         onChange(value, e)
     }
 
-    renderShowPasswordIcon() {
-        const { isPasswordVisible } = this.state;
-        return (
-            <span className={styles.toggleShowPassword} onClick={this.toggleShowPassword}>
-                {isPasswordVisible ? <IconHide /> : <IconShow />}
-            </span>
-        )
-    }
-
     render() {
-        const { error, required, className, type, ...rest } = this.props;
+        const { error, required, className, ...rest } = this.props;
         const placeholder = required && !rest.placeholder ? ' ' : rest.placeholder
     
         return (
             <>
                 <label className={cn(styles.input)}>
-                    {type === 'password' && this.renderShowPasswordIcon()}
-                    <input
-                        type={this.getInputType()}
-                        className={cn(styles.inputField, {
+                    <textarea
+                        className={cn(styles.inputField, styles.textarea, {
                             [styles.inputError]: !!error,
                             [className]: !!className
                         })}
@@ -77,4 +49,4 @@ class Input extends React.Component {
     }
 }
 
-export default Input
+export default Textarea

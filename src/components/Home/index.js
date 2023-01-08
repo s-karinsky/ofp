@@ -1,8 +1,7 @@
 import cn from 'classnames'
 import Accordion from '@components/Accordion'
 import Button from '@components/Button'
-import Checkbox from '@components/Checkbox'
-import Input from '@components/Input'
+import { Checkbox, Input, Textarea } from '@components/Form'
 import GreenForm from '@components/GreenForm'
 import PartnersSlider from '@components/PartnersSlider'
 import styles from './Home.module.scss'
@@ -243,8 +242,8 @@ export default function Home() {
                         <Input placeholder="Имя" />
                         <Input placeholder="E-mail" type="email" />
                         <Input placeholder="Телефон" />
-                        <Input type="textarea" placeholder="Введите данные вашего запроса" className={styles.contactText} />
-                        <Checkbox>Я даю согласие на обработку  персональных данных</Checkbox>
+                        <Textarea type="textarea" placeholder="Введите данные вашего запроса" className={styles.contactText} />
+                        <Checkbox>Я даю согласие на обработку персональных данных</Checkbox>
                         <Button color="white" width="335px">Отправить</Button>
                     </GreenForm>
                 </div>

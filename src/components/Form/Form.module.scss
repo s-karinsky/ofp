@@ -41,6 +41,7 @@
     border-radius: $input-border-radius;
 }
 .inputField {
+    resize: none;
     white-space: nowrap;
     font-family: $font-roboto;
     display: block;
@@ -51,11 +52,18 @@
     border: 1px solid $light-gray;
     transition: ease .3s border-color;
     background: rgba(0, 0, 0, 0);
-    height: $input-size;
-    line-height: $input-size;
     border-radius: $input-border-radius;
     padding: $input-padding;
     font-size: $input-font-size;
+
+    &:not(.textarea) {
+        height: $input-size;
+        line-height: $input-size;
+    }
+}
+.textarea {
+    line-height: 1em;
+    padding-top: 20px;
 }
 .inputField:hover,
 .inputField:focus {
@@ -77,6 +85,7 @@
     line-height: $input-size;
     padding: $input-padding;
     font-size: $input-font-size;
+    border-radius: $input-border-radius;
 }
 .selectPlaceholder span,
 .requiredMark span {

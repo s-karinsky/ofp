@@ -1,6 +1,5 @@
 import { useSelector } from 'react-redux'
 import Button from '@components/Button'
-// import Input from '@components/Input'
 import { Input, Select } from '@components/Form'
 import styles from './Profile.module.scss'
 

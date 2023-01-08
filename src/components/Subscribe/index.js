@@ -1,6 +1,6 @@
 import cn from 'classnames'
 import Button from '@components/Button'
-import Input from '@components/Input'
+import { Input } from '@components/Form'
 import styles from './Subscribe.module.scss'
 import IconSubmit from './submit.svg'
 
