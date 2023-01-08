@@ -1,0 +1,162 @@
+@import '@styles/var';
+
+.select {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 20;
+    opacity: 0;
+}
+.selectArrow {
+    z-index: 15;
+    position: absolute;
+    right: 17px;
+    top: 50%;
+    transform: rotate(180deg);
+    margin-top: -8px;
+    transition: ease .3s;
+    transition-property: transform, margin-top;
+}
+.select:focus + .selectArrow {
+    transform: rotate(0deg);
+    margin-top: -12px;
+}
+.selectField:after {
+    z-index: 4;
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 50px;
+    background: linear-gradient(to right, rgba(255,255,255,0) 0%, $white 50%);
+    border-radius: $input-border-radius;
+    content: '';
+}
+.input {
+    display: block;
+    position: relative;
+    background-color: $white;
+    border-radius: $input-border-radius;
+}
+.inputField {
+    white-space: nowrap;
+    font-family: $font-roboto;
+    display: block;
+    width: 100%;
+    position: relative;
+    z-index: 10;
+    color: $black;
+    border: 1px solid $light-gray;
+    transition: ease .3s border-color;
+    background: rgba(0, 0, 0, 0);
+    height: $input-size;
+    line-height: $input-size;
+    border-radius: $input-border-radius;
+    padding: $input-padding;
+    font-size: $input-font-size;
+}
+.inputField:hover,
+.inputField:focus {
+    outline: none;
+    border-color: $gray;
+}
+.inputField::placeholder,
+.selectPlaceholder {
+    color: $gray;
+    opacity: 1;
+}
+.requiredMark {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: $white;
+    color: transparent;
+    height: $input-size;
+    line-height: $input-size;
+    padding: $input-padding;
+    font-size: $input-font-size;
+}
+.selectPlaceholder span,
+.requiredMark span {
+    color: $red;
+}
+.inputField:not(:placeholder-shown) + .requiredMark {
+    display: none;
+}
+.inputError {
+    border-color: $red;
+}
+.toggleShowPassword {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translate(0, -50%);
+    z-index: 12;
+    cursor: pointer;
+    color: $gray;
+}
+.errorMessage {
+    font-size: 10px;
+    color: $red;
+}
+
+.checkbox {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox:not(.disabled):hover .checkboxBlock {
+    border-color: $dark-gray;
+}
+
+.checkboxInput {
+    display: none;
+}
+
+.checkboxBlock {
+    align-self: flex-start;
+    text-align: center;
+    flex-shrink: 0;
+    flex-basis: $checkbox-size;
+    height: $checkbox-size;
+    line-height: $checkbox-size;
+    border-radius: $checkbox-border-radius;
+    border: 1px solid $light-gray;
+    box-sizing: border-box;
+    display: inline-block;
+    transition: ease .3s;
+    transition-property: border-color, background-color;
+    cursor: pointer;
+    color: $white;
+}
+.small .checkboxBlock {
+    flex-basis: $checkbox-size-small;
+    height: $checkbox-size-small;
+    line-height: $checkbox-size-small;
+    border-radius: $checkbox-border-radius-small;
+}
+.small svg {
+    transform: scale(0.8);
+}
+.disabled .checkboxBlock {
+    cursor: auto;
+}
+.checkboxIcon {
+    opacity: 0;
+}
+.checkboxInput:checked + .checkboxBlock {
+    background-color: $primary-light;
+}
+.checkboxInput:checked + .checkboxBlock .checkboxIcon {
+    opacity: 1;
+}
+
+.checkboxContent {
+    margin-left: 10px;
+}
+.small .checkboxContent {
+    font-size: 14px;
+    margin-left: 5px;
+}

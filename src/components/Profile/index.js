@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux'
 import Button from '@components/Button'
-import Input from '@components/Input'
+// import Input from '@components/Input'
+import { Input, Select } from '@components/Form'
 import styles from './Profile.module.scss'
 
 export default function Profile() {
@@ -14,7 +15,7 @@ export default function Profile() {
                 <Input placeholder="Дата рождения" defaultValue={profile.birthdate} />
             </div>
             <div className={styles.field}>
-                <Input
+                <Select
                     placeholder="Правовая форма"
                     defaultValue={profile.status}
                     options={[
