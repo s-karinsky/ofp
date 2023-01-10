@@ -43,6 +43,7 @@
 }
 .close {
     position: absolute;
+    z-index: 20;
     right: 30px;
     top: 30px;
     color: $gray;

@@ -125,6 +125,101 @@ body {
   &_summary {
     margin-bottom: 10px;
   }
+
+  &_popupTitle {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    padding: 30px 70px 28px 40px;
+    border-bottom: 1px solid $xlight-gray;
+    font-size: 18px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &_popupContent {
+    width: 330px;
+    margin-top: 40px;
+  }
+
+  &_popupInput {
+    margin-top: 16px;
+  }
+
+  &_popupCompany {
+    margin-top: 15px;
+    position: relative;
+
+    &:before {
+      position: absolute;
+      left: -50px;
+      right: -50px;
+      top: 50%;
+      height: 1px;
+      background-color: $xlight-gray;
+      content: '';
+    }
+  }
+
+  &_popupCompanyBtn {
+    position: relative;
+    margin: 0 auto;
+
+    &__white {
+      border: 1px solid $light-gray;
+      box-sizing: border-box;
+
+      &:hover {
+        background-color: $white;
+      }
+    }
+  }
+
+  &_popupHeader {
+    color: $primary-color;
+    font-weight: bold;
+    margin: 15px 0;
+  }
+
+  &_popupField {
+    width: 130px;
+    height: 28px !important;
+    line-height: 28px !important;
+    padding-left: 10px;
+
+    &Small {
+      width: 55px;
+      margin-bottom: 10px;
+    }
+  }
+
+  &_popupSmallInput {
+    display: inline-block;
+  }
+
+  &_popupInputSunheader {
+    font-size: 14px;
+  }
+
+  &_popupLabel {
+    display: inline-block;
+    font-weight: bold;
+    width: 125px;
+  }
+
+  &_popupLabelContent {
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  &_popupCheckbox {
+    font-size: 14px;
+
+    a {
+      color: $secondary-color;
+    }
+  }
 }
 .cabinet {
   min-height: 50vw;
@@ -144,4 +239,8 @@ body {
   &_order {
     margin-bottom: 10px;
   }
+}
+.leaflet-attribution-flag {
+  visibility: hidden !important;
+  opacity: 0 !important;
 }

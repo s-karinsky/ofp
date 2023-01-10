@@ -46,6 +46,10 @@
 .gray {
     background: $gray;
     color: $white;
+
+    &:hover {
+        background: $gray;
+    }
 }
 .orange {
     background-color: $button-bg-hover;
