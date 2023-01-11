@@ -36,10 +36,18 @@
     position: relative;
     background: #fff;
     border-radius: 20px;
-}
-.popup.noBorder {
-    border-radius: 0;
-    padding: 0;
+
+    &.noBorder {
+        border-radius: 0;
+        padding: 0;
+    }
+
+    &.contentOnly {
+        border-radius: 0;
+        padding: 0;
+        background: none;
+        border-radius: 0;
+    }
 }
 .close {
     position: absolute;

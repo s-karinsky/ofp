@@ -1,0 +1,46 @@
+@import '@styles/var';
+
+.week {
+    display: flex;
+    font-size: 16px;
+    margin: 10px 0;
+}
+.date {
+    flex: 0 0 45px;
+    text-align: right;
+}
+.weekdays {
+    color: #CFCFCF;
+    margin: 15px 0;
+    text-align: center;
+}
+.select {
+    height: 38px !important;
+    line-height: 38px !important;
+    border-radius: 15px !important;
+    color: $white;
+    background-color: $primary-color;
+}
+.controls {
+    display: flex;
+    justify-content: space-between;
+}
+.selectMonth {
+    width: 200px;
+}
+.selectYear {
+    width: 120px;
+}
+.selectYear,
+.selectMonth {
+    flex-grow: 0;
+    flex-shrink: 0;
+
+    svg {
+        color: $white !important;
+    }
+
+    label > div:first-child:after {
+        background: linear-gradient(to right, rgba($primary-color, 0), $primary-color);
+    }
+}

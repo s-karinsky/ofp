@@ -38,7 +38,7 @@ class Select extends React.Component {
     }
 
     render() {
-        const { error, required, options, placeholder, ...rest } = this.props
+        const { error, required, options, placeholder, className, ...rest } = this.props
         const { selectLabel } = this.state
         const valueLabel = rest.value === undefined ? selectLabel : getSelected(rest.value, options)
 
@@ -48,7 +48,8 @@ class Select extends React.Component {
                     <div
                         className={cn(styles.inputField, styles.selectField, {
                             [styles.inputError]: !!error,
-                            [styles.selectPlaceholder]: valueLabel === placeholder
+                            [styles.selectPlaceholder]: valueLabel === placeholder,
+                            [className]: !!className
                         })}>
                         {valueLabel || ''}
                         {(required && valueLabel === placeholder) && <span>*</span>}

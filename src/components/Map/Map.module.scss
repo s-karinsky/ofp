@@ -151,3 +151,21 @@
     font-family: $font-roboto;
     font-size: 14px;
 }
+.calendars {
+    display: flex;
+    justify-content: center;
+}
+.calendarOuter {
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 360px;
+    background: $white;
+    border-radius: 20px;
+    padding: 15px;
+    &:first-child {
+        margin-right: 15px;
+    }
+}
+.calendar {
+    height: 330px;
+}

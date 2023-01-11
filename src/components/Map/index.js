@@ -1,114 +1,33 @@
-import React, { useState } from 'react'
-import {
-    MapContainer,
-    TileLayer,
-    ZoomControl,
-    Rectangle,
-    Polyline,
-    Polygon,
-    useMap,
-    useMapEvents
-} from 'react-leaflet'
+import React from 'react'
+import { connect } from 'react-redux'
+import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet'
 import cn from 'classnames'
 import { computeArea, computeDistanceBetween } from 'spherical-geometry-js'
 import 'leaflet/dist/leaflet.css'
+import Button from '@components/Button'
 import { Input } from '@components/Form'
-import IconSearch from './search.svg'
-import IconDate from './date.svg'
-import IconArea from './area.svg'
-import IconRect from './rect.svg'
-import IconPolygon from './polygon.svg'
-import IconKML from './kml.svg'
-import IconArrow from './arrow.svg'
+import Calendar from '@components/Calendar'
+import Popup from '@components/Popup'
+import { Draw, DrawArea } from './draw'
+import { IconSearch, IconDate, IconArea, IconRect, IconPolygon, IconKML, IconArrow } from './icons'
 import styles from './Map.module.scss'
-
-const pathOptions = {
-    color: '#E87258',
-    weight: 2
-}
 
 function getRectCoords(p) {
     return [[p[0][0], p[0][1]], [p[0][0], p[1][1]], [p[1][0], p[1][1]], [p[1][0], p[0][1]], [p[0][0], p[0][1]]]
 }
 
-function DrawRect({ onFinish = () => {} }) {
-    const [ isDraw, setIsDraw ] = useState()
-    const [ bounds, setBounds ] = useState([])
-    useMapEvents({
-        click: e => {
-            const { lat, lng } = e.latlng
-            if (isDraw) {
-                setBounds([bounds[0], [lat, lng]])
-                onFinish([bounds[0], [lat, lng]])
-                setIsDraw(false)
-            } else {
-                setBounds([[lat, lng]])
-                setIsDraw(true)
-            }
-        },
-        mousemove: e => {
-            if (!isDraw) return
-            const { lat, lng } = e.latlng
-            setBounds([bounds[0], [lat, lng]])
-        }
-    })
-    return bounds.length === 2
-        ? <Rectangle bounds={bounds} pathOptions={pathOptions} className="mapPointer"  />
-        : null
-}
-
-function DrawPolyline({ onFinish = () => {} }) {
-    const [ isDraw, setIsDraw ] = useState()
-    const [ bounds, setBounds ] = useState([])
-    const [ pointMove, setPointMove ] = useState([])
-    useMapEvents({
-        click: e => {
-            const { lat, lng } = e.latlng
-            if (isDraw) {
-                const lastBound = bounds[bounds.length - 1]
-                if (lastBound[0] !== lat || lastBound[1] !== lng) {
-                    setBounds([...bounds, [lat, lng]])
-                }
-            } else {
-                setBounds([[lat, lng]])
-                setIsDraw(true)
-            }
-        },
-        mousemove: e => {
-            if (!isDraw) return
-            const { lat, lng } = e.latlng
-            setPointMove([[lat, lng]])
-        },
-        dblclick: e => {
-            setIsDraw(false)
-            setPointMove([])
-            setBounds(bounds.concat([bounds[0]]))
-            onFinish(bounds.concat([bounds[0]]))
-        }
-    })
-    return bounds.length ?
-        <Polyline positions={bounds.concat(pointMove)} pathOptions={pathOptions} className="mapPointer" /> :
-        null
-}
-
-function Draw({ type, onFinish = () => {} }) {
-    // Не думай обо мне плохо, если видишь это. Но по-другому я не смог :)
-    const map = useMap()
-    const cont = map._container
-    cont.classList.add('mapPointer')
-    return (
-        type === 'rect' ?
-            <DrawRect onFinish={onFinish} /> :
-            <DrawPolyline onFinish={onFinish} />
-    )
-}
-
-function DrawArea({ type, points }) {
-    // Ну правда не смог :(
-    const map = useMap()
-    const cont = map._container
-    cont.classList.remove('mapPointer')
-    return <Polygon positions={points} pathOptions={pathOptions} />
+function getDateOffsetMonth(offset = 0) {
+    let year = new Date().getFullYear()
+    let month = new Date().getMonth() + offset
+    while (month < 0) {
+        month += 12
+        year -= 1
+    }
+    while (month > 11) {
+        month -= 12
+        year +=1
+    }
+    return [year, month]
 }
 
 const nameByDrawType = {
@@ -130,7 +49,11 @@ export default class Map extends React.Component {
         isDraw: false,
         drawType: null,
         dateType: null,
-        points: []
+        points: [],
+        calendar: getDateOffsetMonth(-1),
+        calendar2: getDateOffsetMonth(),
+        dateFrom: null,
+        dateTo: null
     }
 
     setDrawType = drawType => () => {
@@ -143,6 +66,7 @@ export default class Map extends React.Component {
 
     setDateType = dateType => () => {
         this.setState({ dateType, showOptions: null })
+        if (dateType === 'custom') this.props.showPopup('map-date-range')
     }
 
     handleFinishDraw = points => {
@@ -158,6 +82,8 @@ export default class Map extends React.Component {
         const lanLng = points.map(item => ({ lat: item[0], lng: item[1]}))
         return (computeArea(lanLng) / 1000000).toFixed(2)
     }
+
+    handleChangeCalendar = key => date => this.setState({ [key]: date })
 
     renderPointsDistances() {
         const { drawType, points } = this.state
@@ -184,9 +110,33 @@ export default class Map extends React.Component {
     }
 
     render() {
-        const { showOptions, drawType, dateType, isDraw, points } = this.state
+        const { showOptions, drawType, dateType, isDraw, points, calendar, calendar2 } = this.state
         return (
             <div className={styles.map}>
+                <Popup name="map-date-range" contentOnly>
+                    <div className={styles.calendars}>
+                        <div className={styles.calendarOuter}>
+                            <div className={styles.calendar}>
+                                <Calendar
+                                    month={calendar[1]}
+                                    year={calendar[0]}
+                                    onChange={this.handleChangeCalendar('calendar')}
+                                />
+                            </div>
+                            <Button fullSize>Применить</Button>
+                        </div>
+                        <div className={styles.calendarOuter}>
+                            <div className={styles.calendar}>
+                                <Calendar
+                                    month={calendar2[1]}
+                                    year={calendar2[0]}
+                                    onChange={this.handleChangeCalendar('calendar2')}
+                                />
+                            </div>
+                            <Button onClick={this.props.hidePopup} fullSize>Отмена</Button>
+                        </div>
+                    </div>
+                </Popup>
                 <div className={styles.mapContainer}>
                     <MapContainer
                         center={[53.721152, 91.442396]}
