@@ -244,3 +244,6 @@ body {
   visibility: hidden !important;
   opacity: 0 !important;
 }
+.mapPointer {
+  cursor: url("/mapPointer.svg") 9 9, auto !important;
+}
