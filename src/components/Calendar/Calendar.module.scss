@@ -3,15 +3,25 @@
 .week {
     display: flex;
     font-size: 16px;
-    margin: 10px 0;
 }
 .date {
     flex: 0 0 45px;
-    text-align: right;
+    text-align: center;
+    padding: 10px 0;
+
+    span {
+        cursor: pointer;
+        &:hover {
+            font-weight: bold;
+        }
+    }
+
+    &_selected {
+        background: $secondary-color;
+    }
 }
 .weekdays {
     color: #CFCFCF;
-    margin: 15px 0;
     text-align: center;
 }
 .select {

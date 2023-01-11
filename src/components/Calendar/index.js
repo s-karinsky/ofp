@@ -34,23 +34,37 @@ function getWeeksInMonth(year, month) {
     return weeks
 }
 
+function inRange(value, min, max) {
+    return value >= min && value <= max
+}
+
 class Calendar extends React.Component {
     static propTypes = {
         month: pt.oneOfType([pt.number, pt.string]),
         year: pt.oneOfType([pt.number, pt.string]),
         minDate: pt.instanceOf(Date),
         maxDate: pt.instanceOf(Date),
-        onChange: pt.func
+        onChange: pt.func,
+        onSelect: pt.func,
+        startSelect: pt.array,
+        endSelect: pt.array
     }
 
     renderWeek = (week, num) => {
-        const { month, year } = this.props
+        const { month, year, onSelect, startSelect, endSelect } = this.props
+        const timeStart = startSelect && new Date(...startSelect).getTime()
+        const timeEnd = endSelect && new Date(...endSelect).getTime()
         const keyPref = `${year}-${month}`
         return (
             <div className={styles.week} key={`${keyPref}-w${num}`}>
                 {week.map((date, i) => (
-                    <div className={styles.date} key={`${keyPref}-${date || -i}`}>
-                        {date}
+                    <div
+                        className={cn(styles.date, {
+                            [styles.date_selected]: !!date && inRange(new Date(year, month, date).getTime(), timeStart, timeEnd)
+                        })}
+                        key={`${keyPref}-${date || -i}`}
+                    >
+                        {date && <span onClick={() => onSelect([year, month, date])}>{date}</span>}
                     </div>
                 ))}
             </div>

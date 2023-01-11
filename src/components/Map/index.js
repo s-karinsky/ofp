@@ -16,9 +16,9 @@ function getRectCoords(p) {
     return [[p[0][0], p[0][1]], [p[0][0], p[1][1]], [p[1][0], p[1][1]], [p[1][0], p[0][1]], [p[0][0], p[0][1]]]
 }
 
-function getDateOffsetMonth(offset = 0) {
-    let year = new Date().getFullYear()
-    let month = new Date().getMonth() + offset
+function getDateOffsetMonth(offset = 0, date = []) {
+    let year = new Date(...date).getFullYear()
+    let month = new Date(...date).getMonth() + offset
     while (month < 0) {
         month += 12
         year -= 1
@@ -53,7 +53,8 @@ export default class Map extends React.Component {
         calendar: getDateOffsetMonth(-1),
         calendar2: getDateOffsetMonth(),
         dateFrom: null,
-        dateTo: null
+        dateTo: null,
+        applyRange: null
     }
 
     setDrawType = drawType => () => {
@@ -78,12 +79,46 @@ export default class Map extends React.Component {
     }
 
     getArea() {
-        const { drawType, points } = this.state
+        const { points } = this.state
         const lanLng = points.map(item => ({ lat: item[0], lng: item[1]}))
         return (computeArea(lanLng) / 1000000).toFixed(2)
     }
 
-    handleChangeCalendar = key => date => this.setState({ [key]: date })
+    applyCalendar = () => {
+        const { dateFrom, dateTo } = this.state
+        const applyRange = {
+            start: [...dateFrom].reverse(),
+            end: [...dateTo].reverse()
+        }
+        applyRange.start[1] = Number(applyRange.start[1]) + 1
+        applyRange.end[1] = Number(applyRange.end[1]) + 1
+        this.setState({ applyRange })
+        this.props.hidePopup()
+    }
+
+    handleChangeCalendar = key => date => {
+        const { calendar, calendar2 } = this.state
+        const val = { calendar, calendar2 }
+        val[key] = date
+        if (new Date(...val.calendar).getTime() >= new Date(...val.calendar2).getTime()) {
+            if (key === 'calendar') {
+                val.calendar2 = getDateOffsetMonth(1, val.calendar)
+
+                if (val.calendar2[0] > new Date().getFullYear()) {
+                    val.calendar2 = val.calendar
+                    val.calendar = getDateOffsetMonth(-1, val.calendar2)
+                }
+            } else {
+                val.calendar = getDateOffsetMonth(-1, val.calendar2)
+            }
+        }
+        this.setState(val)
+    }
+
+    hideCalendar = () => {
+        this.props.hidePopup()
+        this.setState({ dateFrom: null, dateTo: null })
+    }
 
     renderPointsDistances() {
         const { drawType, points } = this.state
@@ -110,7 +145,18 @@ export default class Map extends React.Component {
     }
 
     render() {
-        const { showOptions, drawType, dateType, isDraw, points, calendar, calendar2 } = this.state
+        const {
+            showOptions,
+            drawType,
+            dateType,
+            isDraw,
+            points,
+            calendar,
+            calendar2,
+            dateFrom,
+            dateTo,
+            applyRange
+        } = this.state
         return (
             <div className={styles.map}>
                 <Popup name="map-date-range" contentOnly>
@@ -121,9 +167,12 @@ export default class Map extends React.Component {
                                     month={calendar[1]}
                                     year={calendar[0]}
                                     onChange={this.handleChangeCalendar('calendar')}
+                                    onSelect={dateFrom => this.setState({ dateFrom })}
+                                    startSelect={dateFrom}
+                                    endSelect={dateTo}
                                 />
                             </div>
-                            <Button fullSize>Применить</Button>
+                            <Button onClick={this.applyCalendar} fullSize>Применить</Button>
                         </div>
                         <div className={styles.calendarOuter}>
                             <div className={styles.calendar}>
@@ -131,9 +180,12 @@ export default class Map extends React.Component {
                                     month={calendar2[1]}
                                     year={calendar2[0]}
                                     onChange={this.handleChangeCalendar('calendar2')}
+                                    onSelect={dateTo => this.setState({ dateTo })}
+                                    startSelect={dateFrom}
+                                    endSelect={dateTo}
                                 />
                             </div>
-                            <Button onClick={this.props.hidePopup} fullSize>Отмена</Button>
+                            <Button onClick={this.hideCalendar} fullSize>Отмена</Button>
                         </div>
                     </div>
                 </Popup>
@@ -186,7 +238,10 @@ export default class Map extends React.Component {
                                 })}
                                 onClick={() => this.setState({ showOptions: showOptions === 'date' ? null : 'date' })}
                             >
-                                {nameByDate[dateType] || 'Дата'}
+                                {dateType === 'custom' && applyRange ?
+                                    `${applyRange.start.join('.')} - ${applyRange.end.join('.')}` :
+                                    (nameByDate[dateType] || 'Дата')
+                                }
                                 <span className={styles.optionsArrow}><IconArrow /></span>
                             </div>
                             <div className={cn(styles.options, { [styles.options_visible]: showOptions === 'date' })}>
