@@ -84,7 +84,7 @@ function Draw({ type, onFinish = () => {} }) {
     )
 }
 
-function DrawArea({ type, points }) {
+function DrawArea({ points }) {
     // Ну правда не смог :(
     const map = useMap()
     const cont = map._container

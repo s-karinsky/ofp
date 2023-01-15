@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import kmlParser from 'js-kml-parser'
 import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet'
 import cn from 'classnames'
 import { computeArea, computeDistanceBetween } from 'spherical-geometry-js'
@@ -30,9 +30,23 @@ function getDateOffsetMonth(offset = 0, date = []) {
     return [year, month]
 }
 
+function getPolygon(kmlGeometry) {
+    if (kmlGeometry.type === 'Polygon') {
+        return kmlGeometry.coordinates[0]
+    }
+    if (kmlGeometry.type === 'GeometryCollection') {
+        return kmlGeometry.geometries.map(getPolygon)
+    }
+}
+
+function toMultiPolygon(points) {
+    return points[0] && typeof points[0][0] === 'number' ? [points] : points
+}
+
 const nameByDrawType = {
     rect: 'Прямоугольник',
-    polygon: 'Полигон'
+    polygon: 'Полигон',
+    kml: 'Файл (KML)'
 }
 
 const nameByDate = {
@@ -120,16 +134,31 @@ export default class Map extends React.Component {
         this.setState({ dateFrom: null, dateTo: null })
     }
 
-    renderPointsDistances() {
-        const { drawType, points } = this.state
-        const pairs = [];
+    handleFileChange = e => {
+        const file = e.target.files[0]
+        const reader = new FileReader()
+        reader.onload = () => {
+            const geoJson = kmlParser.toGeoJson(reader.result)
+            const features = geoJson.features
+            if (!Array.isArray(features)) return
+            let polygon = []
+            features.map(feature => {
+                polygon.push(getPolygon(feature.geometry))
+            })
+            this.handleFinishDraw(polygon[0])
+        }
+        reader.readAsText(file)
+    }
+
+    renderPointsDistances(points, num) {
+        const pairs = []
         for (var i = 0; i < points.length - 1; i++) {
             var p1 = { lat: points[i][0], lng: points[i][1] }
             var p2 = { lat: points[i+1][0], lng: points[i+1][1] }
             pairs.push([p1, p2])
         }
         return (
-            <div className={styles.distances}>
+            <div className={styles.distances} key={num}>
                 {pairs.map((pair, i) => (
                     <div className={styles.distanceItem} key={i}>
                         <span>{i + 1}</span>
@@ -205,7 +234,7 @@ export default class Map extends React.Component {
                         <ZoomControl position="bottomright" />
                         {isDraw ?
                             <Draw type={drawType} onFinish={this.handleFinishDraw} /> :
-                            <DrawArea points={points} type={drawType} />
+                            <DrawArea points={points} />
                         }
                     </MapContainer>
                 </div>
@@ -219,7 +248,7 @@ export default class Map extends React.Component {
                         <span>Расстояние</span>
                     </div>
                     <div>
-                        {this.renderPointsDistances()}
+                        {toMultiPolygon(points).map(this.renderPointsDistances)}
                     </div>
                 </div>}
                 <div className={styles.searchPanel}>
@@ -275,8 +304,16 @@ export default class Map extends React.Component {
                                     полигон
                                 </div>
                                 <div className={styles.option}>
-                                    <span className={styles.optionIcon}><IconKML /></span>
-                                    файл (KML)
+                                    <label className={styles.optionFile} onClick={this.setDrawType('kml')}>
+                                        <span className={styles.optionIcon}><IconKML /></span>
+                                        файл (KML)
+                                        <input
+                                            type="file"
+                                            className={styles.file}
+                                            accept=".kml,.kmz"
+                                            onChange={this.handleFileChange}
+                                        />
+                                    </label>
                                 </div>
                             </div>
                         </span>
