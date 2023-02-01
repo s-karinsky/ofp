@@ -21,7 +21,7 @@ const signInAction = ({ email, password, remember }) =>
 function Message({ children, onClick, type, buttonText = 'Назад' }) {
     return (
         <div className={styles.errorMessage}>
-            <div class={styles.errorMessageContent}>
+            <div className={styles.errorMessageContent}>
                 {type === 'success' && <IconSuccess className={cn(styles.messageIcon, styles.success)} />}
                 {type === 'error' && <IconError className={cn(styles.messageIcon, styles.error)} />}
                 {children}
@@ -40,14 +40,20 @@ function Message({ children, onClick, type, buttonText = 'Назад' }) {
 
 export function SigninForm({ showPopup, hidePopup }) {
     const { handleSubmit, register, setError, formState } = useForm({ action: signInAction })
+    const [ isUnconfirmed, setIsUnconfirmed ] = useState(false)
 
-    return (
-        <form onSubmit={handleSubmit(res => {
+    return !isUnconfirmed ? 
+        (<form onSubmit={handleSubmit(res => {
             if (!res.ok) {
-                setError({
-                    email: 'Неправильные e-mail или пароль',
-                    password: true
-                })
+                if (res.error === 'Your password is invalid') {
+                    setError({
+                        email: 'Неправильные e-mail или пароль',
+                        password: true
+                    })
+                }
+                if (res.error === 'Unconfirmed') {
+                    setIsUnconfirmed(true)
+                }
             } else {
                 hidePopup()
             }
@@ -104,8 +110,10 @@ export function SigninForm({ showPopup, hidePopup }) {
             >
                 {formState.submitting ? <Spinner /> : 'Войти'}
             </Button>
-        </form>
-    )
+        </form>) :
+        (<Message type='error' onClick={() => setIsUnconfirmed(false)}>
+            Подтвердите регистрацию для входа в этот аккаунт
+        </Message>)
 }
 
 export function ResetPasswordForm({ showPopup }) {

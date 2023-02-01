@@ -32,6 +32,9 @@ export default async function auth(req, res) {
                     if(!pwValid) {
                         throw new Error("Your password is invalid")
                     }
+                    if (user.confirmationCode) {
+                        throw new Error("Unconfirmed")
+                    }
                     return user
                 }            
             })
