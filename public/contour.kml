@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document id="root_doc">
+<Schema name="дырявый" id="дырявый">
+	<SimpleField name="id" type="float"></SimpleField>
+</Schema>
+<Folder><name>дырявый</name>
+  <Placemark>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#дырявый">
+		<SimpleData name="id">1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><Polygon><outerBoundaryIs><LinearRing><coordinates>91.4120492718677,53.6967249595879 91.4120918812505,53.695742974374 91.4104443184479,53.6953130851915 91.4085624040398,53.6958778406595 91.4094216932601,53.697411914102 91.410479826267,53.6976310628654 91.411893037464,53.6975425606182 91.4120492718677,53.6967249595879</coordinates></LinearRing></outerBoundaryIs><innerBoundaryIs><LinearRing><coordinates>91.4099472089816,53.6960464229059 91.4093222713668,53.6961728591456 91.4097128573761,53.6959031280397 91.4099472089816,53.6960464229059</coordinates></LinearRing></innerBoundaryIs><innerBoundaryIs><LinearRing><coordinates>91.4110053419885,53.6956502535508 91.4114527405082,53.6961644300748 91.4107283810001,53.6960927829048 91.4106431622345,53.6958314804228 91.4110053419885,53.6956502535508</coordinates></LinearRing></innerBoundaryIs><innerBoundaryIs><LinearRing><coordinates>91.4113391154873,53.6970747599198 91.4098335839607,53.6970621165852 91.4096702479933,53.6964088724387 91.4109414279142,53.6962740078626 91.4113391154873,53.6970747599198</coordinates></LinearRing></innerBoundaryIs></Polygon></MultiGeometry>
+  </Placemark>
+</Folder>
+</Document></kml>

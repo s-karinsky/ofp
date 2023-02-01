@@ -36,7 +36,7 @@ class Input extends React.Component {
         const { onChange } = this.props
         if (!onChange) return
         const value = e.target.value
-        onChange(value, e)
+        onChange(e, value)
     }
 
     renderShowPasswordIcon() {
@@ -64,7 +64,8 @@ class Input extends React.Component {
                         })}
                         {...rest}
                         placeholder={placeholder}
-                        onChange={this.handleChangeInput}
+                        onChange={this.handleChange}
+                        required={required}
                     />
                     {required && <span className={cn(styles.requiredMark)}>
                         {rest.placeholder ? rest.placeholder + ' ' : ''}

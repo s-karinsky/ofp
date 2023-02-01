@@ -8,7 +8,8 @@ const nextConfig = {
       '@components': path.resolve(__dirname, 'src/components'),
       '@lib': path.resolve(__dirname, 'src/lib'),
       '@middleware': path.resolve(__dirname, 'src/middleware'),
-      '@store': path.resolve(__dirname, 'src/store')
+      '@store': path.resolve(__dirname, 'src/store'),
+      '@models': path.resolve(__dirname, 'src/models')
     };
 
     config.module.rules.push({

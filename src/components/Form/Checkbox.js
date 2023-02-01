@@ -8,16 +8,18 @@ export default function Checkbox(props = {}) {
         children,
         disabled,
         size,
+        error,
         ...rest
     } = props
 
-    const handleChange = e => onChange(e.target.value, e)
+    const handleChange = e => onChange(e, e.target.value)
 
     return (
         <label
             className={cn({
                 [styles.checkbox]: true,
                 [styles[size]]: !!size,
+                [styles.checkboxError]: !!error,
                 [styles.disabled]: disabled
             })}>
             <input

@@ -1,4 +1,5 @@
 import { Provider } from 'react-redux'
+import { SessionProvider } from 'next-auth/react'
 import { store } from '@store'
 import Header from '@components/Header'
 import Footer from '@components/Footer'
@@ -20,28 +21,30 @@ const cabinetTitles = {
     password: 'Изменить пароль'
 }
 
-export default function MyApp({ Component, pageProps, router }) {
+export default function MyApp({ Component, pageProps: { session, ...pageProps }, router }) {
     const rootSection = router.pathname.split('/')[1]
     const subSection = router.pathname.split('/')[2]
     return (
-        <Provider store={store}>
-            <PopupOverlay />
-            <Header navItems={navItems} />
-            {rootSection === 'cabinet'
-                ? <div className="cabinet">
-                    <div className="container">
-                        <div className="cabinet_layout">
-                            <CabinetNav
-                                title={cabinetTitles[subSection] || cabinetTitles.default}
-                                section={subSection}
-                            />
-                            <Component {...pageProps} />
+        <SessionProvider session={session}>
+            <Provider store={store}>
+                <PopupOverlay />
+                <Header navItems={navItems} />
+                {rootSection === 'cabinet'
+                    ? <div className="cabinet">
+                        <div className="container">
+                            <div className="cabinet_layout">
+                                <CabinetNav
+                                    title={cabinetTitles[subSection] || cabinetTitles.default}
+                                    section={subSection}
+                                />
+                                <Component {...pageProps} />
+                            </div>
                         </div>
                     </div>
-                </div>
-                : <Component {...pageProps} />
-            }
-            <Footer navItems={navItems} />
-        </Provider>
+                    : <Component {...pageProps} />
+                }
+                <Footer navItems={navItems} />
+            </Provider>
+        </SessionProvider>
     )
 }

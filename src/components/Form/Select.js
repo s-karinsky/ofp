@@ -33,7 +33,7 @@ class Select extends React.Component {
             const selectLabel = getSelected(val, options)
             this.setState({ selectLabel })
         }
-        if (onChange) onChange(val, e)
+        if (onChange) onChange(e, val)
         e.target.blur()
     }
 

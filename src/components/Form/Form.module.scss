@@ -140,6 +140,9 @@
     cursor: pointer;
     color: $white;
 }
+.checkboxError .checkboxBlock {
+    border-color: $red;
+}
 .small .checkboxBlock {
     flex-basis: $checkbox-size-small;
     height: $checkbox-size-small;

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import cn from 'classnames'
+import { signOut } from 'next-auth/react'
 import IconOrders from './orders.svg'
 import IconProfile from './profile.svg'
 import IconPassword from './password.svg'
@@ -30,10 +31,10 @@ export default function CabinetNav({ title, section }) {
                     </Link>
                 </li>
                 <li className={cn(styles.item)}>
-                    <Link href="/logout">
+                    <a onClick={() => signOut({ callbackUrl: '/' })}>
                         <span className={styles.icon}><IconLogout /></span>
                         Выйти
-                    </Link>
+                    </a>
                 </li>
             </ul>
         </div>
