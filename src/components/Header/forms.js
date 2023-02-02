@@ -18,7 +18,7 @@ const signInAction = ({ email, password, remember }) =>
         remember
     })
 
-function Message({ children, onClick, type, buttonText = 'Назад' }) {
+export function Message({ children, onClick, type, buttonText = 'Назад' }) {
     return (
         <div className={styles.errorMessage}>
             <div className={styles.errorMessageContent}>

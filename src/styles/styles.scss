@@ -250,3 +250,8 @@ body {
 .mapPointer {
   cursor: url("/mapPointer.svg") 9 9, auto !important;
 }
+.textLink {
+  color: $primary-color;
+  text-decoration: underline;
+  cursor: pointer;
+}

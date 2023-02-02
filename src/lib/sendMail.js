@@ -6,8 +6,7 @@ const {
     SMTP_PASS,
     SMTP_HOST,
     SMTP_PORT,
-    SMTP_SECURE,
-    NODE_ENV
+    SMTP_SECURE
 } = process.env
 
 export default async function({ from, to, subject, text, html }) {
@@ -29,8 +28,4 @@ export default async function({ from, to, subject, text, html }) {
     const transporter = nodemailer.createTransport(config)
 
     const result = await transporter.sendMail({ from, to, subject, text, html })
-
-    if (NODE_ENV === 'development') {
-        console.log(result)
-    }
 }

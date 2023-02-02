@@ -22,13 +22,15 @@ const cabinetTitles = {
 }
 
 export default function MyApp({ Component, pageProps: { session, ...pageProps }, router }) {
-    const rootSection = router.pathname.split('/')[1]
-    const subSection = router.pathname.split('/')[2]
+    const { pathname = '', state = {} } = router
+    const rootSection = pathname.split('/')[1]
+    const subSection = pathname.split('/')[2]
+
     return (
         <SessionProvider session={session}>
             <Provider store={store}>
                 <PopupOverlay />
-                <Header navItems={navItems} />
+                <Header navItems={navItems} router={router} />
                 {rootSection === 'cabinet'
                     ? <div className="cabinet">
                         <div className="container">
