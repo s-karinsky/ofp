@@ -1,38 +1,68 @@
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { isValidEmail } from '@lib/utils'
+import Spinner from '@components/Spinner'
 import Button from '@components/Button'
 import { Input, Select } from '@components/Form'
+import { useForm } from '@lib/hooks'
+import { setUserData } from '@store/profile'
 import styles from './Profile.module.scss'
 
 export default function Profile() {
     const profile = useSelector(state => state.profile.user)
+    const dispatch = useDispatch()
+    const { formState, register, handleSubmit } = useForm({ action: 'user', defaultValues: profile })
     return (
-        <div className={styles.profile}>
-            <div className={styles.field}>
-                <Input placeholder="ФИО" defaultValue={profile.name} required />
+        <form onSubmit={handleSubmit(({ data } = {}) => {
+            if (data.user) {
+                const { _id, ...user } = data.user
+                dispatch(setUserData(user))
+            }
+        })} noValidate>
+            <div className={styles.profile}>
+                <div className={styles.field}>
+                    <Input
+                        placeholder="ФИО"
+                        {...register('name', { required: true })}
+                    />
+                </div>
+                <div className={styles.field}>
+                    <Input
+                        placeholder="Дата рождения"
+                        {...register('birthdate')}
+                    />
+                </div>
+                <div className={styles.field}>
+                    <Select
+                        placeholder="Правовая форма"
+                        options={[
+                            { value: 1, label: 'Физическое лицо' },
+                            { value: 2, label: 'Индивидуальный предприниматель' },
+                            { value: 3, label: 'Акционерное общество' }
+                        ]}
+                        {...register('legalForm')}
+                    />
+                </div>
+                <div className={styles.field}>
+                    <Input
+                        placeholder="Телефон"
+                        {...register('phone', { required: true })}
+                    />
+                </div>
+                <div className={styles.field}>
+                    <Input
+                        placeholder="E-mail"
+                        {...register('email', {
+                            required: true,
+                            getValidationError: val => !isValidEmail(val) && 'Введите корректный e-mail'
+                        })}
+                    />
+                </div>
+                <div className={styles.field}>
+                    <Button fullSize>
+                        {formState.submitting ? <Spinner /> : 'Сохранить'}
+                    </Button>
+                </div>
             </div>
-            <div className={styles.field}>
-                <Input placeholder="Дата рождения" defaultValue={profile.birthdate} />
-            </div>
-            <div className={styles.field}>
-                <Select
-                    placeholder="Правовая форма"
-                    defaultValue={profile.status}
-                    options={[
-                        { value: 1, label: 'Физическое лицо' },
-                        { value: 2, label: 'Индивидуальный предприниматель' },
-                        { value: 3, label: 'Акционерное общество' }
-                    ]}
-                />
-            </div>
-            <div className={styles.field}>
-                <Input placeholder="Телефон" defaultValue={profile.phone} />
-            </div>
-            <div className={styles.field}>
-                <Input placeholder="E-mail" defaultValue={profile.email} required />
-            </div>
-            <div className={styles.field}>
-                <Button fullSize>Сохранить</Button>
-            </div>
-        </div>
+        </form>
     )
 }

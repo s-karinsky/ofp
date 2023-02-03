@@ -23,6 +23,9 @@ const userSchema = new mongoose.Schema({
     legalForm: {
         type: String
     },
+    birthdate: {
+        type: String
+    },
     confirmationCode: {
         type: String
     },

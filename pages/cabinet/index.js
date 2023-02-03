@@ -8,14 +8,14 @@ const statuses = {
 }
 
 export default function Cabinet() {
-    const [expandedOrders, setExpandedOrders] = useState([])
+    const [ expandedOrders, setExpandedOrders ] = useState([])
     const orders = useSelector(state => state.profile.orders)
     
     return (
         <div className="cabinet_orders">
-            {orders.map(order => 
-                expandedOrders.indexOf(order.orderId) !== -1 ? (
-                    <div className="cabinet_order" key={order.orderId}>
+            {orders.map(order => (
+                <div className="cabinet_order" key={order.orderId}>
+                    {expandedOrders.indexOf(order.orderId) !== -1 ? (
                         <Order
                             index={order.orderId}
                             date={order.date}
@@ -23,9 +23,7 @@ export default function Cabinet() {
                             items={order.items}
                             onCollapse={() => setExpandedOrders(expandedOrders.filter(id => id !== order.orderId))}
                         />
-                    </div>
-                ) : (
-                    <div className="cabinet_order" key={order.orderId}>
+                    ) : (
                         <OrderSummary
                             index={order.orderId}
                             date={order.date}
@@ -33,8 +31,9 @@ export default function Cabinet() {
                             count={order.items.length}
                             onExpand={() => setExpandedOrders([...expandedOrders, order.orderId])}
                         />
-                    </div>
-                )
+                    )
+                    }
+                </div>)
             )}
         </div>
     )

@@ -9,11 +9,9 @@ export function useForm({ defaultValues = {}, action, method = 'post' } = {}) {
         }
     }
     const _form = formControl.current
-
     const [ values, setValues ] = useState(defaultValues)
     const [ errors, setErrors ] = useState({})
     const [ formState, setFormState ] = useState({ submitting: false })
-
     const setError = (name, value) => typeof name === 'object' ?
         setErrors({ ...errors, ...name }) :
         setErrors({ ...errors, [name]: value })
@@ -40,7 +38,7 @@ export function useForm({ defaultValues = {}, action, method = 'post' } = {}) {
         setError(name, error)
     }
 
-    const register = (name, { getValidationError, required, checkbox }) => {
+    const register = (name, { getValidationError, required, checkbox } = {}) => {
         _form.validators[name] = value => {
             if (required && !value) return 'Обязательное поле'
             if (typeof getValidationError !== 'function') return false

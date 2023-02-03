@@ -3,12 +3,9 @@ import { createSlice } from '@reduxjs/toolkit'
 const profileSlice = createSlice({
     name: 'profile',
     initialState: {
-        user: {
-            name: 'Иванов Иван Иванович',
-            email: 'ivanov@ivan.iv',
-            phone: '+79235554411',
-            birthdate: '22.11.1980'
-        },
+        isLoading: false,
+        isLoaded: false,
+        user: {},
         orders: [
             {
                 orderId: '3319771',
@@ -72,10 +69,16 @@ const profileSlice = createSlice({
                 ...state.user,
                 ...action.payload
             }
+        },
+        setIsLoading(state, action) {
+            state.isLoading = action.payload
+        },
+        setIsLoaded(state, action) {
+            state.isLoaded = action.payload
         }
     }
 })
 
 const { actions, reducer } = profileSlice
-export const { setUserData } = actions
+export const { setUserData, setIsLoading, setIsLoaded } = actions
 export default reducer
