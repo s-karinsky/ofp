@@ -26,6 +26,12 @@ const userSchema = new mongoose.Schema({
     confirmationCode: {
         type: String
     },
+    restoreCode: {
+        type: String
+    },
+    restoreDate: {
+        type: Date
+    },
     createdAt: {
         type: Date,
         default: Date.now

@@ -96,5 +96,5 @@ export function useForm({ defaultValues = {}, action, method = 'post' } = {}) {
         }
     }
 
-    return { handleSubmit, register, setError, setValue, formState }
+    return { handleSubmit, register, setError, setValue, formState, values }
 }

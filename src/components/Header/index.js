@@ -7,7 +7,7 @@ import { useSession } from 'next-auth/react'
 import Popup from '@components/Popup'
 import { showPopup, hidePopup } from '@store/popup'
 import styles from './Header.module.scss'
-import { SigninForm, SignupForm, ResetPasswordForm, Message } from './forms'
+import { SigninForm, SignupForm, ResetPasswordForm, ChangePasswordForm, Message } from './forms'
 import IconCart from './cart.svg'
 import IconUser from './user.svg'
 
@@ -38,7 +38,7 @@ export default function Header({ router, navItems = [] }) {
     const session = useSession()
     const isLogged = session.status === 'authenticated'
 
-    const { query: { confirm } = {} } = router.state || {}
+    const { query: { confirm, reset } = {} } = router.state || {}
     
     useEffect(function() {
         if (confirm === 'ok') {
@@ -47,7 +47,10 @@ export default function Header({ router, navItems = [] }) {
         if (confirm === 'fail') {
             popupShow('confirm-fail')
         }
-    }, [confirm])
+        if (reset === 'pass') {
+            popupShow('change-password')
+        }
+    }, [confirm, reset])
 
     return (
         <header className={cn('container', styles.header)}>
@@ -89,6 +92,10 @@ export default function Header({ router, navItems = [] }) {
 
             <Popup name="signup">
                 <SignupForm showPopup={popupShow} hidePopup={popupHide} />
+            </Popup>
+
+            <Popup name="change-password">
+                <ChangePasswordForm showPopup={popupShow} hidePopup={popupHide} />
             </Popup>
 
             <Popup name="confirm-success">

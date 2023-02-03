@@ -116,31 +116,107 @@ export function SigninForm({ showPopup, hidePopup }) {
         </Message>)
 }
 
-export function ResetPasswordForm({ showPopup }) {
-    const { handleSubmit, register } = useForm()
+export function ResetPasswordForm({ showPopup, hidePopup }) {
+    const { handleSubmit, register, setError, formState } = useForm({ action: 'restore' })
+    const [ isSuccess, setIsSuccess ] = useState(false)
     return (
-        <form onSubmit={handleSubmit(() => console.log('ok'), () => console.log('fail'))} noValidate>
-            <div className="popup_header">Восстановить пароль</div>
-            <div className={styles.popupField}>
-                <Input
-                    placeholder="E-mail"
-                    type="email"
-                    {...register('email', {
-                        required: true,
-                        getValidationError: val => !isValidEmail(val) && 'Введите корректный e-mail'
-                    })}
-                />
-            </div>
-            <Button className={styles.submit} fullSize>Сбросить мой пароль</Button>
-            <div className={styles.resetText}>
-                Вспомнили пароль? <span
-                    className={styles.resetPass}
-                    onClick={() => showPopup('signin')}
+        <>
+            {!isSuccess && <form onSubmit={handleSubmit(
+                () => {
+                    setIsSuccess(true)
+                },
+                err => {
+                    if (err.name === 'AxiosError') {
+                        setError({
+                            email: 'Пользователь с таким e-mail не зарегистрирован'
+                        })
+                    }
+                }
+            )} noValidate>
+                <div className="popup_header">Восстановить пароль</div>
+                <div className={styles.popupField}>
+                    <Input
+                        placeholder="E-mail"
+                        type="email"
+                        {...register('email', {
+                            required: true,
+                            getValidationError: val => !isValidEmail(val) && 'Введите корректный e-mail'
+                        })}
+                    />
+                </div>
+                <Button
+                    className={styles.submit}
+                    disabled={formState.submitting}
+                    fullSize
                 >
-                    Войдите
-                </span>
-            </div>
-        </form>
+                    {formState.submitting ? <Spinner /> : 'Сбросить мой пароль'}
+                </Button>
+                <div className={styles.resetText}>
+                    Вспомнили пароль? <span
+                        className={styles.resetPass}
+                        onClick={() => showPopup('signin')}
+                    >
+                        Войдите
+                    </span>
+                </div>
+            </form>}
+            {isSuccess && <Message onClick={() => hidePopup()} type='success' buttonText='Закрыть окно'>
+                На ваш e-mail отправлено письмо с инструкцией для изменения пароля
+            </Message>}
+        </>
+    )
+}
+
+export function ChangePasswordForm({ showPopup, hidePopup }) {
+    const { handleSubmit, register, setError, formState, values } = useForm({ action: 'restore' })
+    const [ isSuccess, setIsSuccess ] = useState(false)
+    return (
+        <>
+            {!isSuccess && <form onSubmit={handleSubmit(
+                () => {
+                    setIsSuccess(true)
+                },
+                err => {
+                    if (err.name === 'AxiosError') {
+                        setError({
+                            email: 'Пользователь с таким e-mail не зарегистрирован'
+                        })
+                    }
+                }
+            )} noValidate>
+                <div className="popup_header">Изменить пароль</div>
+                <div className={styles.popupField}>
+                    <Input
+                        placeholder="Введите новый пароль"
+                        type="password"
+                        {...register('password', {
+                            required: true,
+                            getValidationError: val => val !== values.password_repeat
+                        })}
+                    />
+                </div>
+                <div className={styles.popupField}>
+                    <Input
+                        placeholder="Повторите новый пароль"
+                        type="password"
+                        {...register('password_repeat', {
+                            required: true,
+                            getValidationError: val => val !== values.password && 'Пароли должны совпадать'
+                        })}
+                    />
+                </div>
+                <Button
+                    className={styles.submit}
+                    disabled={formState.submitting}
+                    fullSize
+                >
+                    {formState.submitting ? <Spinner /> : 'Изменить пароль'}
+                </Button>
+            </form>}
+            {isSuccess && <Message onClick={() => hidePopup()} type='success' buttonText='Закрыть окно'>
+                Пароль изменен. Вы можете войти с помощью нового пароля
+            </Message>}
+        </>
     )
 }
 
@@ -151,7 +227,7 @@ export function SignupForm({ showPopup, hidePopup }) {
     return (
         <form onSubmit={
             handleSubmit(
-                res => {
+                () => {
                     setIsSuccess(true)
                 },
                 err => {
