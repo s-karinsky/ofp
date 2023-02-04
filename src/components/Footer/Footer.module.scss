@@ -21,40 +21,28 @@
 }
 .logo {
     display: block;
-    width: 280px;
-    height: 70px;
+    width: 23vw;
+    max-width: 450px;
+    height: 85px;
     margin-bottom: 30px;
-    background-image: url('/images/logo.png');
-    background-size: cover;
+    background-image: url('/images/logo.svg');
+    background-size: contain;
     background-repeat: no-repeat;
-
-    @include screenMore(1440px) {
-        width: 350px;
-        height: 88px;
-    }
-
-    @include screenMore(1920px) {
-        width: 393px;
-        height: 99px;
-    }
 }
 .logoText {
     font-size: 14px;
     line-height: 1.3em;
     color: $gray;
     width: 280px;
-    padding-left: 84px;
     box-sizing: border-box;
 
     @include screenMore(1440px) {
         font-size: 18px;
-        padding-left: 107px;
         width: 350px;
     }
 
     @include screenMore(1920px) {
         font-size: 20px;
-        padding-left: 120px;
         width: 393px;
     }
 }
