@@ -1,7 +1,26 @@
+@import '@styles/var';
+
 .partners {
-    padding-top: 140px;
-    padding-bottom: 200px;
+    padding-top: 10vw;
+    margin-bottom: 120px;
+    background-image: url('/images/partner_page_bg.jpg');
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 34vw;
+    box-sizing: border-box;
 }
 .submit {
     padding-bottom: 120px;
+}
+.formTitle {
+    color: #333;
+    margin-bottom: 70px;
+}
+.partnerText {
+    color: $secondary-color;
+    margin-top: 30px;
+    font-size: 24px;
+    text-transform: uppercase;
+    width: 560px;
 }

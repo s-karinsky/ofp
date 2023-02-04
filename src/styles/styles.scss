@@ -74,6 +74,10 @@ body {
   padding-bottom: 30px;
   margin: 0;
 
+  @include screenLess(1280px) {
+    font-size: 36px;
+  }
+
   &_noline:after {
     display: none;
   }

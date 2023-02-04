@@ -8,14 +8,17 @@ import styles from './Partners.module.scss'
 export default function Partners() {
     return (
         <>
-            <div className={cn("container", styles.partners)}>
-                <h1 className="title title_noline">Где применяется</h1>
-                <UsageSlider />
+            <div className={styles.partners}>
+                <div className="container">
+                    <h1 className="title title_white title_noline">Станьте Нашим партнёром</h1>
+                    <div className={styles.partnerText}>
+                        Вы занимаетесь созданием ортофотопланов и у вас уже есть готовые ортофотопланы, <b>вы можете стать нашим партнером и продать ваши ОФП</b>
+                    </div>
+                </div>
             </div>
             <div className="container">
-                <h1 className="title title_noline">
-                    Станьте нашим партнером
-                    <div className="subtitle">Заполните форму</div>
+                <h1 className={cn("title", "title_noline", styles.formTitle)}>
+                    Заполните форму<br />мы с вами свяжемся
                 </h1>
                 <GreenForm>
                     <Input placeholder="Имя" />
