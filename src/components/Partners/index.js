@@ -23,7 +23,7 @@ export default function Partners() {
                     <span>
                         {partnerSendStatus === 'success' ?
                             'Ваше сообщение отправлено. В ближайшее время вам ответят' :
-                            'Происзошла ошибка, попробуйте позже'
+                            'Произошла ошибка, попробуйте позже'
                         }
                     </span>
                 </Message>
