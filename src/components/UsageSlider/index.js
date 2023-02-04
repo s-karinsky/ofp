@@ -1,7 +1,7 @@
 import Slider from '@components/Slider'
-import styles from './PartnersSlider.module.scss'
+import styles from './UsageSlider.module.scss'
 
-export default function PartnersSlider() {
+export default function UsageSlider() {
     return (
         <div className={styles.sliderWrapper}>
             <Slider slidesToShow={3}>

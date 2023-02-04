@@ -3,7 +3,7 @@ import Accordion from '@components/Accordion'
 import Button from '@components/Button'
 import { Checkbox, Input, Textarea } from '@components/Form'
 import GreenForm from '@components/GreenForm'
-import PartnersSlider from '@components/PartnersSlider'
+import UsageSlider from '@components/UsageSlider'
 import styles from './Home.module.scss'
 
 export default function Home() {
@@ -194,15 +194,34 @@ export default function Home() {
                             <div className="subtitle">Области применения</div>
                         </h1>
 
-                        <PartnersSlider />
-                        
-                        <div className={styles.partnerButton}>
-                            <Button width="530px" height="100px" href="/partners">
-                                Стать партнёром
-                            </Button>
+                        <UsageSlider />
+                    </div>
+                </div>
+
+                <div className={styles.partner}>
+                    <div className={cn("container", styles.usageContainer)}>
+                        <h1 className="title">
+                            Как стать нашим партнером?
+                            <div className="subtitle">Давай с нами делать мир лучше</div>
+                        </h1>
+
+                        <div className={styles.partnerContent}>
+                            <div className={styles.partnerText}>
+                                Вы занимаетесь созданием ортофотопланов и у вас уже есть готовые ортофотопланы, <b>вы можете стать нашим партнером и продать ваши ОФП</b>
+                            </div>
+                            <div className={styles.partnerButton}>
+                                <Button width="530px" height="100px" href="/partners">
+                                    Стать партнёром
+                                </Button>
+                                <div className={styles.partnerHint}>
+                                    Мы обязательно свяжемся с Вами в ближайшее время
+                                </div>
+                            </div>
                         </div>
                     </div>
+                </div>
 
+                <div className={styles.faqWrapper}>
                     <div className={cn("container", styles.faq)}>
                         <h1 className="title">
                             Часто задаваемые вопросы
@@ -231,21 +250,22 @@ export default function Home() {
                             </Accordion>
                         </div>
                     </div>
-                    
-                    <div className={cn("container", styles.askTitle)}>
-                        <h1 className="title">
+                </div>
+                <div>
+                    <div className="container">
+                        <h1 className="title title_noline">
                             Проконсультируем по любым вопросам
                             <div className="subtitle">Заполни форму обратной связи</div>
                         </h1>
+                        <GreenForm>
+                            <Input placeholder="Имя" />
+                            <Input placeholder="E-mail" type="email" />
+                            <Input placeholder="Телефон" />
+                            <Textarea type="textarea" placeholder="Введите данные вашего запроса" className={styles.contactText} />
+                            <Checkbox>Я даю согласие на обработку персональных данных</Checkbox>
+                            <Button color="white" width="335px">Отправить</Button>
+                        </GreenForm>
                     </div>
-                    <GreenForm>
-                        <Input placeholder="Имя" />
-                        <Input placeholder="E-mail" type="email" />
-                        <Input placeholder="Телефон" />
-                        <Textarea type="textarea" placeholder="Введите данные вашего запроса" className={styles.contactText} />
-                        <Checkbox>Я даю согласие на обработку персональных данных</Checkbox>
-                        <Button color="white" width="335px">Отправить</Button>
-                    </GreenForm>
                 </div>
             </div>
         </div>

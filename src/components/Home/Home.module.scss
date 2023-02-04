@@ -203,8 +203,12 @@
 .usage {
     padding-top: 70px;
     position: relative;
-    background-image: url('/images/home_faq.jpg');
-    background-position: top 630px center;
+}
+.partner {
+    margin-top: 180px;
+    height: 50vw;
+    background: url('/images/partner_bg.jpg');
+    background-position: center bottom;
     background-size: contain;
     background-repeat: no-repeat;
 }
@@ -212,29 +216,35 @@
     position: relative;
     z-index: 10;
 }
-.usage:before {
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    height: 700px;
-    background: linear-gradient(to bottom, rgba(196, 196, 196, 0.38), rgba(206, 206, 206, 0));
-    content: '';
+.partnerContent {
+    margin-top: 140px;
+    display: flex;
+    justify-content: space-between;
+}
+.partnerText {
+    text-transform: uppercase;
+    width: 530px;
+    font-size: 24px;
 }
 .partnerButton {
-    margin-top: 80px;
     text-align: center;
     text-transform: uppercase;
 }
-.faq {
-    margin-top: 250px;
+.partnerHint {
+    font-size: 17px;
+    margin-top: 20px;
+}
+.faqWrapper {
+    margin-top: 100px;
+    padding-top: 180px;
+    background-image: url('/images/faq_bg.jpg');
+    background-position: right top;
+    background-repeat: no-repeat;
+    background-size: 50vw auto;
 }
 .accordion {
     padding: 60px 0 100px;
 }
 .contactText {
     height: 200px;
-}
-.askTitle {
-    padding-bottom: 100px;
 }

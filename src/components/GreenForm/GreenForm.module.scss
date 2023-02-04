@@ -1,14 +1,32 @@
 @import '@styles/var';
 
 .greenForm {
-    padding: 180px 0 90px;
-    background-image: url('/images/home_bottom.jpg');
-    background-size: cover;
-    background-position: top right;
+    position: relative;
+    padding: 110px 0 70px;
+    background-color: #3E5C69;
+    height: 850px;
+    box-sizing: border-box;
+    border-radius: 65px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+.greenForm:before {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('/images/ask_bg.png');
+    background-size: contain;
+    background-position: bottom center;
     background-repeat: no-repeat;
+    opacity: .4;
+    content: ''
 }
 .greenFormInput {
-    width: 45vw;
+    position: relative;
+    margin: 0 auto;
+    width: 850px;
     margin-bottom: 40px;
     color: $white;
 }
