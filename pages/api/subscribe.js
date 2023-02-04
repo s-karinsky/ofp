@@ -34,7 +34,7 @@ async function subscribe(req, res) {
             subject: 'Подписка',
             html: `
                 Вы были подписаны на новости сайта ортофотоплан<br>
-                Для отмены подписки перейдите по ссылке <a href="${process.env.BASE_URL}/api/subscribe?email=${email}&code=${unsubscribeCode}" target="_blank">localhost:3000/api/subscribe?email=${email}&code=${unsubscribeCode}</a>
+                Для отмены подписки перейдите по ссылке <a href="${process.env.BASE_URL}/api/subscribe?email=${email}&code=${unsubscribeCode}" target="_blank">${process.env.BASE_URL}:3000/api/subscribe?email=${email}&code=${unsubscribeCode}</a>
             `
         })
 

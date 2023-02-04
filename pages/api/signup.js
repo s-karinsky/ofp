@@ -16,7 +16,7 @@ async function createUser(req, res) {
             subject: 'Подтверждение e-mail',
             html: `
                 Этот e-mail был указан для регистрации на сайте ортофотоплан<br>
-                Для подтверждения перейдите по ссылке <a href="${process.env.BASE_URL}/api/confirm?email=${email}&code=${confirmationCode}" target="_blank">localhost:3000/api/confirm?email=${email}&code=${confirmationCode}</a>
+                Для подтверждения перейдите по ссылке <a href="${process.env.BASE_URL}/api/confirm?email=${email}&code=${confirmationCode}" target="_blank">${process.env.BASE_URL}/api/confirm?email=${email}&code=${confirmationCode}</a>
             `
         })
 
