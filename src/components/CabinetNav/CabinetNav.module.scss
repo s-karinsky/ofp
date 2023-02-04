@@ -42,3 +42,15 @@
     margin-right: 10px;
     vertical-align: middle;
 }
+.logoutConfirm {
+    text-align: center;
+    height: 400px;
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    & > span {
+        padding: 100px 0;
+    }
+}
