@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import cn from 'classnames'
 import { hidePopup } from '@store/popup'
@@ -14,10 +14,14 @@ function Popup(props = {}) {
         children
     } = props
     const dispatch = useDispatch()
+    const [ isPopupMouseDown, setPopupMouseDown ] = useState()
     const popupName = useSelector(state => state.popup.popupName)
     const handleWrapperClick = e => {
         if (e.target === e.currentTarget) {
-            dispatch(hidePopup())
+            if (isPopupMouseDown)
+                setPopupMouseDown(false)
+            else
+                dispatch(hidePopup())
         }
     }
     if (popupName !== name) return null;
@@ -28,6 +32,8 @@ function Popup(props = {}) {
                     [styles.contentOnly]: contentOnly,
                     [styles.noBorder]: noBorder
                 })}
+                onMouseDown={() => setPopupMouseDown(true)}
+                onMouseUp={() => setPopupMouseDown(false)}
             >
                 {!contentOnly && <span className={styles.close} onClick={() => dispatch(hidePopup())}>
                     <IconClose />
