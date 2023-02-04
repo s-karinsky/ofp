@@ -19,7 +19,7 @@ class Textarea extends React.Component {
         const { onChange } = this.props
         if (!onChange) return
         const value = e.target.value
-        onChange(value, e)
+        onChange(e, value)
     }
 
     render() {
@@ -36,7 +36,7 @@ class Textarea extends React.Component {
                         })}
                         {...rest}
                         placeholder={placeholder}
-                        onChange={this.handleChangeInput}
+                        onChange={this.handleChange}
                     />
                     {required && <span className={cn(styles.requiredMark)}>
                         {rest.placeholder ? rest.placeholder + ' ' : ''}

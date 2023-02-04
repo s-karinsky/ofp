@@ -1,14 +1,35 @@
+import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import cn from 'classnames'
+import { Message } from '@components/Header/forms'
 import Accordion from '@components/Accordion'
 import Button from '@components/Button'
 import { Checkbox, Input, Textarea } from '@components/Form'
 import GreenForm from '@components/GreenForm'
+import Popup from '@components/Popup'
 import UsageSlider from '@components/UsageSlider'
+import Spinner from '@components/Spinner'
+import { showPopup, hidePopup } from '@store/popup'
+import { isValidEmail } from '@lib/utils'
+import { useForm } from '@lib/hooks'
 import styles from './Home.module.scss'
 
 export default function Home() {
+    const dispatch = useDispatch()
+    const [ contactSendStatus, setContactSendStatus ] = useState()
+    const { handleSubmit, register, formState } = useForm({ action: 'contact', defaultValues: { type: 'consult' } })
     return (
         <div className={styles.home}>
+            <Popup name="contact-send">
+                <Message type={contactSendStatus} buttonText="Закрыть" onClick={() => dispatch(hidePopup())}>
+                    <span>
+                        {contactSendStatus === 'success' ?
+                            'Ваше сообщение отправлено. В ближайшее время вам ответят' :
+                            'Происзошла ошибка, попробуйте позже'
+                        }
+                    </span>
+                </Message>
+            </Popup>
             <div className={styles.homeTop}>
                 <div className={styles.homeTopTitle}>
                     Сервис продажи готовых<br />ортофотопланов<br />и съемки с БПЛА
@@ -257,13 +278,44 @@ export default function Home() {
                             Проконсультируем по любым вопросам
                             <div className="subtitle">Заполни форму обратной связи</div>
                         </h1>
-                        <GreenForm>
-                            <Input placeholder="Имя" />
-                            <Input placeholder="E-mail" type="email" />
-                            <Input placeholder="Телефон" />
-                            <Textarea type="textarea" placeholder="Введите данные вашего запроса" className={styles.contactText} />
-                            <Checkbox>Я даю согласие на обработку персональных данных</Checkbox>
-                            <Button color="white" width="335px">Отправить</Button>
+                        <GreenForm onSubmit={handleSubmit(
+                            ({ data = {}} = {}) => {
+                                setContactSendStatus(data.success ? 'success' : 'error')
+                                dispatch(showPopup('contact-send'))
+                            },
+                            () => {
+                                setContactSendStatus('error')
+                                dispatch(showPopup('contact-send'))
+                            }
+                        )}>
+                            <Input
+                                placeholder="Имя"
+                                {...register('name', { required: true })}
+                            />
+                            <Input
+                                placeholder="E-mail"
+                                type="email"
+                                {...register('email', {
+                                    required: true,
+                                    getValidationError: val => !isValidEmail(val) && 'Введите корректный e-mail'
+                                })}
+                            />
+                            <Input
+                                placeholder="Телефон"
+                                {...register('phone')}
+                            />
+                            <Textarea
+                                type="textarea"
+                                placeholder="Введите данные вашего запроса"
+                                className={styles.contactText}
+                                {...register('message', { required: true })}
+                            />
+                            <Checkbox {...register('agree', { required: true, checkbox: true })}>
+                                Я даю согласие на обработку персональных данных
+                            </Checkbox>
+                            <Button color="white" width="335px" disabled={formState.submitting}>
+                                {formState.submitting ? <Spinner /> : 'Отправить'}
+                            </Button>
                         </GreenForm>
                     </div>
                 </div>
