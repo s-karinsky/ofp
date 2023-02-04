@@ -283,9 +283,11 @@ export default function Home() {
                                 setContactSendStatus(data.success ? 'success' : 'error')
                                 dispatch(showPopup('contact-send'))
                             },
-                            () => {
-                                setContactSendStatus('error')
-                                dispatch(showPopup('contact-send'))
+                            (err) => {
+                                if (err.name === 'AxiosError') {
+                                    setPartnerSendStatus('error')
+                                    dispatch(showPopup('partner-send'))
+                                }
                             }
                         )}>
                             <Input
