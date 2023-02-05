@@ -18,7 +18,7 @@
     "leaflet": "^1.9.3",
     "mongoose": "^6.9.0",
     "next": "latest",
-    "next-auth": "^4.18.10",
+    "next-auth": "^4.19.2",
     "next-connect": "^0.6.6",
     "nodemailer": "^6.9.1",
     "passport": "^0.4.1",
