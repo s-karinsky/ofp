@@ -1,20 +1,18 @@
+import 'leaflet/dist/leaflet.css'
 import React from 'react'
 import kmlParser from 'js-kml-parser'
 import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet'
 import cn from 'classnames'
 import { computeArea, computeDistanceBetween } from 'spherical-geometry-js'
-import 'leaflet/dist/leaflet.css'
 import Button from '@components/Button'
 import { Input } from '@components/Form'
 import Calendar from '@components/Calendar'
 import Popup from '@components/Popup'
+import { getRectPolygonByCorners, getMultipolygon, reversePolygonCoords } from '@lib/geo'
+import { DRAW_TYPE_OPTIONS, DATE_OPTIONS } from './consts'
 import { Draw, DrawArea } from './draw'
 import { IconSearch, IconDate, IconArea, IconRect, IconPolygon, IconKML, IconArrow } from './icons'
 import styles from './Map.module.scss'
-
-function getRectCoords(p) {
-    return [[p[0][0], p[0][1]], [p[0][0], p[1][1]], [p[1][0], p[1][1]], [p[1][0], p[0][1]], [p[0][0], p[0][1]]]
-}
 
 function getDateOffsetMonth(offset = 0, date = []) {
     let year = new Date(...date).getFullYear()
@@ -32,29 +30,11 @@ function getDateOffsetMonth(offset = 0, date = []) {
 
 function getPolygon(kmlGeometry) {
     if (kmlGeometry.type === 'Polygon') {
-        return kmlGeometry.coordinates[0]
+        return kmlGeometry.coordinates
     }
     if (kmlGeometry.type === 'GeometryCollection') {
         return kmlGeometry.geometries.map(getPolygon)
     }
-}
-
-function toMultiPolygon(points) {
-    return points[0] && typeof points[0][0] === 'number' ? [points] : points
-}
-
-const nameByDrawType = {
-    rect: 'Прямоугольник',
-    polygon: 'Полигон',
-    kml: 'Файл (KML)'
-}
-
-const nameByDate = {
-    last3: 'последние 3 месяца',
-    last6: 'последние 6 месяцев',
-    lastyear: 'последний год',
-    all: 'за все время',
-    custom: 'выбрать даты...'
 }
 
 export default class Map extends React.Component {
@@ -88,14 +68,23 @@ export default class Map extends React.Component {
         const { drawType } = this.state
         this.setState({
             isDraw: false,
-            points: drawType === 'rect' ? getRectCoords(points) : points
+            points: drawType === 'rect' ? getRectPolygonByCorners(points) : points
         })
     }
 
     getArea() {
         const { points } = this.state
-        const lanLng = points.map(item => ({ lat: item[0], lng: item[1]}))
-        return (computeArea(lanLng) / 1000000).toFixed(2)
+        const multipolygon = getMultipolygon(points)
+        let area = 0
+        multipolygon.forEach(polygon => {
+            const [ firstPoly, ...items ] = polygon.map(points => points.map(item => ({ lat: item[0], lng: item[1]})))
+            let totalArea = computeArea(firstPoly) / 1000000
+            items.forEach(item => {
+                totalArea -= computeArea(item) / 1000000
+            })
+            area += Number(totalArea.toFixed(2))
+        })
+        return area
     }
 
     applyCalendar = () => {
@@ -140,14 +129,35 @@ export default class Map extends React.Component {
         reader.onload = () => {
             const geoJson = kmlParser.toGeoJson(reader.result)
             const features = geoJson.features
-            if (!Array.isArray(features)) return
+            if (!Array.isArray(features) || !features.length) {
+                alert('Файл не содержит координат или некорректен')
+                return
+            }
             let polygon = []
             features.map(feature => {
                 polygon.push(getPolygon(feature.geometry))
             })
-            this.handleFinishDraw(polygon[0])
+            const points = reversePolygonCoords(polygon).filter(p => p.length)
+            this.handleFinishDraw(points)
         }
         reader.readAsText(file)
+    }
+
+    renderDistances() {
+        const { points } = this.state
+        const multipolygon = getMultipolygon(points)
+        
+        return (
+            <div className={styles.allDistances}>
+                {multipolygon.map((polygon, i) => {
+                    return (
+                        <div className={styles.polygonDistances} key={i}>
+                            {polygon.map(this.renderPointsDistances)}
+                        </div>
+                    )
+                })}
+            </div>
+        )
     }
 
     renderPointsDistances(points, num) {
@@ -186,6 +196,7 @@ export default class Map extends React.Component {
             dateTo,
             applyRange
         } = this.state
+
         return (
             <div className={styles.map}>
                 <Popup name="map-date-range" contentOnly>
@@ -248,7 +259,7 @@ export default class Map extends React.Component {
                         <span>Расстояние</span>
                     </div>
                     <div>
-                        {toMultiPolygon(points).map(this.renderPointsDistances)}
+                        {this.renderDistances()}
                     </div>
                 </div>}
                 <div className={styles.searchPanel}>
@@ -269,14 +280,14 @@ export default class Map extends React.Component {
                             >
                                 {dateType === 'custom' && applyRange ?
                                     `${applyRange.start.join('.')} - ${applyRange.end.join('.')}` :
-                                    (nameByDate[dateType] || 'Дата')
+                                    (DATE_OPTIONS[dateType] || 'Дата')
                                 }
                                 <span className={styles.optionsArrow}><IconArrow /></span>
                             </div>
                             <div className={cn(styles.options, { [styles.options_visible]: showOptions === 'date' })}>
-                                {Object.keys(nameByDate).map(key => (
+                                {Object.keys(DATE_OPTIONS).map(key => (
                                     <div key={key} className={styles.option} onClick={this.setDateType(key)}>
-                                        {nameByDate[key]}
+                                        {DATE_OPTIONS[key]}
                                     </div>
                                 ))}
                             </div>
@@ -291,7 +302,7 @@ export default class Map extends React.Component {
                                 })}
                                 onClick={() => this.setState({ showOptions: showOptions === 'draw' ? null : 'draw' })}
                             >
-                                {nameByDrawType[drawType] || 'Область'}
+                                {DRAW_TYPE_OPTIONS[drawType] || 'Область'}
                                 <span className={styles.optionsArrow}><IconArrow /></span>
                             </div>
                             <div className={cn(styles.options, { [styles.options_visible]: showOptions === 'draw' })}>
@@ -310,8 +321,9 @@ export default class Map extends React.Component {
                                         <input
                                             type="file"
                                             className={styles.file}
-                                            accept=".kml,.kmz"
+                                            accept=".kml,.kmz,.xml"
                                             onChange={this.handleFileChange}
+                                            onClick={e => e.target.value = null}
                                         />
                                     </label>
                                 </div>

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
     Rectangle,
     Polyline,
@@ -73,10 +73,11 @@ function DrawPolyline({ onFinish = () => {} }) {
 }
 
 function Draw({ type, onFinish = () => {} }) {
-    // Не думай обо мне плохо, если видишь это. Но по-другому я не смог :)
     const map = useMap()
-    const cont = map._container
-    cont.classList.add('mapPointer')
+    useEffect(() => {
+        const cont = map._container
+        cont.classList.add('mapPointer')
+    }, [])
     return (
         type === 'rect' ?
             <DrawRect onFinish={onFinish} /> :
@@ -85,10 +86,12 @@ function Draw({ type, onFinish = () => {} }) {
 }
 
 function DrawArea({ points }) {
-    // Ну правда не смог :(
     const map = useMap()
-    const cont = map._container
-    cont.classList.remove('mapPointer')
+    useEffect(() => {
+        const cont = map._container
+        cont.classList.remove('mapPointer')
+        if (points && points.length) map.fitBounds(points)
+    }, [])
     return <Polygon positions={points} pathOptions={pathOptions} />
 }
 

@@ -108,9 +108,17 @@
     padding: 20px 15px 10px 20px;
     border-bottom: 1px solid $xlight-gray;
 }
-.distances {
-    max-height: 125px;
+.allDistances {
+    max-height: 150px;
     overflow: auto;
+}
+.distances {
+    margin-bottom: 10px;
+
+    & + .distances {
+        border-top: 1px dashed #999;
+        padding-top: 10px;
+    }
 }
 .distanceHeader {
     display: flex;
