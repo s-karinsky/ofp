@@ -26,6 +26,11 @@ const userSchema = new mongoose.Schema({
     birthdate: {
         type: String
     },
+    role: {
+        type: String,
+        enum: ['user', 'seller'],
+        default: 'user'
+    },
     confirmationCode: {
         type: String
     },

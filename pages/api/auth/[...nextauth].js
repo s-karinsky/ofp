@@ -29,7 +29,7 @@ export default async function auth(req, res) {
                         throw new Error('No user with a matching email was found.')
                     }
                     const pwValid = await user.comparePassword(credentials.password)
-                    if(!pwValid) {
+                    if (!pwValid) {
                         throw new Error("Your password is invalid")
                     }
                     if (user.confirmationCode) {
