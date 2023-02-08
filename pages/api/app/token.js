@@ -12,6 +12,12 @@ async function loginUser(req, res) {
     if (!user) {
         throw new Error('No user with a matching email was found.')
     }
+    if (user.confirmationCode) {
+        throw new Error('User not confirm own e-mail')
+    }
+    // if (user.role !== 'seller') {
+    //     throw new Error('User role is not seller')
+    // }
     const pwValid = await user.comparePassword(password)
     if (!pwValid) {
         throw new Error("Your password is invalid")

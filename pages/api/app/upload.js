@@ -11,10 +11,16 @@ const upload = multer({
         filename: (req, file, cb) => {
             const id = req.token.id
             const filename = `${id}${Date.now()}.${file.originalname.split('.').pop()}`
-            req.filename = filename
+            req.previewFilename = filename
             cb(null, filename)
         }
-    })
+    }),
+    fileFilter: (req, file, cb) => {
+        if (['image/gif', 'image/jpeg', 'image/png'].indexOf(file.mimetype) === -1) {
+            cb(new Error('Preview must be image'))
+        }
+        cb(null, true)
+    }
 })
 const uploadMiddleware = upload.single('preview')
 
@@ -27,10 +33,10 @@ async function checkTokenMiddleware(req, res, next) {
     })
 }
 
-async function loginUser(req, res) {
+async function createArea(req, res) {
     dbConnect()
     const id = req.token.id
-    const filename = req.filename
+    const filename = req.previewFilename
     
     try {
         const area = await Area.create({
@@ -49,7 +55,10 @@ async function loginUser(req, res) {
                 ]
             }
         })
-        res.status(201).send({ create: area._id })
+        res.status(201).send({
+            id: area._id,
+            preview: filename
+        })
     } catch (e) {
         throw new Error(e)
     }
@@ -60,7 +69,7 @@ handler
     .use(externalApp)
     .use(checkTokenMiddleware)
     .use(uploadMiddleware)
-    .post(loginUser)
+    .post(createArea)
 
 export const config = {
     api: {
