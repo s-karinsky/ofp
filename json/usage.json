@@ -1,0 +1,65 @@
+{
+    "industrial-facilities": {
+        "title": "Промышленные объекты",
+        "preview": "industrial.jpg",
+        "contentImage": "",
+        "content": "html",
+        "order": 0
+    },
+    "agriculture": {
+        "title": "Сельское хозяйство",
+        "preview": "agriculture.jpg",
+        "contentImage": "",
+        "content": "html",
+        "order": 1
+    },
+    "development": {
+        "title": "Строительство",
+        "preview": "development.jpg",
+        "contentImage": "",
+        "content": "html",
+        "order": 2
+    },
+    "exploration-of-deposits": {
+        "title": "Разведка месторождений",
+        "preview": "deposits.jpg",
+        "contentImage": "",
+        "content": "html",
+        "order": 3
+    },
+    "geodesy": {
+        "title": "Геодезия",
+        "preview": "geodesy.jpg",
+        "contentImage": "",
+        "content": "html",
+        "order": 4
+    },
+    "urban-planning": {
+        "title": "Градостроительство и землеустройство",
+        "preview": "planning.jpg",
+        "contentImage": "",
+        "content": "html",
+        "order": 5
+    },
+    "mining": {
+        "title": "Горное дело",
+        "preview": "mining.jpg",
+        "contentImage": "",
+        "content": "html",
+        "order": 6
+    },
+    "oil-and-gas": {
+        "title": "Нефтегазовый сектор",
+        "preview": "oilgas.jpg",
+        "contentImage": "",
+        "content": "html",
+        "order": 7
+    },
+    "energy": {
+        "title": "Энергетика",
+        "preview": "energy.jpg",
+        "contentImage": "",
+        "content": "html",
+        "order": 8
+    }
+}

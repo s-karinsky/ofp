@@ -10,7 +10,8 @@ const nextConfig = {
       '@lib': path.resolve(__dirname, 'src/lib'),
       '@middleware': path.resolve(__dirname, 'src/middleware'),
       '@store': path.resolve(__dirname, 'src/store'),
-      '@models': path.resolve(__dirname, 'src/models')
+      '@models': path.resolve(__dirname, 'src/models'),
+      '@json': path.resolve(__dirname, 'json')
     };
 
     config.module.rules.push({
