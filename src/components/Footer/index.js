@@ -6,7 +6,7 @@ import IconLetter from './letter.svg'
 import IconPhone from './phone.svg'
 import styles from './Footer.module.scss'
 
-export default function Footer({ navItems = [] }) {
+export default function Footer({ navItems = [], email, tel = [] }) {
     const router = useRouter()
     return (
         <>
@@ -47,25 +47,19 @@ export default function Footer({ navItems = [] }) {
                                 <span className={styles.contactIcon}>
                                     <IconLetter />
                                 </span>
-                                uhninv@mail.ru
+                                {email}
                             </Link>
                         </div>
-                        <div className={styles.contact}>
-                            <Link href="tel:+73466682015">
-                                <span className={styles.contactIcon}>
-                                    <IconPhone />
-                                </span>
-                                +7 (3466) 68-20-15
-                            </Link>
-                        </div>
-                        <div className={styles.contact}>
-                            <Link href="tel:+73466682016">
-                                <span className={styles.contactIcon}>
-                                    <IconPhone />
-                                </span>
-                                +7 (3466) 68-20-16
-                            </Link>
-                        </div>
+                        {tel.map(num => (
+                            <div className={styles.contact} key={num}>
+                                <Link href={`tel:${num}`}>
+                                    <span className={styles.contactIcon}>
+                                        <IconPhone />
+                                    </span>
+                                    {num}
+                                </Link>
+                            </div>
+                        ))}
                         <div className={styles.contact}>бесплатно по России</div>
                     </div>
                 </div>

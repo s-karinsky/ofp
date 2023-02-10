@@ -62,6 +62,10 @@
     @include screenLess(1280px) {
         font-size: 12px;
     }
+
+    a {
+        text-decoration: none;
+    }
 }
 .contactsNumber {
     color: $primary-color;

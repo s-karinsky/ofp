@@ -5,15 +5,9 @@ import Header from '@components/Header'
 import Footer from '@components/Footer'
 import { PopupOverlay } from '@components/Popup'
 import CabinetNav from '@components/CabinetNav'
+import headerJson from '@json/header.json'
+import footerJson from '@json/footer.json'
 import '@styles/styles.scss'
-
-const navItems = [
-    { link: '/', title: 'Главная' },
-    { link: '/map', title: 'Карта' },
-    { link: '/partners', title: 'Партнерам' },
-    { link: '/documents', title: 'Документы' },
-    { link: '/contacts', title: 'Контакты' },
-]
 
 const cabinetTitles = {
     default: 'Мои заказы',
@@ -21,16 +15,23 @@ const cabinetTitles = {
     password: 'Изменить пароль'
 }
 
-export default function MyApp({ Component, pageProps: { session, ...pageProps }, router }) {
+export default function MyApp({
+    Component,
+    pageProps: { session, ...pageProps },
+    router
+}) {
     const { pathname = '', state = {} } = router
     const rootSection = pathname.split('/')[1]
     const subSection = pathname.split('/')[2]
-
     return (
         <SessionProvider session={session}>
             <Provider store={store}>
                 <PopupOverlay />
-                <Header navItems={navItems} router={router} />
+                <Header
+                    navItems={headerJson.nav}
+                    tel={headerJson.tel}
+                    router={router}
+                />
                 {rootSection === 'cabinet'
                     ? <div className="cabinet">
                         <div className="container">
@@ -45,7 +46,11 @@ export default function MyApp({ Component, pageProps: { session, ...pageProps },
                     </div>
                     : <Component {...pageProps} />
                 }
-                <Footer navItems={navItems} />
+                <Footer
+                    navItems={footerJson.nav}
+                    email={footerJson.email}
+                    tel={footerJson.tel}
+                />
             </Provider>
         </SessionProvider>
     )

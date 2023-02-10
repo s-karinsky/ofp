@@ -1,0 +1,17 @@
+{
+    "nav": [{
+        "link": "/map",
+        "title": "Карта"
+    }, {
+        "link": "/partners",
+        "title": "Партнерам"
+    }, {
+        "link": "/documents",
+        "title": "Документы"
+    }, {
+        "link": "/contacts",
+        "title": "Контакты"
+    }],
+    "email": "uhninv@mail.ru",
+    "tel": ["+7 (3466) 68-20-15", "+7 (3466) 68-20-16"]
+}

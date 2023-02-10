@@ -261,19 +261,19 @@ body {
 }
 
 .user_html {
-  line-height: 1.3em;
+  line-height: 1.4em;
 
   p {
     margin: 30px 0 60px;
   }
+}
 
-  div {
-    background-color: rgba(#FDCAB4, .7);
-    border-radius: 65px;
-    text-align: center;
-    padding: 90px 160px;
-    text-transform: uppercase;
-    font-size: 24px;
-    font-weight: bold;;
-  }
+.text_tip {
+  background-color: rgba(#FDCAB4, .7);
+  border-radius: 65px;
+  text-align: center;
+  padding: 90px 160px;
+  text-transform: uppercase;
+  font-size: 24px;
+  font-weight: bold;;
 }

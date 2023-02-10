@@ -31,7 +31,7 @@ function MainNav(props) {
     )
 }
 
-export default function Header({ router, navItems = [] }) {
+export default function Header({ router, navItems = [], tel }) {
     const dispatch = useDispatch()
     const popupShow = name => dispatch(showPopup(name))
     const popupHide = () => dispatch(hidePopup())
@@ -57,7 +57,11 @@ export default function Header({ router, navItems = [] }) {
             <Link href="/" className={styles.logo}></Link>
             <MainNav items={navItems} />
             <div className={styles.contacts}>
-                <div className={styles.contactsNumber}>+7 962 800 9090</div>
+                <Link href={`tel:${tel}`}>
+                    <div className={styles.contactsNumber}>
+                        {tel}
+                    </div>
+                </Link>
                 бесплатно по России
             </div>
             <div className={styles.icons}>

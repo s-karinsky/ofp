@@ -1,0 +1,19 @@
+{
+    "nav": [{
+        "link": "/",
+        "title": "Главная"
+    }, {
+        "link": "/map",
+        "title": "Карта"
+    }, {
+        "link": "/partners",
+        "title": "Партнерам"
+    }, {
+        "link": "/documents",
+        "title": "Документы"
+    }, {
+        "link": "/contacts",
+        "title": "Контакты"
+    }],
+    "tel": "+7 962 800 9090"
+}
