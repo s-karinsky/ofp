@@ -200,9 +200,38 @@
         font-size: 16px;
     }
 }
+.usageContainer {
+    position: relative;
+    z-index: 10;
+}
 .usage {
     padding-top: 70px;
     position: relative;
+}
+.usageSliderWrapper {
+    position: relative;
+    z-index: 15;
+    margin-top: -52px;
+}
+.usageSlideImage {
+    margin: 0 auto;
+    padding: 0 20px;
+
+    img {
+        border-radius: 65px;
+    }
+}
+.usageSlideText {
+    margin: 55px 40px 0;
+    padding-top: 15px;
+    border-top: 1px solid $black;
+    font-size: 24px;
+    font-weight: bold;
+    color: $primary-color;
+    text-align: center;
+}
+.usageLink {
+    text-decoration: none;
 }
 .partner {
     margin-top: 180px;
@@ -211,10 +240,6 @@
     background-position: center bottom;
     background-size: contain;
     background-repeat: no-repeat;
-}
-.usageContainer {
-    position: relative;
-    z-index: 10;
 }
 .partnerContent {
     margin-top: 140px;

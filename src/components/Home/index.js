@@ -1,20 +1,23 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import cn from 'classnames'
+import Link from 'next/link'
 import { Message } from '@components/Header/forms'
 import Accordion from '@components/Accordion'
 import Button from '@components/Button'
 import { Checkbox, Input, Textarea } from '@components/Form'
 import GreenForm from '@components/GreenForm'
 import Popup from '@components/Popup'
-import UsageSlider from '@components/UsageSlider'
+import Slider from '@components/Slider'
 import Spinner from '@components/Spinner'
 import { showPopup, hidePopup } from '@store/popup'
 import { isValidEmail } from '@lib/utils'
 import { useForm } from '@lib/hooks'
 import styles from './Home.module.scss'
 
-export default function Home() {
+export default function Home({
+    usage = []
+}) {
     const dispatch = useDispatch()
     const [ contactSendStatus, setContactSendStatus ] = useState()
     const { handleSubmit, register, formState } = useForm({ action: 'contact', defaultValues: { type: 'consult' } })
@@ -215,7 +218,24 @@ export default function Home() {
                             <div className="subtitle">Области применения</div>
                         </h1>
 
-                        <UsageSlider />
+                        <div className={styles.usageSliderWrapper}>
+                            <Slider slidesToShow={3}>
+                                {usage.map(item => (
+                                    <Link
+                                        href={`/usage/${item.link}`}
+                                        className={styles.usageLink}
+                                        key={item.link}
+                                    >
+                                        <div className={styles.usageSlideImage}>
+                                            <img src={`/images/usecases/${item.preview}`} width="100%" />
+                                        </div>
+                                        <div className={styles.usageSlideText}>
+                                            {item.title}
+                                        </div>
+                                    </Link>
+                                ))}
+                            </Slider>
+                        </div>
                     </div>
                 </div>
 
