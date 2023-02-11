@@ -20,6 +20,10 @@ const areaSchema = new mongoose.Schema({
     preview: {
         type: String,
         required: true
+    },
+    date: {
+        type: Date,
+        required: true
     }
 })
 

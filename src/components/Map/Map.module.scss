@@ -1,7 +1,7 @@
 @import '@styles/var';
 
 .map {
-    height: 100vh;
+    height: 150vh;
     position: relative;
 }
 .mapContainer {
@@ -11,7 +11,7 @@
     height: 100%;
 }
 .searchPanel {
-    z-index: 15;
+    z-index: 20;
     position: absolute;
     top: 0;
     left: 40px;
@@ -37,6 +37,48 @@
     flex-grow: 1;
     position: relative;
 }
+.resultPanel {
+    width: 341px;
+    box-sizing: border-box;
+    z-index: 15;
+    position: absolute;
+    top: 265px;
+    left: 40px;
+    background: $white;
+    border-radius: 20px;
+    padding: 0 30px;
+}
+.resultHeader {
+    height: 68px;
+    line-height: 68px;
+    font-weight: bold;
+    font-size: 20px;
+}
+.resultSpinner {
+    height: 100%;
+    display: inline-block;
+    vertical-align: middle;
+}
+.resultContent {
+    border-top: 1px solid $xlight-gray;
+    padding: 20px 0 10px;
+}
+.resultList {
+    list-style-type: decimal;
+    margin: 0;
+    padding-left: 20px;
+    font-size: 18px;
+
+    li {
+        margin-bottom: 12px;
+
+        &:hover {
+            font-weight: bold;
+            color: $primary-color;
+        }
+    }
+}
+
 .input {
     position: relative;
     height: 40px !important;

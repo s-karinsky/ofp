@@ -1,14 +1,20 @@
 import 'leaflet/dist/leaflet.css'
 import React from 'react'
 import kmlParser from 'js-kml-parser'
-import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet'
+import { polygon, point } from '@turf/helpers'
+import intersect from '@turf/intersect'
+import area from '@turf/area'
+import distance from '@turf/distance'
+import { MapContainer, TileLayer, ZoomControl, Polygon } from 'react-leaflet'
 import cn from 'classnames'
-import { computeArea, computeDistanceBetween } from 'spherical-geometry-js'
 import Button from '@components/Button'
 import { Input } from '@components/Form'
 import Calendar from '@components/Calendar'
 import Popup from '@components/Popup'
+import Spinner from '@components/Spinner'
 import { getRectPolygonByCorners, getMultipolygon, reversePolygonCoords } from '@lib/geo'
+import { declOfNum } from '@lib/utils'
+import axios from '@lib/axios'
 import { DRAW_TYPE_OPTIONS, DATE_OPTIONS } from './consts'
 import { Draw, DrawArea } from './draw'
 import { IconSearch, IconDate, IconArea, IconRect, IconPolygon, IconKML, IconArrow } from './icons'
@@ -48,7 +54,44 @@ export default class Map extends React.Component {
         calendar2: getDateOffsetMonth(),
         dateFrom: null,
         dateTo: null,
-        applyRange: null
+        applyRange: null,
+        searchProgress: false,
+        searchResult: null,
+        searchClips: null
+    }
+
+    searchArea = (points) => {
+        const searchPolygon = reversePolygonCoords(getMultipolygon(points))
+        const turfSearchItems = searchPolygon.map(polygon)
+        const coords = JSON.stringify(searchPolygon)
+        this.setState({ searchProgress: true })
+        const polygons = []
+        const clips = []
+        axios.get('/map/search', { params: { coords } }).then(({ data: { result = [] } = {} }) => {
+            const searchResult = result.map(item => {
+                polygons.push(item.polygon)
+                const polygon = reversePolygonCoords(item.polygon)
+                return {
+                    ...item,
+                    polygon
+                }
+            })
+            
+            polygons.map(p => {
+                const pol = polygon(p)
+                turfSearchItems.map(item => {
+                    const intersection = intersect(item, pol)
+                    if (intersection)
+                        clips.push(reversePolygonCoords(intersection.geometry.coordinates))
+                })
+            })
+
+            this.setState({
+                searchProgress: false,
+                searchResult,
+                searchClips: clips
+            })
+        })
     }
 
     setDrawType = drawType => () => {
@@ -65,26 +108,24 @@ export default class Map extends React.Component {
     }
 
     handleFinishDraw = points => {
-        const { drawType } = this.state
+        const { drawType, dateFrom, dateTo } = this.state
+        const polygon = drawType === 'rect' ? getRectPolygonByCorners(points) : points
         this.setState({
             isDraw: false,
-            points: drawType === 'rect' ? getRectPolygonByCorners(points) : points
+            points: polygon
         })
+        this.searchArea(polygon, dateFrom, dateTo)
     }
 
     getArea() {
         const { points } = this.state
         const multipolygon = getMultipolygon(points)
-        let area = 0
-        multipolygon.forEach(polygon => {
-            const [ firstPoly, ...items ] = polygon.map(points => points.map(item => ({ lat: item[0], lng: item[1]})))
-            let totalArea = computeArea(firstPoly) / 1000000
-            items.forEach(item => {
-                totalArea -= computeArea(item) / 1000000
-            })
-            area += Number(totalArea.toFixed(2))
+        let totalArea = 0
+        multipolygon.forEach(points => {
+            const turfPoly = polygon(reversePolygonCoords(points))
+            totalArea += Number((area(turfPoly) / 1000000).toFixed(2))
         })
-        return area
+        return totalArea
     }
 
     applyCalendar = () => {
@@ -143,6 +184,29 @@ export default class Map extends React.Component {
         reader.readAsText(file)
     }
 
+    renderSearchResult = () => {
+        const { searchResult, searchClips } = this.state
+        if (!searchResult || !searchResult.length) return null
+        return (
+            <>
+                {searchResult.map(area => (
+                    <Polygon
+                        key={area.id}
+                        positions={area.polygon}
+                        pathOptions={{ color: '#000', weight: 1, dashArray: '3 3' }}
+                    />
+                ))}
+                {searchClips.map((area, i) => (
+                    <Polygon
+                        key={i}
+                        positions={area}
+                        pathOptions={{ color: '#f00', weight: 1 }}
+                    />
+                ))}
+            </>
+        )
+    }
+
     renderDistances() {
         const { points } = this.state
         const multipolygon = getMultipolygon(points)
@@ -163,9 +227,9 @@ export default class Map extends React.Component {
     renderPointsDistances(points, num) {
         const pairs = []
         for (var i = 0; i < points.length - 1; i++) {
-            var p1 = { lat: points[i][0], lng: points[i][1] }
-            var p2 = { lat: points[i+1][0], lng: points[i+1][1] }
-            pairs.push([p1, p2])
+            var p1 = [points[i][1], points[i][0]]
+            var p2 = [points[i+1][1], points[i+1][0]]
+            pairs.push({ points: [point(p1), point(p2)], output: p1 })
         }
         return (
             <div className={styles.distances} key={num}>
@@ -173,10 +237,10 @@ export default class Map extends React.Component {
                     <div className={styles.distanceItem} key={i}>
                         <span>{i + 1}</span>
                         <span>
-                            <input type="text" defaultValue={pair[0].lat} className={styles.pointInput} disabled />
-                            , <input type="text" defaultValue={pair[0].lng} className={styles.pointInput} disabled />
+                            <input type="text" defaultValue={pair.output[1]} className={styles.pointInput} disabled />
+                            , <input type="text" defaultValue={pair.output[0]} className={styles.pointInput} disabled />
                         </span>
-                        <span>{computeDistanceBetween(pair[0], pair[1]).toFixed(2)} м</span>
+                        <span>{(distance(...pair.points) * 1000).toFixed(2)} м</span>
                     </div>
                 ))}
             </div>
@@ -194,7 +258,9 @@ export default class Map extends React.Component {
             calendar2,
             dateFrom,
             dateTo,
-            applyRange
+            applyRange,
+            searchProgress,
+            searchResult
         } = this.state
 
         return (
@@ -247,6 +313,7 @@ export default class Map extends React.Component {
                             <Draw type={drawType} onFinish={this.handleFinishDraw} /> :
                             <DrawArea points={points} />
                         }
+                        {this.renderSearchResult()}
                     </MapContainer>
                 </div>
                 {!isDraw && !!drawType && <div className={styles.editPanel}>
@@ -331,6 +398,26 @@ export default class Map extends React.Component {
                         </span>
                     </div>
                 </div>
+
+                {(searchProgress || searchResult) && <div className={styles.resultPanel}>
+                    <div className={styles.resultHeader}>
+                        {searchProgress ? <>
+                            <div className={styles.resultSpinner}>
+                                <Spinner color="green" />
+                            </div>
+                            Поиск снимков
+                        </> : <div>
+                            {searchResult.length === 1 ? 'Найден' : 'Найдено'} {searchResult.length} {declOfNum(searchResult.length, ['снимок', 'снимка', 'снимков'])}
+                        </div>}
+                    </div>
+                    {Array.isArray(searchResult) && <div className={styles.resultContent}>
+                        <ul className={styles.resultList}>
+                            {searchResult.map(item => (
+                                <li key={item.id}>Карта</li>
+                            ))}
+                        </ul>
+                    </div>}
+                </div>}
             </div>
         )
     }

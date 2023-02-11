@@ -52,7 +52,8 @@ async function createArea(req, res) {
                         [53.727212535607784, 91.42358779907228],
                         [53.73584425610803, 91.43732070922853]
                     ]
-                ]
+                ],
+                date: Date.now()
             }
         })
         res.status(201).send({
