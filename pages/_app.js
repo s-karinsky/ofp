@@ -3,7 +3,7 @@ import { SessionProvider } from 'next-auth/react'
 import { store } from '@store'
 import Header from '@components/Header'
 import Footer from '@components/Footer'
-import { PopupOverlay } from '@components/Popup'
+import { PopupOverlay, PopupMessage } from '@components/Popup'
 import CabinetNav from '@components/CabinetNav'
 import headerJson from '@json/header.json'
 import footerJson from '@json/footer.json'
@@ -27,6 +27,7 @@ export default function MyApp({
         <SessionProvider session={session}>
             <Provider store={store}>
                 <PopupOverlay />
+                <PopupMessage />
                 <Header
                     navItems={headerJson.nav}
                     tel={headerJson.tel}

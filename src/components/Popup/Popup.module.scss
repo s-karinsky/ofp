@@ -49,6 +49,9 @@
         border-radius: 0;
     }
 }
+.popupHidden {
+    display: none;
+}
 .close {
     position: absolute;
     z-index: 20;
@@ -59,4 +62,25 @@
 }
 .close:hover {
     color: $dark-gray;
+}
+
+.popupMessage {
+    width: 325px;
+}
+.popupMessageContent {
+    display: flex;
+    align-items: center;
+}
+.success {
+    color: $primary-color;
+}
+.error {
+    color: $red;
+}
+.popupMessageIcon {
+    flex-shrink: 0;
+    margin-right: 10px;
+}
+.popupMessageSubmit {
+    margin-top: 35px;
 }

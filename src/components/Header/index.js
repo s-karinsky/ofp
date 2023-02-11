@@ -5,9 +5,9 @@ import cn from 'classnames'
 import { useDispatch } from 'react-redux'
 import { useSession } from 'next-auth/react'
 import Popup from '@components/Popup'
-import { showPopup, hidePopup } from '@store/popup'
+import { showPopup, hidePopup, showMessage } from '@store/popup'
 import styles from './Header.module.scss'
-import { SigninForm, SignupForm, ResetPasswordForm, ChangePasswordForm, Message } from './forms'
+import { SigninForm, SignupForm, ResetPasswordForm, ChangePasswordForm } from './forms'
 import IconCart from './cart.svg'
 import IconUser from './user.svg'
 
@@ -35,17 +35,18 @@ export default function Header({ router, navItems = [], tel }) {
     const dispatch = useDispatch()
     const popupShow = name => dispatch(showPopup(name))
     const popupHide = () => dispatch(hidePopup())
+    const message = payload => dispatch(showMessage(payload))
     const session = useSession()
     const isLogged = session.status === 'authenticated'
 
     const { query: { confirm, reset } = {} } = router.state || {}
     
     useEffect(function() {
-        if (confirm === 'ok') {
-            popupShow('confirm-success')
-        }
-        if (confirm === 'fail') {
-            popupShow('confirm-fail')
+        if (confirm) {
+            message({
+                icon: confirm === 'ok' ? 'success' : 'error',
+                text: confirm === 'ok' ? 'Регистрация успешно завершена' : 'Ошибка подтверждения регистрации'
+            })
         }
         if (reset === 'pass') {
             popupShow('change-password')
@@ -87,33 +88,19 @@ export default function Header({ router, navItems = [], tel }) {
                 }
             </div>
             <Popup name="signin">
-                <SigninForm showPopup={popupShow} hidePopup={popupHide} />
+                <SigninForm showPopup={popupShow} hidePopup={popupHide} showMessage={message} />
             </Popup>
 
             <Popup name="reset-password">
-                <ResetPasswordForm showPopup={popupShow} hidePopup={popupHide} />
+                <ResetPasswordForm showPopup={popupShow} hidePopup={popupHide} showMessage={message} />
             </Popup>
 
             <Popup name="signup">
-                <SignupForm showPopup={popupShow} hidePopup={popupHide} />
+                <SignupForm showPopup={popupShow} hidePopup={popupHide} showMessage={message} />
             </Popup>
 
             <Popup name="change-password">
-                <ChangePasswordForm showPopup={popupShow} hidePopup={popupHide} />
-            </Popup>
-
-            <Popup name="confirm-success">
-                <Message type="success" buttonText="Закрыть" onClick={popupHide}>
-                    <span>
-                        Регистрация успешно завершена. <a className="textLink" onClick={() => popupShow('signin')}>Войдите</a>, используя e-mail и пароль
-                    </span>
-                </Message>
-            </Popup>
-
-            <Popup name="confirm-fail">
-                <Message type="error" buttonText="Закрыть" onClick={popupHide}>
-                    Ошибка подтверждения регистрации
-                </Message>
+                <ChangePasswordForm showPopup={popupShow} hidePopup={popupHide} showMessage={message} />
             </Popup>
         </header>
     )

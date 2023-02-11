@@ -1,16 +1,13 @@
-import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import cn from 'classnames'
 import Link from 'next/link'
-import { Message } from '@components/Header/forms'
 import Accordion from '@components/Accordion'
 import Button from '@components/Button'
 import { Checkbox, Input, Textarea } from '@components/Form'
 import GreenForm from '@components/GreenForm'
-import Popup from '@components/Popup'
 import Slider from '@components/Slider'
 import Spinner from '@components/Spinner'
-import { showPopup, hidePopup } from '@store/popup'
+import { showMessage } from '@store/popup'
 import { isValidEmail } from '@lib/utils'
 import { useForm } from '@lib/hooks'
 import styles from './Home.module.scss'
@@ -19,20 +16,9 @@ export default function Home({
     usage = []
 }) {
     const dispatch = useDispatch()
-    const [ contactSendStatus, setContactSendStatus ] = useState()
     const { handleSubmit, register, formState } = useForm({ action: 'contact', defaultValues: { type: 'consult' } })
     return (
         <div className={styles.home}>
-            <Popup name="contact-send">
-                <Message type={contactSendStatus} buttonText="Закрыть" onClick={() => dispatch(hidePopup())}>
-                    <span>
-                        {contactSendStatus === 'success' ?
-                            'Ваше сообщение отправлено. В ближайшее время вам ответят' :
-                            'Происзошла ошибка, попробуйте позже'
-                        }
-                    </span>
-                </Message>
-            </Popup>
             <div className={styles.homeTop}>
                 <div className={styles.homeTopTitle}>
                     Сервис продажи готовых<br />ортофотопланов<br />и съемки с БПЛА
@@ -299,16 +285,13 @@ export default function Home({
                             <div className="subtitle">Заполни форму обратной связи</div>
                         </h1>
                         <GreenForm onSubmit={handleSubmit(
-                            ({ data = {}} = {}) => {
-                                setContactSendStatus(data.success ? 'success' : 'error')
-                                dispatch(showPopup('contact-send'))
-                            },
-                            (err) => {
-                                if (err.name === 'AxiosError') {
-                                    setPartnerSendStatus('error')
-                                    dispatch(showPopup('partner-send'))
-                                }
-                            }
+                            ({ data: { success } = {} } = {}) =>
+                                dispatch(showMessage({
+                                    icon: success ? 'success' : 'error',
+                                    text: success ?
+                                        'Ваше сообщение отправлено. В ближайшее время вам ответят' :
+                                        'Произошла ошибка, попробуйте позже'
+                            }))
                         )}>
                             <Input
                                 placeholder="Имя"
