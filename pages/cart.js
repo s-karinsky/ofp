@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import cn from 'classnames'
 import Button from '@components/Button'
@@ -7,8 +7,9 @@ import OrderSubmit from '@components/OrderSubmit'
 import OrderSummary from '@components/OrderSummary'
 import Order from '@components/Order'
 import Popup from '@components/Popup'
+import axios from '@lib/axios'
 import { showPopup, hidePopup } from '@store/popup'
-import { setChecked, removeById } from '@store/cart'
+import { setChecked, removeById, setOrderItems } from '@store/cart'
 
 const mapStatusText = {
     order: 'заказ'
@@ -19,6 +20,21 @@ export default function CartPage() {
     const cart = useSelector(state => state.cart)
     const dispatch = useDispatch()
     const submitItems = cart.items.filter(item => cart.checkedById[item.id])
+
+    useEffect(() => {
+        axios.get('order', { status: 'order' }).then(({ data: { orders } = {}} = {}) => {
+            const order = orders && orders[0]
+            const items = order.items || []
+            const orderItems = items.map(item => ({
+                id: item._id,
+                price: item.price,
+                name: 'Ортофотоплан',
+                preview: '',
+                type: item.areaId ? 'plan' : 'shoot'
+            }))
+            dispatch(setOrderItems(orderItems))
+        })
+    }, [])
 
     return (
         <div className="cart">

@@ -2,10 +2,11 @@ import { useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import cn from 'classnames'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useSession } from 'next-auth/react'
 import Popup from '@components/Popup'
 import { showPopup, hidePopup, showMessage } from '@store/popup'
+import { setOrderCount } from '@store/cart'
 import styles from './Header.module.scss'
 import { SigninForm, SignupForm, ResetPasswordForm, ChangePasswordForm } from './forms'
 import IconCart from './cart.svg'
@@ -38,9 +39,14 @@ export default function Header({ router, navItems = [], tel }) {
     const message = payload => dispatch(showMessage(payload))
     const session = useSession()
     const isLogged = session.status === 'authenticated'
-
     const { query: { confirm, reset } = {} } = router.state || {}
+    const orderCount = useSelector(({ cart }) => cart.orderCount)
     
+    useEffect(function() {
+        if (session.data && session.data.user) {
+            dispatch(setOrderCount(session.data.user.orderCount || 0))
+        }
+    }, [session])
     useEffect(function() {
         if (confirm) {
             message({
@@ -69,7 +75,7 @@ export default function Header({ router, navItems = [], tel }) {
                 {isLogged && <Link className={styles.iconLink} href="/cart">
                     <span className={styles.icon}>
                         <IconCart />
-                        <span className={styles.iconCounter}>10</span>
+                        {!!orderCount && <span className={styles.iconCounter}>{orderCount}</span>}
                     </span>
                 </Link>}
                 {isLogged ?

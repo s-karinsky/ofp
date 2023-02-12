@@ -1,8 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { getFormattedDate } from '@lib/datetime'
 
 const cartSlice = createSlice({
     name: 'cart',
     initialState: {
+        orderCount: 0,
         orderId: '3319775',
         date: '23.01.2023',
         status: 'order',
@@ -34,6 +36,9 @@ const cartSlice = createSlice({
         }
     },
     reducers: {
+        setOrderCount(state, action) {
+            state.orderCount = action.payload
+        },
         setChecked(state, action) {
             if (typeof action.payload === 'boolean') {
                 Object.keys(state.checkedById).map(key => {
@@ -42,6 +47,19 @@ const cartSlice = createSlice({
             } else {
                 state.checkedById = action.payload   
             }
+        },
+        setOrderData(state, payload) {
+            const { orderId, date, status } = payload
+            if (orderId) state.orderId = orderId
+            if (date) state.date = getFormattedDate(date)
+            if (status) state.status = status
+        },
+        setOrderItems(state, action) {
+            state.items = action.payload
+            state.checkedById = state.items.reduce((res, item) => ({
+                ...res,
+                [item.id]: true
+            }), {})
         },
         removeById(state, action) {
             const id = action.payload
@@ -55,5 +73,5 @@ const cartSlice = createSlice({
 })
 
 const { actions, reducer } = cartSlice
-export const { setChecked, removeById } = actions
+export const { setChecked, removeById, setOrderCount, setOrderData, setOrderItems } = actions
 export default reducer

@@ -11,7 +11,7 @@ import Button from '@components/Button'
 import { Input } from '@components/Form'
 import Calendar from '@components/Calendar'
 import Popup from '@components/Popup'
-import Spinner from '@components/Spinner'
+import Spinner, { SpinnerRing } from '@components/Spinner'
 import { getRectPolygonByCorners, getMultipolygon, reversePolygonCoords } from '@lib/geo'
 import { getFormattedDate } from '@lib/datetime'
 import { declOfNum } from '@lib/utils'
@@ -61,6 +61,17 @@ export default class Map extends React.Component {
         searchClips: null,
         detailsAreaId: null,
         highlightArea: null
+    }
+
+    pushToCart = async (item) => {
+        const areaId = item.id
+        const coords = item.isNew && item.polygon
+        const res = await axios.post('/order', {
+            areaId,
+            coords
+        })
+        const { data: { order: { createdAt, status, items = [] } = {} } = {} } = res
+        this.props.setOrderCount(items.length)
     }
 
     searchArea = (points) => {
@@ -482,14 +493,20 @@ export default class Map extends React.Component {
                                                 this.props.showPopup('area-details')
                                             }}
                                         />
-                                        {isLogged && <IconCart className={styles.resultIconCart} />}
+                                        {isLogged && <IconCart
+                                            className={styles.resultIconCart}
+                                            onClick={() => this.pushToCart(item)}
+                                        />}
                                     </div>
                                 </li>
                             ))}
                             {isLogged && <li>
                                 Заказать карту
                                 <div className={styles.resultIcons}>
-                                    <IconCart className={styles.resultIconCart} />
+                                    <IconCart
+                                        className={styles.resultIconCart}
+                                        onClick={() => this.pushToCart({ isNew: true, polygon: [points] })}
+                                    />
                                 </div>
                             </li>}
                         </ul>

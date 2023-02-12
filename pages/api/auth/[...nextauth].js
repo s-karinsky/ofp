@@ -1,7 +1,8 @@
-import NextAuth  from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials"
-import User from "@models/user";
-import dbConnect from "@lib/dbConnect";
+import NextAuth  from 'next-auth'
+import CredentialsProvider from 'next-auth/providers/credentials'
+import User from '@models/user'
+import Order from '@models/order'
+import dbConnect from '@lib/dbConnect'
 
 export default async function auth(req, res) {
     return await NextAuth(req, res, {
@@ -40,7 +41,7 @@ export default async function auth(req, res) {
             })
         ],
         callbacks: {
-            async jwt({ token, user }){
+            jwt: async({ token, user }) => {
                 if (user) {
                     token.user = {
                         _id: user._id,
@@ -50,8 +51,12 @@ export default async function auth(req, res) {
                 return token
             },
             session: async({ session, token }) => {
+                dbConnect()
                 if (token) {
                     session.user = token.user
+
+                    const order = await Order.findOne({ userId: token.user._id, status: 'order' })
+                    session.user.orderCount = !order ? 0 : order.items.length
                 }
                 return session
             }

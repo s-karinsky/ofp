@@ -10,3 +10,9 @@ export default function Spinner({ color }) {
         </div>
     )
 }
+
+export function SpinnerRing() {
+    return (
+        <div className={styles.spinnerRing}></div>
+    )
+}

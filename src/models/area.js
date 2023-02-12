@@ -17,6 +17,9 @@ const areaSchema = new mongoose.Schema({
             required: true
         }
     },
+    price: {
+        type: Number
+    },
     preview: {
         type: String,
         required: true
