@@ -5,6 +5,7 @@ import IconRect from './svg/rect.svg'
 import IconPolygon from './svg/polygon.svg'
 import IconKML from './svg/kml.svg'
 import IconArrow from './svg/arrow.svg'
+import IconCart from './svg/cart.svg'
 
 export {
     IconSearch,
@@ -13,5 +14,6 @@ export {
     IconRect,
     IconPolygon,
     IconKML,
-    IconArrow
+    IconArrow,
+    IconCart
 }

@@ -9,7 +9,10 @@ import {
 
 const pathOptions = {
     color: '#E87258',
-    weight: 2
+    weight: 2,
+    dashArray: '4 4',
+    fillOpacity: 0,
+    lineCap: 'butt'
 }
 
 function DrawRect({ onFinish = () => {} }) {

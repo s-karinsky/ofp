@@ -13,11 +13,12 @@ import Calendar from '@components/Calendar'
 import Popup from '@components/Popup'
 import Spinner from '@components/Spinner'
 import { getRectPolygonByCorners, getMultipolygon, reversePolygonCoords } from '@lib/geo'
+import { getFormattedDate } from '@lib/datetime'
 import { declOfNum } from '@lib/utils'
 import axios from '@lib/axios'
 import { DRAW_TYPE_OPTIONS, DATE_OPTIONS } from './consts'
 import { Draw, DrawArea } from './draw'
-import { IconSearch, IconDate, IconArea, IconRect, IconPolygon, IconKML, IconArrow } from './icons'
+import { IconSearch, IconDate, IconArea, IconRect, IconPolygon, IconKML, IconArrow, IconCart } from './icons'
 import styles from './Map.module.scss'
 
 function getDateOffsetMonth(offset = 0, date = []) {
@@ -57,7 +58,9 @@ export default class Map extends React.Component {
         applyRange: null,
         searchProgress: false,
         searchResult: null,
-        searchClips: null
+        searchClips: null,
+        detailsAreaId: null,
+        highlightArea: null
     }
 
     searchArea = (points) => {
@@ -69,7 +72,7 @@ export default class Map extends React.Component {
         const clips = []
         axios.get('/map/search', { params: { coords } }).then(({ data: { result = [] } = {} }) => {
             const searchResult = result.map(item => {
-                polygons.push(item.polygon)
+                polygons.push(item)
                 const polygon = reversePolygonCoords(item.polygon)
                 return {
                     ...item,
@@ -78,11 +81,16 @@ export default class Map extends React.Component {
             })
             
             polygons.map(p => {
-                const pol = polygon(p)
-                turfSearchItems.map(item => {
+                const pol = polygon(p.polygon)
+                turfSearchItems.map((item, i) => {
                     const intersection = intersect(item, pol)
                     if (intersection)
-                        clips.push(reversePolygonCoords(intersection.geometry.coordinates))
+                        clips.push({
+                            ...p,
+                            key: `${p.id}_i`,
+                            intersection: true,
+                            polygon: reversePolygonCoords(intersection.geometry.coordinates)
+                        })
                 })
             })
 
@@ -98,7 +106,9 @@ export default class Map extends React.Component {
         this.setState({
             isDraw: true,
             drawType,
-            showOptions: null
+            showOptions: null,
+            searchResult: null,
+            searchClips: null
         })
     }
 
@@ -185,7 +195,7 @@ export default class Map extends React.Component {
     }
 
     renderSearchResult = () => {
-        const { searchResult, searchClips } = this.state
+        const { searchResult, searchClips, highlightArea } = this.state
         if (!searchResult || !searchResult.length) return null
         return (
             <>
@@ -193,14 +203,41 @@ export default class Map extends React.Component {
                     <Polygon
                         key={area.id}
                         positions={area.polygon}
-                        pathOptions={{ color: '#000', weight: 1, dashArray: '3 3' }}
+                        eventHandlers={{
+                            click: () => {
+                                this.setState({ detailsAreaId: area.id })
+                                this.props.showPopup('area-details')
+                            },
+                            mouseover: () => this.setState({ highlightArea: area.id }),
+                            mouseout: () => this.setState({ highlightArea: null })
+                        }}
+                        pathOptions={{
+                            color: '#000',
+                            weight: 2,
+                            dashArray: '4 4',
+                            fillOpacity: highlightArea === area.id ? 0.5 : 0,
+                            lineCap: 'butt'
+                        }}
                     />
                 ))}
-                {searchClips.map((area, i) => (
+                {searchClips.map(area => (
                     <Polygon
-                        key={i}
-                        positions={area}
-                        pathOptions={{ color: '#f00', weight: 1 }}
+                        key={area.key}
+                        positions={area.polygon}
+                        eventHandlers={{
+                            click: () => {
+                                this.setState({ detailsAreaId: area.id })
+                                this.props.showPopup('area-details')
+                            }
+                        }}
+                        pathOptions={{
+                            color: '#fff',
+                            weight: 2,
+                            dashArray: '4 4',
+                            fillColor: '#E87258',
+                            fillOpacity: 1,
+                            lineCap: 'butt'
+                        }}
                     />
                 ))}
             </>
@@ -248,6 +285,7 @@ export default class Map extends React.Component {
     }
 
     render() {
+        const { isLogged } = this.props
         const {
             showOptions,
             drawType,
@@ -260,8 +298,13 @@ export default class Map extends React.Component {
             dateTo,
             applyRange,
             searchProgress,
-            searchResult
+            searchResult,
+            detailsAreaId
         } = this.state
+
+        const detailsItem = !detailsAreaId || !searchResult ?
+            null :
+            searchResult.find(item => item.id === detailsAreaId)
 
         return (
             <div className={styles.map}>
@@ -294,6 +337,18 @@ export default class Map extends React.Component {
                             <Button onClick={this.hideCalendar} fullSize>Отмена</Button>
                         </div>
                     </div>
+                </Popup>
+                <Popup name="area-details">
+                    {!detailsItem && 'Ошибка загрузки данных'}
+                    {!!detailsItem && <>
+                        <div className={styles.areaPreview}>
+                            <img src={`/uploads/${detailsItem.preview}`} />
+                        </div>
+                        <div className={styles.areaDetails}>
+                            <span><b>Площадь: </b>{(area(polygon(reversePolygonCoords(detailsItem.polygon))) / 1000000).toFixed(2)} км<sup>2</sup></span><br />
+                            <span><b>Дата: </b>{getFormattedDate(detailsItem.date)}</span>
+                        </div>
+                    </>}
                 </Popup>
                 <div className={styles.mapContainer}>
                     <MapContainer
@@ -413,8 +468,30 @@ export default class Map extends React.Component {
                     {Array.isArray(searchResult) && <div className={styles.resultContent}>
                         <ul className={styles.resultList}>
                             {searchResult.map(item => (
-                                <li key={item.id}>Карта</li>
+                                <li
+                                    key={item.id}
+                                    onMouseOver={() => this.setState({ highlightArea: item.id })}
+                                    onMouseOut={() => this.setState({ highlightArea: null })}
+                                >
+                                    Ортофотоплан
+                                    <div className={styles.resultIcons}>
+                                        <IconSearch
+                                            className={styles.resultIconSearch}
+                                            onClick={() => {
+                                                this.setState({ detailsAreaId: item.id })
+                                                this.props.showPopup('area-details')
+                                            }}
+                                        />
+                                        {isLogged && <IconCart className={styles.resultIconCart} />}
+                                    </div>
+                                </li>
                             ))}
+                            {isLogged && <li>
+                                Заказать карту
+                                <div className={styles.resultIcons}>
+                                    <IconCart className={styles.resultIconCart} />
+                                </div>
+                            </li>}
                         </ul>
                     </div>}
                 </div>}

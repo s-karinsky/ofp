@@ -78,6 +78,23 @@
         }
     }
 }
+.resultIcons {
+    float: right;
+}
+.resultIconSearch {
+    cursor: pointer;
+}
+.resultIconCart {
+    cursor: pointer;
+    margin-left: 10px;
+}
+.areaPreview {
+    width: 75vw;
+
+    img {
+        max-width: 100%;
+    }
+}
 
 .input {
     position: relative;
