@@ -28,7 +28,7 @@ export default function CartPage() {
             const orderItems = items.map(item => ({
                 id: item._id,
                 price: item.price,
-                name: 'Ортофотоплан',
+                name: item.areaId ? 'Ортофотоплан' : 'Заказ съемки',
                 preview: '',
                 type: item.areaId ? 'plan' : 'shoot'
             }))

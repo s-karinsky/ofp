@@ -64,12 +64,12 @@
     padding: 20px 0 10px;
 }
 .resultList {
-    list-style-type: decimal;
+    list-style: none;
     margin: 0;
     padding-left: 20px;
     font-size: 18px;
 
-    li {
+    .resultPlan {
         margin-bottom: 12px;
 
         &:hover {

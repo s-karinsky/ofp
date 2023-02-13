@@ -58,8 +58,8 @@ export default class Map extends React.Component {
         applyRange: null,
         searchProgress: false,
         searchResult: null,
-        searchClips: null,
         detailsAreaId: null,
+        detailsAreaPolygon: null,
         highlightArea: null
     }
 
@@ -79,36 +79,29 @@ export default class Map extends React.Component {
         const turfSearchItems = searchPolygon.map(polygon)
         const coords = JSON.stringify(searchPolygon)
         this.setState({ searchProgress: true })
-        const polygons = []
-        const clips = []
         axios.get('/map/search', { params: { coords } }).then(({ data: { result = [] } = {} }) => {
             const searchResult = result.map(item => {
-                polygons.push(item)
-                const polygon = reversePolygonCoords(item.polygon)
+                const polygonCoords = reversePolygonCoords(item.polygon)
+                const turfPolygon = polygon(item.polygon)
+
+                const intersections = turfSearchItems
+                    .map(inter => intersect(inter, turfPolygon))
+                    .filter(inter => inter)
+                    .map((inter, i) => ({
+                        id: `${item.id}_${i}`,
+                        polygon: reversePolygonCoords(inter.geometry.coordinates)
+                    }))
+
                 return {
                     ...item,
-                    polygon
+                    polygon: polygonCoords,
+                    intersections
                 }
-            })
-            
-            polygons.map(p => {
-                const pol = polygon(p.polygon)
-                turfSearchItems.map((item, i) => {
-                    const intersection = intersect(item, pol)
-                    if (intersection)
-                        clips.push({
-                            ...p,
-                            key: `${p.id}_i`,
-                            intersection: true,
-                            polygon: reversePolygonCoords(intersection.geometry.coordinates)
-                        })
-                })
             })
 
             this.setState({
                 searchProgress: false,
-                searchResult,
-                searchClips: clips
+                searchResult
             })
         })
     }
@@ -118,8 +111,7 @@ export default class Map extends React.Component {
             isDraw: true,
             drawType,
             showOptions: null,
-            searchResult: null,
-            searchClips: null
+            searchResult: null
         })
     }
 
@@ -206,17 +198,17 @@ export default class Map extends React.Component {
     }
 
     renderSearchResult = () => {
-        const { searchResult, searchClips, highlightArea } = this.state
+        const { searchResult, highlightArea } = this.state
         if (!searchResult || !searchResult.length) return null
         return (
-            <>
-                {searchResult.map(area => (
+            searchResult.map(area => (
+                <>
                     <Polygon
                         key={area.id}
                         positions={area.polygon}
                         eventHandlers={{
                             click: () => {
-                                this.setState({ detailsAreaId: area.id })
+                                this.setState({ detailsAreaId: area.id, detailsAreaPolygon: null })
                                 this.props.showPopup('area-details')
                             },
                             mouseover: () => this.setState({ highlightArea: area.id }),
@@ -230,28 +222,30 @@ export default class Map extends React.Component {
                             lineCap: 'butt'
                         }}
                     />
-                ))}
-                {searchClips.map(area => (
-                    <Polygon
-                        key={area.key}
-                        positions={area.polygon}
-                        eventHandlers={{
-                            click: () => {
-                                this.setState({ detailsAreaId: area.id })
-                                this.props.showPopup('area-details')
-                            }
-                        }}
-                        pathOptions={{
-                            color: '#fff',
-                            weight: 2,
-                            dashArray: '4 4',
-                            fillColor: '#E87258',
-                            fillOpacity: 1,
-                            lineCap: 'butt'
-                        }}
-                    />
-                ))}
-            </>
+                    {Array.isArray(area.intersections) && area.intersections.map((inter, i) => (
+                        <Polygon
+                            key={inter.id}
+                            positions={inter.polygon}
+                            eventHandlers={{
+                                click: () => {
+                                    this.setState({ detailsAreaId: area.id, detailsAreaPolygon: inter.polygon })
+                                    this.props.showPopup('area-details')
+                                },
+                                mouseover: () => this.setState({ highlightArea: inter.id }),
+                                mouseout: () => this.setState({ highlightArea: null }) 
+                            }}
+                            pathOptions={{
+                                color: '#fff',
+                                weight: 2,
+                                dashArray: '4 4',
+                                fillColor: '#E87258',
+                                fillOpacity: highlightArea === inter.id ? 0.8 : 0.3,
+                                lineCap: 'butt'
+                            }}
+                        />
+                    ))}
+                </>
+            ))
         )
     }
 
@@ -310,7 +304,8 @@ export default class Map extends React.Component {
             applyRange,
             searchProgress,
             searchResult,
-            detailsAreaId
+            detailsAreaId,
+            detailsAreaPolygon
         } = this.state
 
         const detailsItem = !detailsAreaId || !searchResult ?
@@ -356,7 +351,7 @@ export default class Map extends React.Component {
                             <img src={`/uploads/${detailsItem.preview}`} />
                         </div>
                         <div className={styles.areaDetails}>
-                            <span><b>Площадь: </b>{(area(polygon(reversePolygonCoords(detailsItem.polygon))) / 1000000).toFixed(2)} км<sup>2</sup></span><br />
+                            <span><b>Площадь: </b>{(area(polygon(reversePolygonCoords(detailsAreaPolygon || detailsItem.polygon))) / 1000000).toFixed(2)} км<sup>2</sup></span><br />
                             <span><b>Дата: </b>{getFormattedDate(detailsItem.date)}</span>
                         </div>
                     </>}
@@ -478,29 +473,54 @@ export default class Map extends React.Component {
                     </div>
                     {Array.isArray(searchResult) && <div className={styles.resultContent}>
                         <ul className={styles.resultList}>
-                            {searchResult.map(item => (
-                                <li
-                                    key={item.id}
-                                    onMouseOver={() => this.setState({ highlightArea: item.id })}
-                                    onMouseOut={() => this.setState({ highlightArea: null })}
-                                >
-                                    Ортофотоплан
-                                    <div className={styles.resultIcons}>
-                                        <IconSearch
-                                            className={styles.resultIconSearch}
-                                            onClick={() => {
-                                                this.setState({ detailsAreaId: item.id })
-                                                this.props.showPopup('area-details')
-                                            }}
-                                        />
-                                        {isLogged && <IconCart
-                                            className={styles.resultIconCart}
-                                            onClick={() => this.pushToCart(item)}
-                                        />}
+                            {searchResult.map((item, i) => (
+                                <li key={item.id}>
+                                    <div
+                                        className={styles.resultPlan}
+                                        onMouseOver={() => this.setState({ highlightArea: item.id })}
+                                        onMouseOut={() => this.setState({ highlightArea: null })}
+                                    >
+                                        {i + 1}. Ортофотоплан
+                                        <div className={styles.resultIcons}>
+                                            <IconSearch
+                                                className={styles.resultIconSearch}
+                                                onClick={() => {
+                                                    this.setState({ detailsAreaId: item.id, detailsAreaPolygon: null })
+                                                    this.props.showPopup('area-details')
+                                                }}
+                                            />
+                                            {isLogged && <IconCart
+                                                className={styles.resultIconCart}
+                                                onClick={() => this.pushToCart(item)}
+                                            />}
+                                        </div>
                                     </div>
+                                    {item.intersections.length > 0 && item.intersections.map((inter, j) => (
+                                        <div
+                                            key={inter.id}
+                                            className={styles.resultPlan}
+                                            onMouseOver={() => this.setState({ highlightArea: inter.id })}
+                                            onMouseOut={() => this.setState({ highlightArea: null })}
+                                        >
+                                            {i + 1}.{j + 1} Ортофотоплан
+                                            <div className={styles.resultIcons}>
+                                                <IconSearch
+                                                    className={styles.resultIconSearch}
+                                                    onClick={() => {
+                                                        this.setState({ detailsAreaId: item.id, detailsAreaPolygon: inter.polygon })
+                                                        this.props.showPopup('area-details')
+                                                    }}
+                                                />
+                                                {isLogged && <IconCart
+                                                    className={styles.resultIconCart}
+                                                    onClick={() => this.pushToCart(inter)}
+                                                />}
+                                            </div>
+                                        </div>
+                                    ))}
                                 </li>
                             ))}
-                            {isLogged && <li>
+                            {isLogged && <li className={styles.resultPlan}>
                                 Заказать карту
                                 <div className={styles.resultIcons}>
                                     <IconCart
