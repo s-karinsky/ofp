@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import Button from '@components/Button'
 import { Checkbox } from '@components/Form'
 import Popup from '@components/Popup'
+import Spinner from '@components/Spinner'
 import { showPopup, hidePopup } from '@store/popup'
 import IconPlan from './plan.svg'
 import IconShoot from './shoot.svg'
@@ -24,6 +25,7 @@ export default function Order(props) {
         withCheckboxes,
         withRemove,
         checkedItems = {},
+        removingItems = [],
         onCheck,
         onRemove,
         onCollapse
@@ -112,14 +114,14 @@ export default function Order(props) {
                                 <div>{item.price ? `${item.price} руб.` : 'сумма уточняется'}</div>
                             </div>
                         </div>
-                        {withRemove && <div
-                            className={styles.trashIcon}
-                            onClick={() => {
-                                setItemToRemove(item.id)
-                                dispatch(showPopup(`confirm-remove-${index}`))
-                            }}
-                        >
-                            <IconTrash />
+                        {withRemove && <div className={styles.trashIcon}>
+                            {removingItems.indexOf(item.id) === -1 ?
+                                <IconTrash onClick={() => {
+                                    setItemToRemove(item.id)
+                                    dispatch(showPopup(`confirm-remove-${index}`))
+                                }} /> :
+                                <Spinner color="green" />
+                            }
                         </div>}
                     </div>
                 ))}

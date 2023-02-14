@@ -9,14 +9,23 @@ import Order from '@components/Order'
 import Popup from '@components/Popup'
 import axios from '@lib/axios'
 import { showPopup, hidePopup } from '@store/popup'
-import { setChecked, removeById, setOrderItems } from '@store/cart'
+import { setChecked, removeById, setOrderItems, setOrderCount } from '@store/cart'
 
 const mapStatusText = {
     order: 'заказ'
 }
 
+const orderItemsToCart = items => items.map(item => ({
+    id: item._id,
+    price: item.price,
+    name: item.areaId ? 'Ортофотоплан' : 'Заказ съемки',
+    preview: '',
+    type: item.areaId ? 'plan' : 'shoot'
+}))
+
 export default function CartPage() {
     const [ isCompany, setIsCompany ] = useState()
+    const [ removingItems, setRemovingItems ] = useState([])
     const cart = useSelector(state => state.cart)
     const dispatch = useDispatch()
     const submitItems = cart.items.filter(item => cart.checkedById[item.id])
@@ -24,15 +33,8 @@ export default function CartPage() {
     useEffect(() => {
         axios.get('order', { status: 'order' }).then(({ data: { orders } = {}} = {}) => {
             const order = orders && orders[0]
-            const items = order.items || []
-            const orderItems = items.map(item => ({
-                id: item._id,
-                price: item.price,
-                name: item.areaId ? 'Ортофотоплан' : 'Заказ съемки',
-                preview: '',
-                type: item.areaId ? 'plan' : 'shoot'
-            }))
-            dispatch(setOrderItems(orderItems))
+            const items = orderItemsToCart(order.items || [])
+            dispatch(setOrderItems(items))
         })
     }, [])
 
@@ -161,9 +163,16 @@ export default function CartPage() {
                             checkedItems={cart.checkedById}
                             onCheck={val => dispatch(setChecked(val))}
                             onRemove={id => {
-                                axios.post('order', { action: 'delete', id })
-                                dispatch(removeById(id))
+                                setRemovingItems([id].concat(removingItems))
+                                axios.post('order', { action: 'delete', id }).then(({ data: { order } = {}}) => {
+                                    setRemovingItems(removingItems.filter(itemId => itemId !== id))
+                                    const items = orderItemsToCart(order.items || [])
+                                    dispatch(setOrderItems(items))
+                                    dispatch(setOrderCount(items.length))
+                                    dispatch(removeById(id))
+                                })
                             }}
+                            removingItems={removingItems}
                             withCheckboxes
                             withRemove
                         />
