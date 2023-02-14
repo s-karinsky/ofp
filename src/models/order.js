@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-const orderItem = new mongoose.Schema({
+const orderItemSchema = new mongoose.Schema({
     areaId: {
         type: String
     },
@@ -37,7 +37,7 @@ const orderSchema = new mongoose.Schema({
         default: 'order'
     },
     items: {
-        type: [orderItem]
+        type: [orderItemSchema]
     }
 })
 

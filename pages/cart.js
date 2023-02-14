@@ -160,7 +160,10 @@ export default function CartPage() {
                             items={cart.items}
                             checkedItems={cart.checkedById}
                             onCheck={val => dispatch(setChecked(val))}
-                            onRemove={id => dispatch(removeById(id))}
+                            onRemove={id => {
+                                axios.post('order', { action: 'delete', id })
+                                dispatch(removeById(id))
+                            }}
                             withCheckboxes
                             withRemove
                         />

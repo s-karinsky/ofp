@@ -4,8 +4,7 @@ import handler from '@lib/handler'
 import authorized from '@lib/middleware/authorized'
 import { isValidPolygon } from '@lib/geo'
 
-async function updateOrder(req, res) {
-    dbConnect()
+async function addOrderItems(req, res) {
     const { areaId, coords } = req.body || {}
     
     if (coords && !isValidPolygon(coords)) {
@@ -32,6 +31,37 @@ async function updateOrder(req, res) {
     res.status(200).send({ order })
 }
 
+async function deleteOrderItems(req, res) {
+    const { id } = req.body || {}
+    const order = await Order.findOne({ user: res.userId, status: 'order' })
+    if (!order) {
+        throw new Error('Active order not found')
+    }
+    order.items.id(id).remove()
+    order.save()
+    res.status(200).json({ order })
+}
+
+async function changeOrder(req, res) {
+    dbConnect()
+    const { action } = req.body || {}
+
+    switch (action) {
+        case 'add':
+            await addOrderItems(req, res)
+            break
+
+        case 'delete':
+            await deleteOrderItems(req, res)
+            break
+    
+        default:
+            res.status(404).send()
+            break
+    }
+    
+}
+
 async function getOrder(req, res) {
     const { status, id } = req.query || {}
     const query = { userId: res.userId }
@@ -48,7 +78,7 @@ async function getOrder(req, res) {
 
 handler
     .use(authorized)
-    .post(updateOrder)
+    .post(changeOrder)
     .get(getOrder)
 
 export default handler
