@@ -67,6 +67,7 @@ export default class Map extends React.Component {
         const areaId = item.id
         const coords = item.isNew && item.polygon
         const res = await axios.post('/order', {
+            action: 'add',
             areaId,
             coords
         })
@@ -513,7 +514,7 @@ export default class Map extends React.Component {
                                                 />
                                                 {isLogged && <IconCart
                                                     className={styles.resultIconCart}
-                                                    onClick={() => this.pushToCart(inter)}
+                                                    onClick={() => this.pushToCart({ ...inter, isNew: true, id: item.id })}
                                                 />}
                                             </div>
                                         </div>

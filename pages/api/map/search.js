@@ -46,7 +46,8 @@ async function searchAreas(req, res) {
                     id: item._id,
                     polygon: item.polygon.coordinates,
                     date: item.date,
-                    preview: item.preview
+                    preview: item.preview,
+                    price: item.price
                 }))
             res.status(200).send({ result })
         })

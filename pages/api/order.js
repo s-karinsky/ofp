@@ -1,8 +1,12 @@
+import intersect from '@turf/intersect'
+import { default as turfArea } from '@turf/area'
+import { polygon as turfPolygon } from '@turf/helpers'
 import Order from '@models/order'
+import Area from '@models/area'
 import dbConnect from '@lib/dbConnect'
 import handler from '@lib/handler'
 import authorized from '@lib/middleware/authorized'
-import { isValidPolygon } from '@lib/geo'
+import { isValidPolygon, reversePolygonCoords } from '@lib/geo'
 
 async function addOrderItems(req, res) {
     const { areaId, coords } = req.body || {}
@@ -22,10 +26,34 @@ async function addOrderItems(req, res) {
             items: []
         })
     }
-    order.items.push({
+
+    const item = {
         areaId,
         polygon
-    })
+    }
+    if (areaId) {
+        const area = await Area.findById(areaId)
+        if (!area) {
+            item.areaId = null
+        } else {
+            let ratio = 1
+            if (polygon) {
+                const fullPolygon = area.polygon
+                const intersection = intersect(
+                    turfPolygon(reversePolygonCoords(polygon.coordinates)),
+                    turfPolygon(fullPolygon.coordinates)
+                )
+                if (intersection && intersection.geometry) {
+                    const interArea = turfArea(intersection)
+                    const fullArea = turfArea(fullPolygon)
+                    ratio = interArea / fullArea
+                }
+            }
+            item.price = area.price ? Math.ceil(area.price * ratio) : null
+        }
+    }
+
+    order.items.push(item)
     order.save()
     
     res.status(200).send({ order })

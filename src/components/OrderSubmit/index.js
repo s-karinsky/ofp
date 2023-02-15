@@ -3,7 +3,7 @@ import styles from './OrderSubmit.module.scss'
 
 export default function OrderSubmit(props) {
     const { items, onSubmit = () => {} } = props
-    const totalCount = items.reduce((res, item) => res + item.price, 0)
+    const totalCount = items.reduce((res, item) => res + (item.price || 0), 0)
     const isDisabled = items.reduce((res, item) => res || !item.price, false)
     const isEmpty = !items.length
     return (

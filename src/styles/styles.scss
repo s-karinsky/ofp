@@ -224,6 +224,13 @@ body {
       color: $secondary-color;
     }
   }
+
+  &_empty {
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 40px;
+  }
 }
 .cabinet {
   min-height: 50vw;
