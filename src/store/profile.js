@@ -75,10 +75,13 @@ const profileSlice = createSlice({
         },
         setIsLoaded(state, action) {
             state.isLoaded = action.payload
+        },
+        setOrders(state, action) {
+            state.orders = action.payload
         }
     }
 })
 
 const { actions, reducer } = profileSlice
-export const { setUserData, setIsLoading, setIsLoaded } = actions
+export const { setUserData, setIsLoading, setIsLoaded, setOrders } = actions
 export default reducer

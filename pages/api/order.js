@@ -126,7 +126,11 @@ async function getOrder(req, res) {
     const { status, id } = req.query || {}
     const query = { userId: res.userId }
     if (status) {
-        query.status = status
+        if (Array.isArray(status)) {
+            query.status = { $in: status }
+        } else {
+            query.status = status
+        }
     }
     if (id) {
         query._id = id
