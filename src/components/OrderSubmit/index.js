@@ -19,7 +19,14 @@ export default function OrderSubmit(props) {
             <div className={styles.title} style={{ border: 'none' }}>
                 {isEmpty ? 'Товары для заказа не выбраны' : `К оплате ${totalCount}`}
             </div>
-            {!isEmpty && <Button color="orange" disabled={isDisabled} onClick={onSubmit} fullSize>Оплатить</Button>}
+            {!isEmpty && <Button
+                color="orange"
+                disabled={isDisabled}
+                onClick={onSubmit}
+                fullSize
+            >
+                Оформить заказ
+            </Button>}
         </div>
     )
 }

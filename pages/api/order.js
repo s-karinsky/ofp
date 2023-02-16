@@ -70,6 +70,34 @@ async function deleteOrderItems(req, res) {
     res.status(200).json({ order })
 }
 
+async function submitOrder(req, res) {
+    dbConnect()
+    const { skipItems, orderDetails } = req.body || {}
+    const order = await Order.findOne({ userId: res.userId, status: 'order' })
+
+    if (!order) {
+        throw new Error('Order not found')
+    }
+
+    const resJson = {}
+    if (skipItems && skipItems.length && order.items) {
+        const newOrderItems = []
+        skipItems.map(id => {
+            const { _id, ...item } = order.items.id(id)
+            newOrderItems.push(item)
+            order.items.id(id).remove()
+        })
+        order.save()
+        if (newOrderItems.length) {
+            resJson.order = await Order.create({ userId: res.userId, status: 'order', items: newOrderItems })
+        }
+    }
+    await order.updateOne({ status: 'processed', details: orderDetails })
+    resJson.success = true
+
+    res.status(200).send(resJson)
+}
+
 async function changeOrder(req, res) {
     dbConnect()
     const { action } = req.body || {}
@@ -81,6 +109,10 @@ async function changeOrder(req, res) {
 
         case 'delete':
             await deleteOrderItems(req, res)
+            break
+
+        case 'send':
+            await submitOrder(req, res)
             break
     
         default:

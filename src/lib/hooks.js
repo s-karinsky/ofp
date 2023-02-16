@@ -49,7 +49,8 @@ export function useForm({ defaultValues = {}, action, method = 'post' } = {}) {
             name,
             onBlur: handleBlur(name),
             onChange: handleChange(name),
-            error: errors[name]
+            error: errors[name],
+            required
         }
 
         if (checkbox) {
@@ -76,13 +77,31 @@ export function useForm({ defaultValues = {}, action, method = 'post' } = {}) {
             return
         }
 
+        const submitValues = Object.keys(values).reduce((res, key) => {
+            if (!key.includes('.')) {
+                return { ...res, [key]: values[key] }
+            }
+            const parts = key.split('.')
+            let valueProp = res
+            parts.forEach((part, i) => {
+                if (!valueProp[part]) {
+                    valueProp[part] = {}
+                }
+                if (i === parts.length - 1) {
+                    valueProp[part] = values[key]
+                }
+                valueProp = valueProp[part]
+            })
+            return { ...res }
+        }, {})
+
         if (action) {
             const promise = typeof action === 'function' ?
-                action(values) :
+                action(submitValues) :
                 axios.request({
                     method,
                     url: action,
-                    data: values
+                    data: submitValues
                 })
             setFormState({ submitting: true })
             promise
@@ -90,7 +109,7 @@ export function useForm({ defaultValues = {}, action, method = 'post' } = {}) {
                 .catch(onError)
                 .finally(() => setFormState({ submitting: false }))
         } else {
-            onSuccess(values)
+            onSuccess(submitValues)
         }
     }
 

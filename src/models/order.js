@@ -38,6 +38,30 @@ const orderSchema = new mongoose.Schema({
     },
     items: {
         type: [orderItemSchema]
+    },
+    details: {
+        name: String,
+        email: String,
+        phone: String,
+        company: {
+            legalForm: {
+                type: String
+            },
+            name: String,
+            email: String,
+            phone: String,
+            inn: String,
+            kpp: String,
+            bank: String,
+            checkingAccount: String
+        },
+        shootParams: {
+            resolution: Number,
+            longOverlap: Number,
+            crossOverlap: Number,
+            accuracy: String,
+            light: String
+        }
     }
 })
 
