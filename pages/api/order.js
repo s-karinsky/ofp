@@ -6,19 +6,15 @@ import Area from '@models/area'
 import dbConnect from '@lib/dbConnect'
 import handler from '@lib/handler'
 import authorized from '@lib/middleware/authorized'
-import { isValidPolygon, reversePolygonCoords } from '@lib/geo'
+import { isValidPolygon, isValidMultiPolygon, reversePolygonCoords } from '@lib/geo'
 
 async function addOrderItems(req, res) {
     const { areaId, coords } = req.body || {}
     
-    if (coords && !isValidPolygon(coords)) {
+    if (coords && !isValidPolygon(coords) && !isValidMultiPolygon(coords)) {
         throw new Error('Bad coordinates')
     }
 
-    const polygon = coords && {
-        type: 'Polygon',
-        coordinates: coords
-    }
     let order = await Order.findOne({ userId: res.userId, status: 'order' })
     if (!order) {
         order = await Order.create({
@@ -26,7 +22,11 @@ async function addOrderItems(req, res) {
             items: []
         })
     }
-
+    
+    const polygon = coords && {
+        type: 'Polygon',
+        coordinates: coords
+    }
     const item = {
         areaId,
         polygon
@@ -37,7 +37,7 @@ async function addOrderItems(req, res) {
             item.areaId = null
         } else {
             let ratio = 1
-            if (polygon) {
+            if (area.price && polygon) {
                 const fullPolygon = area.polygon
                 const intersection = intersect(
                     turfPolygon(reversePolygonCoords(polygon.coordinates)),
@@ -61,12 +61,19 @@ async function addOrderItems(req, res) {
 
 async function deleteOrderItems(req, res) {
     const { id } = req.body || {}
+
+    await Order.updateOne({
+        user: res.userId,
+        status: 'order'
+    }, {
+        $pull: {
+            items: {
+                _id: id
+            }
+        }
+    })
+
     const order = await Order.findOne({ user: res.userId, status: 'order' })
-    if (!order) {
-        throw new Error('Active order not found')
-    }
-    order.items.id(id).remove()
-    order.save()
     res.status(200).json({ order })
 }
 
