@@ -6,7 +6,7 @@ import Area from '@models/area'
 import dbConnect from '@lib/dbConnect'
 import handler from '@lib/handler'
 import authorized from '@lib/middleware/authorized'
-import { isValidPolygon, isValidMultiPolygon, reversePolygonCoords } from '@lib/geo'
+import { isValidPolygon, isValidMultipolygon, reversePolygonCoords } from '@lib/geo'
 
 async function addOrderItems(req, res) {
     const { areaId, coords } = req.body || {}
