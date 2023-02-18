@@ -63,7 +63,7 @@ async function deleteOrderItems(req, res) {
     const { id } = req.body || {}
 
     await Order.updateOne({
-        user: res.userId,
+        userId: res.userId,
         status: 'order'
     }, {
         $pull: {
@@ -73,7 +73,7 @@ async function deleteOrderItems(req, res) {
         }
     })
 
-    const order = await Order.findOne({ user: res.userId, status: 'order' })
+    const order = await Order.findOne({ userId: res.userId, status: 'order' })
     res.status(200).json({ order })
 }
 
@@ -149,7 +149,7 @@ async function getOrder(req, res) {
 
 handler
     .use(authorized)
-    .post(changeOrder)
     .get(getOrder)
+    .post(changeOrder)
 
 export default handler
