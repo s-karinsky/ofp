@@ -9,60 +9,54 @@ import authorized from '@lib/middleware/authorized'
 import { isValidPolygon, isValidMultipolygon, reversePolygonCoords } from '@lib/geo'
 
 async function addOrderItems(req, res) {
-    const { areaId, coords } = req.body || {}
+    const { areaId, coords } = req.body
     
-    if (coords && !isValidPolygon(coords) && !isValidMultiPolygon(coords)) {
-        throw new Error('Bad coordinates')
+    if (coords && !isValidPolygon(coords) && !isValidMultipolygon(coords)) {
+        throw new Error('Invalid polygon')
     }
+    const order = await Order.findOneAndUpdate({ userId: res.userId, status: 'order' }, {}, { new: true })
+    const area = await Area.findById(areaId)
 
-    let order = await Order.findOne({ userId: res.userId, status: 'order' })
-    if (!order) {
-        order = await Order.create({
-            userId: res.userId,
-            items: []
+    if (!coords) {
+        order.items.push({
+            areaId,
+            price: area.price
+        })
+    } else {
+        const multipolygon = isValidMultipolygon(coords) ? coords : [coords]
+        multipolygon.forEach(points => {
+            const polygon = turfPolygon(reversePolygonCoords(points))
+            const storePolygon = { type: 'Polygon', coordinates: reversePolygonCoords(points) }
+            if (!area) {
+                order.items.push({ polygon: storePolygon })
+            } else if (area.price) {
+                let price = area.price
+                const intersection = intersect(polygon, area.polygon)
+                if (intersection && intersection.geometry) {
+                    const intersectionArea = turfArea(intersection)
+                    const fullArea = turfArea(area.polygon)
+                    price = Math.ceil(price * (intersectionArea / fullArea))
+                } else {
+                    price = null
+                }
+                order.items.push({
+                    areaId,
+                    polygon: storePolygon,
+                    price
+                })
+            }
         })
     }
-    
-    const polygon = coords && {
-        type: 'Polygon',
-        coordinates: coords
-    }
-    const item = {
-        areaId,
-        polygon
-    }
-    if (areaId) {
-        const area = await Area.findById(areaId)
-        if (!area) {
-            item.areaId = null
-        } else {
-            let ratio = 1
-            if (area.price && polygon) {
-                const fullPolygon = area.polygon
-                const intersection = intersect(
-                    turfPolygon(reversePolygonCoords(polygon.coordinates)),
-                    turfPolygon(fullPolygon.coordinates)
-                )
-                if (intersection && intersection.geometry) {
-                    const interArea = turfArea(intersection)
-                    const fullArea = turfArea(fullPolygon)
-                    ratio = interArea / fullArea
-                }
-            }
-            item.price = area.price ? Math.ceil(area.price * ratio) : null
-        }
-    }
-
-    order.items.push(item)
     order.save()
-    
     res.status(200).send({ order })
 }
 
 async function deleteOrderItems(req, res) {
-    const { id } = req.body || {}
-
-    await Order.updateOne({
+    const { id } = req.body
+    if (!id) {
+        throw new Error('id is required')
+    }
+    const order = await Order.findOneAndUpdate({
         userId: res.userId,
         status: 'order'
     }, {
@@ -71,9 +65,11 @@ async function deleteOrderItems(req, res) {
                 _id: id
             }
         }
+    }, {
+        returnDocument: 'after',
+        lean: true
     })
 
-    const order = await Order.findOne({ userId: res.userId, status: 'order' })
     res.status(200).json({ order })
 }
 
@@ -149,7 +145,7 @@ async function getOrder(req, res) {
 
 handler
     .use(authorized)
-    .get(getOrder)
     .post(changeOrder)
+    .get(getOrder)
 
 export default handler

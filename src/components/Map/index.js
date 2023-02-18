@@ -12,7 +12,7 @@ import { Input } from '@components/Form'
 import Calendar from '@components/Calendar'
 import Popup from '@components/Popup'
 import Spinner, { SpinnerRing } from '@components/Spinner'
-import { getRectPolygonByCorners, getMultipolygon, reversePolygonCoords } from '@lib/geo'
+import { getRectPolygonByCorners, getMultipolygon, reversePolygonCoords, isCoords } from '@lib/geo'
 import { getFormattedDate } from '@lib/datetime'
 import { declOfNum } from '@lib/utils'
 import axios from '@lib/axios'
@@ -526,7 +526,7 @@ export default class Map extends React.Component {
                                 <div className={styles.resultIcons}>
                                     <IconCart
                                         className={styles.resultIconCart}
-                                        onClick={() => this.pushToCart({ isNew: true, polygon: [points] })}
+                                        onClick={() => this.pushToCart({ isNew: true, polygon: isCoords(points[0]) ? [points] : points })}
                                     />
                                 </div>
                             </li>}

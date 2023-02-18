@@ -25,10 +25,10 @@ export function isCoords(arr) {
     return arr.length === 2 && typeof arr[0] === 'number' && typeof arr[1] === 'number'
 }
 
-export function isValidPolygon(points) {
+export function isValidPolygon(points = []) {
     return Array.isArray(points) && Array.isArray(points[0]) && Array.isArray(points[0][0]) && isCoords(points[0][0])
 }
 
-export function isValidMultipolygon(points) {
+export function isValidMultipolygon(points = []) {
     return points.reduce((res, item) => res && isValidPolygon(item), true)
 }
