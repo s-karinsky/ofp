@@ -1,12 +1,11 @@
 import jwt from 'jsonwebtoken'
-import handler from '@lib/handler'
-import dbConnect from '@lib/dbConnect'
+import createHandler from '@lib/handler'
 import User from '@models/user'
 import externalApp from '@lib/middleware/externalApp'
 
-async function loginUser(req, res) {
-    dbConnect()
+const handler = createHandler(['db'])
 
+async function loginUser(req, res) {
     const { email, password } = req.body || {}
     const user = await User.findOne({ email }).select('+password')
     if (!user) {

@@ -1,11 +1,10 @@
 import User from '@models/user'
-import dbConnect from '@lib/dbConnect'
-import handler from '@lib/handler'
+import createHandler from '@lib/handler'
 import authorized from '@lib/middleware/authorized'
 
+const handler = createHandler(['db'])
+
 async function getUser(req, res) {
-    dbConnect()
-    
     const user = await User.findById(res.userId, ['email', 'name', 'phone', 'legalForm', 'birthdate'])
     if (!user) {
         throw new Error('User not found')
@@ -15,7 +14,6 @@ async function getUser(req, res) {
 }
 
 async function updateUser(req, res) {
-    dbConnect()
     const { password, password_repeat, password_old, ...data } = req.body || {}
     if (password && password_repeat && password_old) {
         const user = await User.findById(res.userId).select('+password')

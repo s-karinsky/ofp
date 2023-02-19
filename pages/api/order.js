@@ -3,10 +3,11 @@ import { default as turfArea } from '@turf/area'
 import { polygon as turfPolygon } from '@turf/helpers'
 import Order from '@models/order'
 import Area from '@models/area'
-import dbConnect from '@lib/dbConnect'
-import handler from '@lib/handler'
 import authorized from '@lib/middleware/authorized'
 import { isValidPolygon, isValidMultipolygon, reversePolygonCoords } from '@lib/geo'
+import createHandler from '@lib/handler'
+
+const handler = createHandler(['db'])
 
 async function addOrderItems(req, res) {
     const { areaId, coords } = req.body
@@ -74,7 +75,6 @@ async function deleteOrderItems(req, res) {
 }
 
 async function submitOrder(req, res) {
-    dbConnect()
     const { skipItems, orderDetails } = req.body || {}
     const order = await Order.findOne({ userId: res.userId, status: 'order' })
 
@@ -101,8 +101,7 @@ async function submitOrder(req, res) {
     res.status(200).send(resJson)
 }
 
-async function changeOrder(req, res) {
-    dbConnect()
+async function postOrder(req, res) {
     const { action } = req.body || {}
 
     switch (action) {
@@ -145,7 +144,7 @@ async function getOrder(req, res) {
 
 handler
     .use(authorized)
-    .post(changeOrder)
+    .post(postOrder)
     .get(getOrder)
 
 export default handler

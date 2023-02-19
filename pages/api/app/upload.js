@@ -1,9 +1,10 @@
 import jwt from 'jsonwebtoken'
 import multer from 'multer'
-import handler from '@lib/handler'
-import dbConnect from '@lib/dbConnect'
+import createHandler from '@lib/handler'
 import Area from '@models/area'
 import externalApp from '@lib/middleware/externalApp'
+
+const handler = createHandler(['db'])
 
 const upload = multer({
     storage: multer.diskStorage({
@@ -34,7 +35,6 @@ async function checkTokenMiddleware(req, res, next) {
 }
 
 async function createArea(req, res) {
-    dbConnect()
     const id = req.token.id
     const filename = req.previewFilename
     

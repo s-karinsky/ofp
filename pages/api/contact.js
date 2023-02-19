@@ -1,5 +1,7 @@
-import handler from '@lib/handler'
+import createHandler from '@lib/handler'
 import sendMail from '@lib/sendMail'
+
+const handler = createHandler()
 
 async function sendContact(req, res) {
     const { body } = req

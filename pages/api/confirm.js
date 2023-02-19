@@ -1,9 +1,9 @@
 import User from '@models/user'
-import dbConnect from '@lib/dbConnect'
-import handler from '@lib/handler'
+import createHandler from '@lib/handler'
+
+const handler = createHandler(['db'])
 
 async function confirmUser(req, res) {
-    dbConnect()
     const query = req.query || {}
     const { email, code } = query
 

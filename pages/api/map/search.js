@@ -1,10 +1,10 @@
 import Area from '@models/area'
-import dbConnect from '@lib/dbConnect'
-import handler from '@lib/handler'
+import createHandler from '@lib/handler'
 import { isValidMultipolygon } from '@lib/geo'
 
+const handler = createHandler(['db'])
+
 async function searchAreas(req, res) {
-    dbConnect()
     const { coords, date_from, date_to } = req.query
     let points
     try {

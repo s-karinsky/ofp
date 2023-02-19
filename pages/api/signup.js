@@ -1,12 +1,11 @@
 import User from '@models/user'
-import dbConnect from '@lib/dbConnect'
-import handler from '@lib/handler'
+import createHandler from '@lib/handler'
 import sendMail from '@lib/sendMail'
 
+const handler = createHandler(['db'])
+
 async function createUser(req, res) {
-    const data = req.body
-    const { email, password, surname, name, phone } = data
-    dbConnect()
+    const { email, password, surname, name, phone } = req.body
     try {
         const confirmationCode = (Math.random() + 1).toString(36).substring(2)
 

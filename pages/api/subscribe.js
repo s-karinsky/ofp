@@ -1,11 +1,11 @@
 import Subscriber from '@models/subscriber'
-import dbConnect from '@lib/dbConnect'
-import handler from '@lib/handler'
+import createHandler from '@lib/handler'
 import sendMail from '@lib/sendMail'
 
+const handler = createHandler(['db'])
+
 async function unsubscribe(req, res) {
-    const { query: { email, code } = {} } = req
-    dbConnect()
+    const { email, code } = req.query || {}
     
     const result = await Subscriber.findOneAndRemove({ email, unsubscribeCode: code })
     if (result) {
@@ -16,9 +16,7 @@ async function unsubscribe(req, res) {
 }
 
 async function subscribe(req, res) {
-    const data = req.body
-    const { email } = data
-    dbConnect()
+    const { email } = req.body
 
     try {
         const unsubscribeCode = (Math.random() + 1).toString(36).substring(2)

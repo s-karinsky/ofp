@@ -1,14 +1,21 @@
 import nc from 'next-connect'
+import dbConnect from '@lib/dbConnect'
 
-function onError(err, req, res, next) {
-    res.status(500).json({ error: err.toString() })
+export default (middlewares = []) => {
+    const handler = nc({
+        onError: (err, req, res) => {
+            res.status(500).json({ error: err.toString() })
+        },
+        onNoMatch: (req, res) => {
+            res.status(404).send("Page is not found")
+        },
+    })
+
+    if (middlewares.includes('db')) {
+        handler.use(async (req, res, next) => {
+            await dbConnect()
+            next()
+        })
+    }
+    return handler
 }
-
-const handler = nc({
-    onError: onError,
-    onNoMatch: (req, res) => {
-        res.status(404).send("Page is not found")
-    },
-})
-
-export default handler

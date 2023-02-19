@@ -1,11 +1,11 @@
 import { setCookie, hasCookie, getCookie } from 'cookies-next'
 import User from '@models/user'
-import dbConnect from '@lib/dbConnect'
 import sendMail from '@lib/sendMail'
-import handler from '@lib/handler'
+import createHandler from '@lib/handler'
+
+const handler = createHandler(['db'])
 
 async function postRestorePassword(req, res) {
-    dbConnect()
     const { body = {} } = req
     const { email, password } = body
     if (!email && password && hasCookie('restoreEmail', { req, res }) && hasCookie('restoreCode', { req, res })) {
@@ -50,7 +50,6 @@ async function postRestorePassword(req, res) {
 }
 
 async function getRestorePassword(req, res) {
-    dbConnect()
     const { query = {} } = req
     const { email, code } = query
 
