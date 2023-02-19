@@ -45,7 +45,8 @@ export default async function auth(req, res) {
                 if (user) {
                     token.user = {
                         _id: user._id,
-                        email: user.email
+                        email: user.email,
+                        role: user.role
                     }
                 }
                 return token

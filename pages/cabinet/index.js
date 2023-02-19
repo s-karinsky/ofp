@@ -33,7 +33,6 @@ export default function Cabinet() {
                     items
                 }
             })
-            console.log(userOrders)
             dispatch(setOrders(userOrders))
         })
     }, [])

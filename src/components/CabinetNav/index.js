@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import cn from 'classnames'
 import { useDispatch } from 'react-redux'
-import { signOut } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 import Popup from '@components/Popup'
 import Button from '@components/Button'
 import { showPopup, hidePopup } from '@store/popup'
@@ -13,6 +13,7 @@ import styles from './CabinetNav.module.scss'
 
 export default function CabinetNav({ title, section }) {
     const dispatch = useDispatch()
+    const session = useSession()
     return (
         <div className={styles.cabinetNav}>
             <Popup name="confirm-logout">
@@ -54,6 +55,14 @@ export default function CabinetNav({ title, section }) {
                         Изменить пароль
                     </Link>
                 </li>
+                {session.data?.user?.role === 'seller' &&
+                    <li className={cn(styles.item, { [styles.item_active]: section === 'myorders' })}>
+                        <Link href="/cabinet/myorders">
+                            <span className={styles.icon}><IconOrders /></span>
+                            Заказы моих планов
+                        </Link>
+                    </li>
+                }
                 <li className={cn(styles.item)}>
                     <a onClick={() => dispatch(showPopup('confirm-logout'))}>
                         <span className={styles.icon}><IconLogout /></span>

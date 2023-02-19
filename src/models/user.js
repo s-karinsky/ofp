@@ -29,7 +29,8 @@ const userSchema = new mongoose.Schema({
     role: {
         type: String,
         enum: ['user', 'seller'],
-        default: 'user'
+        default: 'user',
+        required: true
     },
     confirmationCode: {
         type: String

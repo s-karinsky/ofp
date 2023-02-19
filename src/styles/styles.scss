@@ -281,3 +281,16 @@ body {
   font-size: 24px;
   font-weight: bold;;
 }
+
+
+.myorders {
+  width: calc(100% - 300px);
+  font-size: 14px;
+  &_orderItem {
+    margin-bottom: 40px;
+  }
+  &_orderPreview {
+    width: 300px;
+    vertical-align: top;
+  }
+}

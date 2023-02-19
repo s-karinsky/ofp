@@ -12,6 +12,7 @@ import '@styles/styles.scss'
 const cabinetTitles = {
     default: 'Мои заказы',
     profile: 'Личные данные',
+    orders: 'Заказы планов',
     password: 'Изменить пароль'
 }
 
