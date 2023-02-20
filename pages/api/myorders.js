@@ -13,7 +13,6 @@ async function getOrders(req, res) {
     }
     const userAreas = await Area.find({ user: res.userId })
     const areasId = userAreas.map(area => area._id.toString())
-    console.log(areasId)
     const orders = await Order.find({ status: 'processed', items: { $elemMatch: { areaId: { "$in": areasId } } } })
     orders.forEach(order => {
         order.items = order.items.filter(item => areasId.indexOf(item.areaId) !== -1)

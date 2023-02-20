@@ -60,7 +60,6 @@ export default function Cabinet() {
                             onCollapse={() => setExpandedOrders(expandedOrders.filter(id => id !== order.orderId))}
                             onClickDetails={id => {
                                 const item = order.items.find(item => item.id === id)
-                                console.log(item)
                                 setAreaPreview({ id: item.areaId, polygon: item.polygon, price: item.price })
                                 dispatch(showPopup('area-preview'))
                             }}
