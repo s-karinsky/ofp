@@ -7,13 +7,13 @@ import area from '@turf/area'
 import distance from '@turf/distance'
 import { MapContainer, TileLayer, ZoomControl, Polygon } from 'react-leaflet'
 import cn from 'classnames'
+import AreaPreview from '@components/AreaPreview'
 import Button from '@components/Button'
 import { Input } from '@components/Form'
 import Calendar from '@components/Calendar'
 import Popup from '@components/Popup'
-import Spinner, { SpinnerRing } from '@components/Spinner'
-import { getRectPolygonByCorners, getMultipolygon, reversePolygonCoords, isCoords } from '@lib/geo'
-import { getFormattedDate } from '@lib/datetime'
+import Spinner from '@components/Spinner'
+import { getRectPolygonByCorners, getMultipolygon, reversePolygonCoords, isCoords, getIntersectionPrice } from '@lib/geo'
 import { declOfNum } from '@lib/utils'
 import axios from '@lib/axios'
 import { DRAW_TYPE_OPTIONS, DATE_OPTIONS } from './consts'
@@ -58,9 +58,8 @@ export default class Map extends React.Component {
         applyRange: null,
         searchProgress: false,
         searchResult: null,
-        detailsAreaId: null,
-        detailsAreaPolygon: null,
-        highlightArea: null
+        highlightArea: null,
+        areaPreview: {}
     }
 
     pushToCart = async (item) => {
@@ -209,8 +208,8 @@ export default class Map extends React.Component {
                         positions={area.polygon}
                         eventHandlers={{
                             click: () => {
-                                this.setState({ detailsAreaId: area.id, detailsAreaPolygon: null })
-                                this.props.showPopup('area-details')
+                                this.setState({ areaPreview: { id: area.id } })
+                                this.props.showPopup('area-preview')
                             },
                             mouseover: () => this.setState({ highlightArea: area.id }),
                             mouseout: () => this.setState({ highlightArea: null })
@@ -223,14 +222,21 @@ export default class Map extends React.Component {
                             lineCap: 'butt'
                         }}
                     />
-                    {Array.isArray(area.intersections) && area.intersections.map((inter, i) => (
+                    {Array.isArray(area.intersections) && area.intersections.map((inter) => (
                         <Polygon
                             key={inter.id}
                             positions={inter.polygon}
                             eventHandlers={{
                                 click: () => {
-                                    this.setState({ detailsAreaId: area.id, detailsAreaPolygon: inter.polygon })
-                                    this.props.showPopup('area-details')
+                                    const fullArea = polygon(reversePolygonCoords(area.polygon))
+                                    const interArea = polygon(reversePolygonCoords(inter.polygon))
+                                    const price = getIntersectionPrice(fullArea, interArea, area.price)
+                                    this.setState({ areaPreview: {
+                                        id: area.id,
+                                        polygon: inter.polygon,
+                                        price
+                                    } })
+                                    this.props.showPopup('area-preview')
                                 },
                                 mouseover: () => this.setState({ highlightArea: inter.id }),
                                 mouseout: () => this.setState({ highlightArea: null }) 
@@ -304,17 +310,14 @@ export default class Map extends React.Component {
             dateTo,
             applyRange,
             searchProgress,
-            searchResult,
-            detailsAreaId,
-            detailsAreaPolygon
+            searchResult
         } = this.state
-
-        const detailsItem = !detailsAreaId || !searchResult ?
-            null :
-            searchResult.find(item => item.id === detailsAreaId)
 
         return (
             <div className={styles.map}>
+                <Popup name="area-preview">
+                    <AreaPreview {...this.state.areaPreview} />
+                </Popup>
                 <Popup name="map-date-range" contentOnly>
                     <div className={styles.calendars}>
                         <div className={styles.calendarOuter}>
@@ -345,18 +348,6 @@ export default class Map extends React.Component {
                         </div>
                     </div>
                 </Popup>
-                <Popup name="area-details">
-                    {!detailsItem && 'Ошибка загрузки данных'}
-                    {!!detailsItem && <>
-                        <div className={styles.areaPreview}>
-                            <img src={`/uploads/${detailsItem.preview}`} />
-                        </div>
-                        <div className={styles.areaDetails}>
-                            <span><b>Площадь: </b>{(area(polygon(reversePolygonCoords(detailsAreaPolygon || detailsItem.polygon))) / 1000000).toFixed(2)} км<sup>2</sup></span><br />
-                            <span><b>Дата: </b>{getFormattedDate(detailsItem.date)}</span>
-                        </div>
-                    </>}
-                </Popup>
                 <div className={styles.mapContainer}>
                     <MapContainer
                         center={[53.721152, 91.442396]}
@@ -373,7 +364,7 @@ export default class Map extends React.Component {
                         <ZoomControl position="bottomright" />
                         {isDraw ?
                             <Draw type={drawType} onFinish={this.handleFinishDraw} /> :
-                            <DrawArea points={points} />
+                            <DrawArea points={points} isHighlighted={this.state.highlightArea === 'new'} />
                         }
                         {this.renderSearchResult()}
                     </MapContainer>
@@ -486,8 +477,8 @@ export default class Map extends React.Component {
                                             <IconSearch
                                                 className={styles.resultIconSearch}
                                                 onClick={() => {
-                                                    this.setState({ detailsAreaId: item.id, detailsAreaPolygon: null })
-                                                    this.props.showPopup('area-details')
+                                                    this.setState({ areaPreview: { id: item.id } })
+                                                    this.props.showPopup('area-preview')
                                                 }}
                                             />
                                             {isLogged && <IconCart
@@ -508,8 +499,17 @@ export default class Map extends React.Component {
                                                 <IconSearch
                                                     className={styles.resultIconSearch}
                                                     onClick={() => {
-                                                        this.setState({ detailsAreaId: item.id, detailsAreaPolygon: inter.polygon })
-                                                        this.props.showPopup('area-details')
+                                                        const fullArea = polygon(reversePolygonCoords(item.polygon))
+                                                        const interArea = polygon(reversePolygonCoords(inter.polygon))
+                                                        const price = getIntersectionPrice(fullArea, interArea, item.price)
+                                                        this.setState({
+                                                            areaPreview: {
+                                                                id: item.id,
+                                                                polygon: inter.polygon,
+                                                                price
+                                                            }
+                                                        })
+                                                        this.props.showPopup('area-preview')
                                                     }}
                                                 />
                                                 {isLogged && <IconCart
@@ -522,12 +522,17 @@ export default class Map extends React.Component {
                                 </li>
                             ))}
                             {isLogged && <li className={styles.resultPlan}>
-                                Заказать карту
-                                <div className={styles.resultIcons}>
-                                    <IconCart
-                                        className={styles.resultIconCart}
-                                        onClick={() => this.pushToCart({ isNew: true, polygon: isCoords(points[0]) ? [points] : points })}
-                                    />
+                                <div
+                                    onMouseOver={() => this.setState({ highlightArea: 'new' })}
+                                    onMouseOut={() => this.setState({ highlightArea: null })}
+                                >
+                                    Заказать карту
+                                    <div className={styles.resultIcons}>
+                                        <IconCart
+                                            className={styles.resultIconCart}
+                                            onClick={() => this.pushToCart({ isNew: true, polygon: isCoords(points[0]) ? [points] : points })}
+                                        />
+                                    </div>
                                 </div>
                             </li>}
                         </ul>

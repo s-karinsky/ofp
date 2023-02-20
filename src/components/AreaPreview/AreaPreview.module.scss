@@ -1,0 +1,41 @@
+@import '@styles/var';
+
+.areaPreview {
+    width: 70vw;
+}
+
+.details {
+    margin-bottom: 30px;
+    font-size: 14px;
+}
+.detailsList {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0;
+}
+.header {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.mapHeader {
+    color: $secondary-color;
+
+    span {
+        display: inline-block;
+        color: #000;
+
+        &:before {
+            content: '/ ';
+            color: $gray;
+        }
+    }
+}
+
+.preview {
+    margin-bottom: 30px;
+}
+
+.previewImage {
+    width: 100%;
+}

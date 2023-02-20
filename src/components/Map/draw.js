@@ -11,7 +11,6 @@ const pathOptions = {
     color: '#E87258',
     weight: 2,
     dashArray: '4 4',
-    fillOpacity: 0,
     lineCap: 'butt'
 }
 
@@ -88,14 +87,14 @@ function Draw({ type, onFinish = () => {} }) {
     )
 }
 
-function DrawArea({ points }) {
+function DrawArea({ points, isHighlighted }) {
     const map = useMap()
     useEffect(() => {
         const cont = map._container
         cont.classList.remove('mapPointer')
         if (points && points.length) map.fitBounds(points)
     }, [])
-    return <Polygon positions={points} pathOptions={pathOptions} />
+    return <Polygon positions={points} pathOptions={{ ...pathOptions, fillOpacity: isHighlighted ? 0.5 : 0 }} />
 }
 
 export { Draw, DrawArea }

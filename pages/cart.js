@@ -8,9 +8,11 @@ import OrderSummary from '@components/OrderSummary'
 import Spinner from '@components/Spinner'
 import Order from '@components/Order'
 import Popup from '@components/Popup'
+import AreaPreview from '@components/AreaPreview'
 import { useForm } from '@lib/hooks'
 import { isValidEmail } from '@lib/utils'
 import axios from '@lib/axios'
+import { reversePolygonCoords } from '@lib/geo'
 import { showPopup, hidePopup, showMessage } from '@store/popup'
 import { setChecked, removeById, setOrderItems, setOrderCount } from '@store/cart'
 
@@ -23,13 +25,16 @@ const orderItemsToCart = items => items.map(item => ({
     price: item.price,
     name: item.areaId ? 'Ортофотоплан' : 'Заказ съемки',
     preview: '',
-    type: item.areaId ? 'plan' : 'shoot'
+    type: item.areaId ? 'plan' : 'shoot',
+    areaId: item.areaId,
+    polygon: reversePolygonCoords(item.polygon?.coordinates)
 }))
 
 export default function CartPage() {
     const [ isCompany, setIsCompany ] = useState()
     const [ removingItems, setRemovingItems ] = useState([])
     const [ isSubmitting, setIsSubmitting ] = useState()
+    const [ areaPreview, setAreaPreview ] = useState({})
     const cart = useSelector(state => state.cart)
     const dispatch = useDispatch()
     const submitItems = cart.items.filter(item => cart.checkedById[item.id])
@@ -56,6 +61,9 @@ export default function CartPage() {
 
     return (
         <div className="cart">
+            <Popup name="area-preview">
+                <AreaPreview {...areaPreview} />
+            </Popup>
             {cart.orderCount > 0 ? <>
                 <Popup name="submit-order">
                     {isSubmitting ?
@@ -260,6 +268,11 @@ export default function CartPage() {
                                         dispatch(setOrderCount(items.length))
                                         dispatch(removeById(id))
                                     })
+                                }}
+                                onClickDetails={id => {
+                                    const item = cart.items.find(item => item.id === id)
+                                    setAreaPreview({ id: item.areaId, polygon: item.polygon, price: item.price })
+                                    dispatch(showPopup('area-preview'))
                                 }}
                                 removingItems={removingItems}
                                 withCheckboxes

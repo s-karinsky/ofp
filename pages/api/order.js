@@ -1,10 +1,8 @@
-import intersect from '@turf/intersect'
-import { default as turfArea } from '@turf/area'
 import { polygon as turfPolygon } from '@turf/helpers'
 import Order from '@models/order'
 import Area from '@models/area'
 import authorized from '@lib/middleware/authorized'
-import { isValidPolygon, isValidMultipolygon, reversePolygonCoords } from '@lib/geo'
+import { isValidPolygon, isValidMultipolygon, reversePolygonCoords, getIntersectionPrice } from '@lib/geo'
 import createHandler from '@lib/handler'
 
 const handler = createHandler(['db'])
@@ -31,15 +29,7 @@ async function addOrderItems(req, res) {
             if (!area) {
                 order.items.push({ polygon: storePolygon })
             } else if (area.price) {
-                let price = area.price
-                const intersection = intersect(polygon, area.polygon)
-                if (intersection && intersection.geometry) {
-                    const intersectionArea = turfArea(intersection)
-                    const fullArea = turfArea(area.polygon)
-                    price = Math.ceil(price * (intersectionArea / fullArea))
-                } else {
-                    price = null
-                }
+                const price = getIntersectionPrice(area.polygon, polygon, area.price)
                 order.items.push({
                     areaId,
                     polygon: storePolygon,

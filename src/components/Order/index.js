@@ -28,10 +28,10 @@ export default function Order(props) {
         removingItems = [],
         onCheck,
         onRemove,
+        onClickDetails = () => {},
         onCollapse
     } = props
     const isCheckedAll = items.reduce((res, item) => res && checkedItems[item.id], true)
-    const [previewImage, setPreviewImage] = useState()
     const [itemToRemove, setItemToRemove] = useState()
     const dispatch = useDispatch()
     const isCollapsing = typeof onCollapse === 'function'
@@ -39,9 +39,6 @@ export default function Order(props) {
     return (
         <div className={styles.order}>
             {isCollapsing && <span className={styles.collapse} onClick={onCollapse}>-</span>}
-            <Popup name={`order-preview-${index}`} noBorder>
-                <img src={previewImage} width="900" />
-            </Popup>
             {withRemove && <Popup name={`confirm-remove-${index}`}>
                 <div className={styles.removeHeader}>Уверены?</div>
                 <div className={styles.removeText}>Это удалит товар из корзины</div>
@@ -103,10 +100,7 @@ export default function Order(props) {
                                     {item.name}
                                     <span
                                         className={styles.previewIcon}
-                                        onClick={() => {
-                                            setPreviewImage(item.preview)
-                                            dispatch(showPopup(`order-preview-${index}`))
-                                        }}
+                                        onClick={() => onClickDetails(item.id)}
                                     >
                                         <IconPreview />
                                     </span>
