@@ -10,3 +10,11 @@ export const declOfNum = (value, words) => {
 	if(num == 1) return words[0]
 	return words[2]
 }
+
+export const debounce = (func, timeout) => {
+	let timer
+	return (...args) => {
+		clearTimeout(timer)
+		timer = setTimeout(() => { func.apply(this, args); }, timeout)
+	}
+}

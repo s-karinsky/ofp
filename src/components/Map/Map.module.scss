@@ -242,3 +242,36 @@
 .optionFile {
     cursor: pointer;
 }
+
+.autocomplete {
+    position: relative;
+
+    &List {
+        list-style: none;
+        position: absolute;
+        z-index: 20;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #fff;
+        margin: 0;
+        padding: 0;
+        font-size: 14px;
+        border: 1px solid $gray;
+        border-radius: 5px;
+
+        &Item {
+            padding: 3px 5px;
+            border-bottom: 1px solid $gray;
+            cursor: pointer;
+
+            &.active {
+                background-color: rgba($primary-color, 0.3);
+            }
+
+            &:last-child {
+                border-bottom: none;
+            }
+        }
+    }
+}

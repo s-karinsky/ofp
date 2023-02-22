@@ -1,5 +1,5 @@
 import 'leaflet/dist/leaflet.css'
-import React from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import kmlParser from 'js-kml-parser'
 import { polygon, point } from '@turf/helpers'
 import intersect from '@turf/intersect'
@@ -14,7 +14,7 @@ import Calendar from '@components/Calendar'
 import Popup from '@components/Popup'
 import Spinner from '@components/Spinner'
 import { getRectPolygonByCorners, getMultipolygon, reversePolygonCoords, isCoords, getIntersectionPrice } from '@lib/geo'
-import { declOfNum } from '@lib/utils'
+import { declOfNum, debounce } from '@lib/utils'
 import axios from '@lib/axios'
 import { DRAW_TYPE_OPTIONS, DATE_OPTIONS } from './consts'
 import { Draw, DrawArea } from './draw'
@@ -44,6 +44,85 @@ function getPolygon(kmlGeometry) {
     }
 }
 
+function SearchAddress({ map }) {
+    const api = useRef()
+    const [ selectedValue, setSelectedValue ] = useState()
+    const [ value, setValue ] = useState('')
+    const [ activeIndex, setActiveIndex ] = useState(-1)
+    const [ suggestions, setSuggestions ] = useState([])
+
+    if (!api.current) {
+        api.current = debounce((value, selectedValue) => {
+            if (value === selectedValue) return
+            if (!value || value.length < 3) {
+                setSuggestions([])
+                return
+            }
+            axios.get('map/address', { params: { q: value } }).then(({ data: { suggestions = [] } } = {}) => {
+                setSuggestions(suggestions.filter(item => item.data?.geo_lat && item.data?.geo_lon))
+            })
+        }, 500)        
+    }
+
+    const applyValue = useCallback(index => {
+        const item = suggestions[index]
+        const { data: { geo_lat, geo_lon } = {} } = item || {}
+        if (!geo_lat || !geo_lon) return
+        setSelectedValue(item.value)
+        setValue(item.value)
+        map.setView([parseFloat(geo_lat), parseFloat(geo_lon)], 13)
+        setActiveIndex(-1)
+        setSuggestions([])
+    })
+
+    useEffect(() => {
+        api.current(value, selectedValue)
+    }, [value])
+    
+    return (
+        <div className={styles.autocomplete}>
+            <Input
+                placeholder="Найти"
+                className={styles.input}
+                value={value}
+                onChange={e => setValue(e.target.value)}
+                onKeyDown={e => {
+                    if (['ArrowDown', 'ArrowUp', 'Enter'].includes(e.key)) {
+                        e.preventDefault()
+                    }
+                    if (e.key === 'ArrowDown') {
+                        setActiveIndex(Math.min(activeIndex + 1, suggestions.length - 1))
+                    }
+                    if (e.key === 'ArrowUp') {
+                        setActiveIndex(Math.max(activeIndex - 1, 0))
+                    }
+                    if (e.key === 'Escape') {
+                        setSuggestions([])
+                    }
+                    if (e.key === 'Enter') {
+                        applyValue(activeIndex)
+                    }
+                }}
+            />
+            {!!value && suggestions.length > 0 && <ul className={styles.autocompleteList}>
+                {suggestions.map((item, i) => (
+                    <li
+                        key={item.value}
+                        className={cn(styles.autocompleteListItem, {
+                            [styles.active]: activeIndex === i
+                        })}
+                        onMouseOver={() => setActiveIndex(i)}
+                        onMouseOut={() => activeIndex === i && setActiveIndex(-1)}
+                        onClick={() => applyValue(i)}
+                    >
+                        {item.value}
+                    </li>
+                ))}
+            </ul>}
+        </div>
+    )
+}
+
 export default class Map extends React.Component {
     state = {
         showOptions: null,
@@ -59,7 +138,8 @@ export default class Map extends React.Component {
         searchProgress: false,
         searchResult: null,
         highlightArea: null,
-        areaPreview: {}
+        areaPreview: {},
+        map: null
     }
 
     pushToCart = async (item) => {
@@ -356,6 +436,7 @@ export default class Map extends React.Component {
                         zoomControl={false}
                         zoom={13}
                         style={{ width: '100%', height: '100%' }}
+                        ref={ref => !this.state.map && this.setState({ map: ref })}
                     >
                         <TileLayer
                             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -386,7 +467,7 @@ export default class Map extends React.Component {
                     <div className={styles.searchField}>
                         <span className={styles.searchIcon}><IconSearch /></span>
                         <span className={styles.searchInput}>
-                            <Input placeholder="Найти" className={styles.input} />
+                            <SearchAddress map={this.state.map} />
                         </span>
                     </div>
                     <div className={styles.searchField}>
