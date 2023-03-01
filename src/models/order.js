@@ -16,6 +16,9 @@ const orderItemSchema = new mongoose.Schema({
     },
     price: {
         type: Number
+    },
+    done: {
+        type: Boolean
     }
 })
 
@@ -33,7 +36,7 @@ const orderSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['order', 'progress', 'success'],
+        enum: ['order', 'processed', 'success'],
         default: 'order'
     },
     items: {

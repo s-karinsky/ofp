@@ -5,292 +5,346 @@
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 ::-ms-reveal {
     display: none;
 }
 body {
-  min-width: 1000px;
-  margin: 0;
-  color: #000;
-  font-family: $font-roboto;
-  font-size: 18px;
+    min-width: 1000px;
+    margin: 0;
+    color: #000;
+    font-family: $font-roboto;
+    font-size: 18px;
 }
 .container {
-  max-width: 1700px;
-  min-width: 940px;
-  padding-left: 40px;
-  padding-right: 40px;
-  margin-left: auto;
-  margin-right: auto;
+    max-width: 1700px;
+    min-width: 940px;
+    padding-left: 40px;
+    padding-right: 40px;
+    margin-left: auto;
+    margin-right: auto;
 }
 .not-found {
-  height: 100vh;
-  min-height: 600px;
-  background-image: url('/images/bg_404.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  color: $white;
-
-  &_header {
-    font-size: 160px;
-    font-weight: bold;
-    margin-bottom: 40px;
-  }
-
-  &_title {
-    font-size: 36px;
-    margin-bottom: 16px;
-  }
-
-  &_text {
-    font-size: 20px;
-    margin-bottom: 100px;
-  }
-
-  &_button {
-    width: 370px;
-  }
+    height: 100vh;
+    min-height: 600px;
+    background-image: url('/images/bg_404.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: $white;
+    
+    &_header {
+        font-size: 160px;
+        font-weight: bold;
+        margin-bottom: 40px;
+    }
+    
+    &_title {
+        font-size: 36px;
+        margin-bottom: 16px;
+    }
+    
+    &_text {
+        font-size: 20px;
+        margin-bottom: 100px;
+    }
+    
+    &_button {
+        width: 370px;
+    }
 }
 .popup_header {
-  font-size: 22px;
-  line-height: 28px;
-  color: #2C2C2C;
+    font-size: 22px;
+    line-height: 28px;
+    color: #2C2C2C;
 }
 .title {
-  font-family: $font-ubuntu;
-  font-size: 40px;
-  font-weight: bold;
-  color: #144854;
-  text-transform: uppercase;
-  position: relative;
-  padding-bottom: 30px;
-  margin: 0;
-
-  @include screenLess(1280px) {
-    font-size: 36px;
-  }
-
-  &_noline:after {
-    display: none;
-  }
-
-  &_white {
-    color: $white;
-  }
+    font-family: $font-ubuntu;
+    font-size: 40px;
+    font-weight: bold;
+    color: #144854;
+    text-transform: uppercase;
+    position: relative;
+    padding-bottom: 30px;
+    margin: 0;
+    
+    @include screenLess(1280px) {
+        font-size: 36px;
+    }
+    
+    &_noline:after {
+        display: none;
+    }
+    
+    &_white {
+        color: $white;
+    }
 }
 .title:after {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 372px;
-  height: 1px;
-  background-color: $black;
-  content: '';
-}
-.subtitle {
-  font-family: $font-roboto;
-  font-size: 22px;
-  color: #444;
-  text-transform: none;
-  font-weight: 400;
-}
-.cart {
-  background-image: url('/images/cart_bg.jpg');
-  background-position: left bottom;
-  background-repeat: no-repeat;
-  background-size: contain;
-  min-height: 50vw;
-
-  &_layout {
-    display: flex;
-    align-items: flex-start;
-  }
-  &_submit {
-    margin-right: 60px;
-    width: 400px;
-    flex-shrink: 0;
-    flex-grow: 0;
-
-    @include screenLess(1280px) {
-      width: 300px;
-    }
-  }
-  &_details {
-    flex-grow: 1;
-  }
-  &_summary {
-    margin-bottom: 10px;
-  }
-
-  &_popupTitle {
     position: absolute;
     left: 0;
-    top: 0;
-    right: 0;
-    padding: 30px 70px 28px 40px;
-    border-bottom: 1px solid $xlight-gray;
-    font-size: 18px;
-    display: flex;
-    justify-content: space-between;
-  }
-
-  &_popupContent {
-    width: 330px;
-    margin-top: 40px;
-  }
-
-  &_popupInput {
-    margin-top: 16px;
-  }
-
-  &_popupCompany {
-    margin-top: 15px;
-    position: relative;
-
-    &:before {
-      position: absolute;
-      left: -50px;
-      right: -50px;
-      top: 50%;
-      height: 1px;
-      background-color: $xlight-gray;
-      content: '';
+    bottom: 0;
+    width: 372px;
+    height: 1px;
+    background-color: $black;
+    content: '';
+}
+.subtitle {
+    font-family: $font-roboto;
+    font-size: 22px;
+    color: #444;
+    text-transform: none;
+    font-weight: 400;
+}
+.cart {
+    background-image: url('/images/cart_bg.jpg');
+    background-position: left bottom;
+    background-repeat: no-repeat;
+    background-size: contain;
+    min-height: 50vw;
+    
+    &_layout {
+        display: flex;
+        align-items: flex-start;
     }
-  }
-
-  &_popupCompanyBtn {
-    position: relative;
-    margin: 0 auto;
-
-    &__white {
-      border: 1px solid $light-gray;
-      box-sizing: border-box;
-
-      &:hover {
-        background-color: $white;
-      }
+    &_submit {
+        margin-right: 60px;
+        width: 400px;
+        flex-shrink: 0;
+        flex-grow: 0;
+        
+        @include screenLess(1280px) {
+            width: 300px;
+        }
     }
-  }
-
-  &_popupHeader {
-    color: $primary-color;
-    font-weight: bold;
-    margin: 15px 0;
-  }
-
-  &_popupField {
-    width: 130px;
-    height: 28px !important;
-    line-height: 28px !important;
-    padding-left: 10px;
-
-    &Small {
-      width: 55px;
-      margin-bottom: 10px;
+    &_details {
+        flex-grow: 1;
     }
-  }
-
-  &_popupSmallInput {
-    display: inline-block;
-  }
-
-  &_popupInputSunheader {
-    font-size: 14px;
-  }
-
-  &_popupLabel {
-    display: inline-block;
-    font-weight: bold;
-    width: 125px;
-  }
-
-  &_popupLabelContent {
-    display: inline-block;
-    vertical-align: top;
-  }
-
-  &_popupCheckbox {
-    font-size: 14px;
-
-    a {
-      color: $secondary-color;
+    &_summary {
+        margin-bottom: 10px;
     }
-  }
-
-  &_empty {
-    text-align: center;
-    font-size: 20px;
-    font-weight: bold;
-    padding: 40px;
-  }
+    
+    &_popupTitle {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        padding: 30px 70px 28px 40px;
+        border-bottom: 1px solid $xlight-gray;
+        font-size: 18px;
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    &_popupContent {
+        width: 330px;
+        margin-top: 40px;
+    }
+    
+    &_popupInput {
+        margin-top: 16px;
+    }
+    
+    &_popupCompany {
+        margin-top: 15px;
+        position: relative;
+        
+        &:before {
+            position: absolute;
+            left: -50px;
+            right: -50px;
+            top: 50%;
+            height: 1px;
+            background-color: $xlight-gray;
+            content: '';
+        }
+    }
+    
+    &_popupCompanyBtn {
+        position: relative;
+        margin: 0 auto;
+        
+        &__white {
+            border: 1px solid $light-gray;
+            box-sizing: border-box;
+            
+            &:hover {
+                background-color: $white;
+            }
+        }
+    }
+    
+    &_popupHeader {
+        color: $primary-color;
+        font-weight: bold;
+        margin: 15px 0;
+    }
+    
+    &_popupField {
+        width: 130px;
+        height: 28px !important;
+        line-height: 28px !important;
+        padding-left: 10px;
+        
+        &Small {
+            width: 55px;
+            margin-bottom: 10px;
+        }
+    }
+    
+    &_popupSmallInput {
+        display: inline-block;
+    }
+    
+    &_popupInputSunheader {
+        font-size: 14px;
+    }
+    
+    &_popupLabel {
+        display: inline-block;
+        font-weight: bold;
+        width: 125px;
+    }
+    
+    &_popupLabelContent {
+        display: inline-block;
+        vertical-align: top;
+    }
+    
+    &_popupCheckbox {
+        font-size: 14px;
+        
+        a {
+            color: $secondary-color;
+        }
+    }
+    
+    &_empty {
+        text-align: center;
+        font-size: 20px;
+        font-weight: bold;
+        padding: 40px;
+    }
 }
 .cabinet {
-  min-height: 50vw;
-  background-image: url('/images/cabinet_bg.jpg');
-  background-position: left top;
-  background-repeat: no-repeat;
-  background-size: 80% auto;
-
-  &_layout {
-    display: flex;
-  }
-
-  &_orders {
-    flex-grow: 1;
-  }
-
-  &_order {
-    margin-bottom: 10px;
-  }
+    min-height: 50vw;
+    background-image: url('/images/cabinet_bg.jpg');
+    background-position: left top;
+    background-repeat: no-repeat;
+    background-size: 80% auto;
+    
+    &_layout {
+        display: flex;
+    }
+    
+    &_orders {
+        flex-grow: 1;
+    }
+    
+    &_order {
+        margin-bottom: 10px;
+    }
 }
 .leaflet-attribution-flag {
-  visibility: hidden !important;
-  opacity: 0 !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
 }
 .mapPointer {
-  cursor: url("/mapPointer.svg") 9 9, auto !important;
+    cursor: url("/mapPointer.svg") 9 9, auto !important;
 }
 .textLink {
-  color: $primary-color;
-  text-decoration: underline;
-  cursor: pointer;
+    color: $primary-color;
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 .user_html {
-  line-height: 1.4em;
-
-  p {
-    margin: 30px 0 60px;
-  }
+    line-height: 1.4em;
+    
+    p {
+        margin: 30px 0 60px;
+    }
 }
 
 .text_tip {
-  background-color: rgba(#FDCAB4, .7);
-  border-radius: 65px;
-  text-align: center;
-  padding: 90px 160px;
-  text-transform: uppercase;
-  font-size: 24px;
-  font-weight: bold;;
+    background-color: rgba(#FDCAB4, .7);
+    border-radius: 65px;
+    text-align: center;
+    padding: 90px 160px;
+    text-transform: uppercase;
+    font-size: 24px;
+    font-weight: bold;;
 }
 
 
 .myorders {
-  width: calc(100% - 300px);
-  font-size: 14px;
-  &_orderItem {
-    margin-bottom: 40px;
-  }
-  &_orderPreview {
-    width: 300px;
-    vertical-align: top;
-  }
+    width: calc(100% - 300px);
+    font-size: 14px;
+    &_orderItem {
+        margin-bottom: 40px;
+    }
+    &_orderPreview {
+        width: 300px;
+        vertical-align: top;
+    }
+    &_date {
+        font-size: 1.2em;
+        margin-bottom: 5px;
+    }
+    &_header {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 30px;
+    }
+    &_section {
+        display: inline-block;
+        margin-right: 20px;
+        color: $primary-color;
+        border-bottom: 2px dashed $primary-color;
+        cursor: pointer;
+
+        &__selected {
+            cursor: auto;
+            color: #000;
+            border-bottom-color: transparent;
+        }
+    }
+    &_details {
+        display: flex;
+        align-items: flex-start;
+    }
+    &_preview,
+    &_map {
+        flex-grow: 0;
+        flex-shrink: 0;
+        margin-right: 10px;
+    }
+    &_map {
+        width: 300px;
+    }
+    &_coords {
+        flex-grow: 1;
+    }
+    &_coordsValue {
+        width: 100%;
+        resize: none;
+        border: 1px solid $gray;
+        padding: 5px;
+        font-family: $font-roboto;
+        min-height: 150px;
+        box-sizing: border-box;
+    }
+    &_makeDone {
+        display: inline-block;
+        margin-left: 10px;
+        cursor: pointer;
+        border-bottom: 1px dashed $primary-color;
+        color: $primary-color;
+    }
 }

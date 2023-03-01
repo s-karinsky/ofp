@@ -13,7 +13,19 @@ async function getOrders(req, res) {
     }
     const userAreas = await Area.find({ user: res.userId })
     const areasId = userAreas.map(area => area._id.toString())
-    const orders = await Order.find({ status: 'processed', items: { $elemMatch: { areaId: { "$in": areasId } } } })
+    const orders = await Order
+        .find({
+            status: 'processed',
+            items: {
+                $elemMatch: {
+                    areaId: {
+                        "$in": areasId
+                    }
+                }
+            }
+        })
+        .sort({ createdAt: -1 })
+
     orders.forEach(order => {
         order.items = order.items.filter(item => areasId.indexOf(item.areaId) !== -1)
     })
@@ -21,8 +33,30 @@ async function getOrders(req, res) {
     res.status(200).json({ areas: userAreas, orders })
 }
 
+async function updateOrder(req, res) {
+    const { orderId, itemId, done } = req.body
+    if (!orderId || !itemId) {
+        throw new Error('orderId and itemId are required')
+    }
+    Order.findOneAndUpdate({
+        _id: orderId,
+        "items._id": itemId
+    }, {
+        "$set": {
+            "items.$.done": done
+        }
+    }, function(err, doc) {
+        if (err) {
+            res.status(500).json({ err })
+        } else {
+            res.status(200).json({ success: true })
+        }
+    })
+}
+
 handler
     .use(authorized)
     .get(getOrders)
+    .post(updateOrder)
 
 export default handler
