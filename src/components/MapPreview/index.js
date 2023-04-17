@@ -28,8 +28,8 @@ export default function MapPreview({
             style={style}
         >
             <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; <a href="https://maps.google.com">Google Maps</a>'
+                url="http://mt0.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
             />
             {!!area && <Polygon
                 positions={area}

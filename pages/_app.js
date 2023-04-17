@@ -7,6 +7,7 @@ import { PopupOverlay, PopupMessage } from '@components/Popup'
 import CabinetNav from '@components/CabinetNav'
 import headerJson from '@json/header.json'
 import footerJson from '@json/footer.json'
+import cabinetJson from '@json/cabinet.json'
 import '@styles/styles.scss'
 
 const cabinetTitles = {
@@ -39,6 +40,7 @@ export default function MyApp({
                         <div className="container">
                             <div className="cabinet_layout">
                                 <CabinetNav
+                                    items={cabinetJson.nav}
                                     title={cabinetTitles[subSection] || cabinetTitles.default}
                                     section={subSection}
                                 />

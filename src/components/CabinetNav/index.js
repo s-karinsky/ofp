@@ -11,9 +11,18 @@ import IconPassword from './password.svg'
 import IconLogout from './logout.svg'
 import styles from './CabinetNav.module.scss'
 
-export default function CabinetNav({ title, section }) {
+const iconsList = {
+    orders: IconOrders,
+    profile: IconProfile,
+    password: IconPassword,
+    myorders: IconOrders,
+    logout: IconLogout
+}
+
+export default function CabinetNav({ title, section, items = [] }) {
     const dispatch = useDispatch()
     const session = useSession()
+    const navItems = items.filter(item => !item.role || item.role === session.data?.user?.role)
     return (
         <div className={styles.cabinetNav}>
             <Popup name="confirm-logout">
@@ -37,32 +46,21 @@ export default function CabinetNav({ title, section }) {
             </Popup>
             <div className={styles.title}>{title}</div>
             <ul className={styles.nav}>
-                <li className={cn(styles.item, { [styles.item_active]: !section })}>
-                    <Link href="/cabinet">
-                        <span className={styles.icon}><IconOrders /></span>
-                        Мои заказы
-                    </Link>
-                </li>
-                <li className={cn(styles.item, { [styles.item_active]: section === 'profile' })}>
-                    <Link href="/cabinet/profile">
-                        <span className={styles.icon}><IconProfile /></span>
-                        Личные данные
-                    </Link>
-                </li>
-                <li className={cn(styles.item, { [styles.item_active]: section === 'password' })}>
-                    <Link href="/cabinet/password">
-                        <span className={styles.icon}><IconPassword /></span>
-                        Изменить пароль
-                    </Link>
-                </li>
-                {session.data?.user?.role === 'seller' &&
-                    <li className={cn(styles.item, { [styles.item_active]: section === 'myorders' })}>
-                        <Link href="/cabinet/myorders">
-                            <span className={styles.icon}><IconOrders /></span>
-                            Заказы моих планов
-                        </Link>
-                    </li>
-                }
+                {navItems.map(({ title, icon, link = '' }, i) => {
+                    const Icon = iconsList[icon]
+                    const currentSection = link.split('/').slice(-1)[0]
+                    return (
+                        <li
+                            key={i}
+                            className={cn(styles.item, { [styles.item_active]: section === currentSection })}
+                        >
+                            <Link href={link}>
+                                <span className={styles.icon}>{!!Icon && <Icon />}</span>
+                                {title}
+                            </Link>
+                        </li>
+                    )
+                })}
                 <li className={cn(styles.item)}>
                     <a onClick={() => dispatch(showPopup('confirm-logout'))}>
                         <span className={styles.icon}><IconLogout /></span>

@@ -1,0 +1,20 @@
+{
+    "nav": [{
+        "link": "/cabinet",
+        "title": "Мои заказы",
+        "icon": "orders"
+    }, {
+        "link": "/cabinet/profile",
+        "title": "Личные данные",
+        "icon": "profile"
+    }, {
+        "link": "/cabinet/password",
+        "title": "Изменить пароль",
+        "icon": "password"
+    }, {
+        "link": "/cabinet/myorders",
+        "title": "Заказы планов",
+        "icon": "orders",
+        "role": "seller"
+    }]
+}

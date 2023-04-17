@@ -104,6 +104,13 @@ export default function PageMyOrders() {
                                     className="myorders_coordsValue"
                                     defaultValue={JSON.stringify(reversePolygonCoords(item.polygon?.coordinates))}
                                 />
+                                <br />
+                                <a
+                                    download="coordinates.json"
+                                    href={`data:text/plain;charset=utf-8,${encodeURIComponent(JSON.stringify(reversePolygonCoords(item.polygon?.coordinates)))}`}
+                                >
+                                    Скачать файл с координатами
+                                </a>
                             </div>
                         </div>
                     </div>
