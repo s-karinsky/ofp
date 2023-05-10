@@ -13,9 +13,13 @@ async function addOrderItems(req, res) {
     if (coords && !isValidPolygon(coords) && !isValidMultipolygon(coords)) {
         throw new Error('Invalid polygon')
     }
-    const order = await Order.findOneAndUpdate({ userId: res.userId, status: 'order' }, {}, { new: true })
-    const area = await Area.findById(areaId)
+    let order = await Order.findOneAndUpdate({ userId: res.userId, status: 'order' }, {}, { new: true })
+    if (!order) {
+        order = await Order.create({ userId: res.userId, status: 'order', items: [] })
+    }
 
+    const area = await Area.findById(areaId)
+    console.log(order)
     if (!coords) {
         order.items.push({
             areaId,

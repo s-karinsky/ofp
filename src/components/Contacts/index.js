@@ -16,7 +16,7 @@ export default function Contacts() {
                         <div className={styles.icon}><IconPhone /></div>
                         <div className={styles.blockTitle}>Номер телефона</div>
                         <div className={styles.blockText}>
-                            <p>8 (800) 511 36 39 (бесплатно по России)</p>
+                            <p>8 (962) 083 14 04</p>
                             <p>пн-пт 9:00-21:00</p>
                         </div>
                     </div>
@@ -24,28 +24,26 @@ export default function Contacts() {
                         <div className={styles.icon}><IconEmail /></div>
                         <div className={styles.blockTitle}>E-mail для связи</div>
                         <div className={styles.blockText} style={{ marginBottom: '10px' }}>
-                            <a href="mailto:zakaz@waveharmony.com">zakaz@waveharmony.com</a>
+                            <a href="mailto:terraartechnology@gmail.com">terraartechnology@gmail.com</a>
                         </div>
                         <div className={styles.blockTitle}>Хотите стать партнёром?</div>
                         <div className={styles.blockText}>
-                            <a href="mailto:partner@waveharmony.com">partner@waveharmony.com</a>
+                            <a href="mailto:terraartechnology@gmail.com">terraartechnology@gmail.com</a>
                         </div>
                     </div>
                     <div className={styles.block}>
                         <div className={styles.icon}><IconCurrency /></div>
                         <div className={styles.blockTitle}>Реквизиты</div>
-                        <div className={styles.blockText}>ИП Муравьев Павел Алексеевич<br />249034, Калужская область</div>
+                        <div className={styles.blockText}>ООО "ТЕРРА"</div>
                         {showReq && <div className={styles.blockText}>
                             <p>
-                                <b>Юридический адрес </b>
-                                123456, г. Москва, ул. Подвойского, д. 14, стр. 7<br />
-                                <b>Почтовый адрес </b>
-                                123456, г. Москва, ул. Подвойского, д. 14, стр. 7<br />
-                                <b>ИНН</b> 7712345678<br />
-                                <b>КПП</b> 779101001<br />
-                                <b>БИК</b> 044521234<br />
-                                <b>Р/С</b> 40702810123450101230 в Московский банк ПАО Сбербанк г. Москва<br />
-                                <b>К/С</b> 30101234500000000225
+                                <b>Юридический адрес </b>662605, РОССИЯ, Красноярский край, г. Минусинск, Улица Дружбы, д. д.10 <br />
+                                <b>Номер счета: </b> 40702810923540000375<br />
+                                <b>ИНН</b> 2455033042<br />
+                                <b>ОГРН</b> 1122455001283<br />
+                                <b>ФИЛИАЛ</b> "НОВОСИБИРСКИЙ" АО "АЛЬФА-БАНК"<br /> 
+                                <b>БИК</b> 045004774<br />            
+                                <b>К/С</b> К/с: 30101810600000000774 в СИБИРСКОЕ ГУ БАНКА РОССИИ <br /> 
                             </p>
                         </div>}
                         <div className={styles.toggleVisible}>
