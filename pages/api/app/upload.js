@@ -1,29 +1,37 @@
 import jwt from 'jsonwebtoken'
 import multer from 'multer'
+import axios from 'axios'
+import kmlParse from 'kml-parse'
+import { DOMParser } from 'xmldom'
 import createHandler from '@lib/handler'
 import Area from '@models/area'
 import externalApp from '@lib/middleware/externalApp'
 
 const handler = createHandler(['db'])
 
-const upload = multer({
+const uploadPreview = multer({
     storage: multer.diskStorage({
         destination: './public/uploads',
         filename: (req, file, cb) => {
             const id = req.token.id
             const filename = `${id}${Date.now()}.${file.originalname.split('.').pop()}`
-            req.previewFilename = filename
             cb(null, filename)
         }
     }),
     fileFilter: (req, file, cb) => {
-        if (['image/gif', 'image/jpeg', 'image/png'].indexOf(file.mimetype) === -1) {
+        if (file.fieldname === 'preview' && ['image/gif', 'image/jpeg', 'image/png'].indexOf(file.mimetype) === -1) {
             cb(new Error('Preview must be image'))
         }
         cb(null, true)
     }
 })
-const uploadMiddleware = upload.single('preview')
+const uploadPreviewMiddleware = uploadPreview.fields([
+    {
+        name: 'preview'
+    }, {
+        name: 'xml'
+    }
+])
 
 async function checkTokenMiddleware(req, res, next) {
     const { token } = req.query || {}
@@ -34,27 +42,37 @@ async function checkTokenMiddleware(req, res, next) {
     })
 }
 
+function getPolygon(kmlGeometry) {
+    if (kmlGeometry.type === 'Polygon') {
+        return kmlGeometry.coordinates
+    }
+    if (kmlGeometry.type === 'GeometryCollection') {
+        return kmlGeometry.geometries.map(getPolygon)
+    }
+}
+
 async function createArea(req, res) {
     const id = req.token.id
-    const filename = req.previewFilename
-    
+    const price = req.body.price
+    const filename = req.files.preview[0].filename
+    const xmlFile = req.files.xml[0].filename
+    const xmlContent = await axios.get(`${process.env.BASE_URL}/uploads/${xmlFile}`)
+    const kmlDom = new DOMParser().parseFromString(xmlContent.data)
+    const kml = kmlParse.parseGeoJSON(kmlDom)
+    let polygon = []
+    kml.features.map(feature => {
+        polygon.push(getPolygon(feature.geometry))
+    })
     try {
         const area = await Area.create({
             user: id,
             preview: filename,
             polygon: {
                 type: "Polygon",
-                coordinates: [
-                    [
-                        [53.73584425610803, 91.43732070922853],
-                        [53.72873590918657, 91.45551681518555],
-                        [53.71878220409145, 91.43577575683595],
-                        [53.727212535607784, 91.42358779907228],
-                        [53.73584425610803, 91.43732070922853]
-                    ]
-                ],
-                date: Date.now()
-            }
+                coordinates: polygon[0]
+            },
+            price: parseInt(price),
+            date: Date.now()
         })
         res.status(201).send({
             id: area._id,
@@ -69,7 +87,7 @@ async function createArea(req, res) {
 handler
     .use(externalApp)
     .use(checkTokenMiddleware)
-    .use(uploadMiddleware)
+    .use(uploadPreviewMiddleware)
     .post(createArea)
 
 export const config = {
