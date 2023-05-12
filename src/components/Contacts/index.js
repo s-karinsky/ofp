@@ -16,7 +16,7 @@ export default function Contacts() {
                         <div className={styles.icon}><IconPhone /></div>
                         <div className={styles.blockTitle}>Номер телефона</div>
                         <div className={styles.blockText}>
-                            <p>8 (962) 083 14 04</p>
+                            <p>+7 913 059 9991</p>
                             <p>пн-пт 9:00-21:00</p>
                         </div>
                     </div>

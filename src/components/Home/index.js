@@ -42,28 +42,45 @@ export default function Home({
                                 <div
                                     className={styles.howWorkBlock}
                                     style={{
+                                        backgroundImage: 'url(/images/how3.svg)'
+                                    }}
+                                />
+                                <div className={styles.howWorkTitle}>Поиск</div>
+                                <div className={styles.howWorkText}>
+                                        <p>   
+                                            <b>Поиск требуемой области</b><br />
+                                            название населенного пункта<br />
+                                            географические координаты,<br />
+                                            либо поиск по карте и выделение нужной области,<br />
+                                            <b>Период съемки</b><br />
+                                            3 месяца<br />
+                                            6 месяцев<br />
+                                            выбранный диапазон<br />
+                                            всё время<br />
+                                            <b>Выбор области</b><br />
+                                            полигон<br />
+                                            квадрат<br />
+                                            загружаемый файл<br />
+                                        </p>
+                                </div>
+                            </li>
+                            <li className={styles.howWorkItem}>
+                                <div
+                                    className={styles.howWorkBlock}
+                                    style={{
                                         backgroundImage: 'url(/images/how1.svg)'
                                     }}
                                 />
-                                <div className={styles.howWorkTitle}>Покупка</div>
+                                <div className={styles.howWorkTitle}>ПРЕДВАРИТЕЛЬНЫЙ ПРОСМОТР</div>
                                 <div className={styles.howWorkText}>
                                     <p>
-                                        <b>Поиск объекта интереса</b><br />
-                                        название населенного пункта<br />
-                                        географические координаты <br />
-                                    </p>
-                                    <p>
-                                        <b>Период съемки</b><br />
-                                        3 месяца<br />
-                                        6 месяцев<br />
-                                        выбранный диапазон <br />
-                                        всё время
-                                    </p>
-                                    <p>
-                                        <b>Выбор области</b><br />
-                                        полигон<br />
-                                        квадрат<br />
-                                        загружаемый файл
+                                    <b>Предварительный просмотр:</b><br />
+                                        Для ортофотопланов, попавших в область поиска, можно загрузить предварительный просмотр.<br />
+                                        Предпросмотр демонстрирует небольшую область выбранного ортофотоплана где вы можете оценить качество.<br />
+                                        Доступна опция заказа новой съемки на выделенную вами территорию из интерфейса геосервиса.<br />
+                                        <b>Оформление заказа</b><br />
+                                        Заказ с добавленными в корзину областями, ортофотопланами или заявкой на съемку становится доступным для<br />
+                                        онлайн-оплаты по кредитной или дебетовой карте.<br />
                                     </p>
                                 </div>
                             </li>
@@ -72,30 +89,6 @@ export default function Home({
                                     className={styles.howWorkBlock}
                                     style={{
                                         backgroundImage: 'url(/images/how2.svg)'
-                                    }}
-                                />
-                                <div className={styles.howWorkTitle}>Поиск</div>
-                                <div className={styles.howWorkText}>
-                                    <p>
-                                        Для ортофотопланов, попавших в область поиска, 
-                                        можно загрузить <b>предварительный просмотр</b>.
-                                    </p>
-                                    <p>
-                                        Предпросмотр демонстрирует ортофотоплан в низком 
-                                        качестве и его характеристики. 
-                                        Подходящие снимки добавляются в корзину.
-                                    </p> 
-                                    <p>
-                                        Доступна опция заказа новой съемки на выделенную 
-                                        территорию интереса из интерфейса геосервиса.
-                                    </p>
-                                </div>
-                            </li>
-                            <li className={styles.howWorkItem}>
-                                <div
-                                    className={styles.howWorkBlock}
-                                    style={{
-                                        backgroundImage: 'url(/images/how3.svg)'
                                     }}
                                 />
                                 <div className={styles.howWorkTitle}>Заказ</div>
@@ -121,7 +114,7 @@ export default function Home({
                                         backgroundImage: 'url(/images/how4.svg)'
                                     }}
                                 />
-                                <div className={styles.howWorkTitle}>Предварительный просмотр</div>
+                                <div className={styles.howWorkTitle}>ПОКУПКА</div>
                                 <div className={styles.howWorkText}>
                                     <p>
                                         После завершения обработки платежа оплаченные 
@@ -248,36 +241,7 @@ export default function Home({
                     </div>
                 </div>
 
-                <div className={styles.faqWrapper}>
-                    <div className={cn("container", styles.faq)}>
-                        <h1 className="title">
-                            Часто задаваемые вопросы
-                            <div className="subtitle">Основные и дополнительные</div>
-                        </h1>
-                        <div className={styles.accordion}>
-                            <Accordion title="Сколько стоит доставка с примеркой в пределах МКАД?">
-                                Стоимость доставки в пределах МКАД - 300р.<br />
-                                Дата возможной доставки с примеркой согласовывается с менеджером.<br />
-                                Доставка осуществляется в будние дни c 9-00 до 19-00.
-                            </Accordion>
-                            <Accordion title="Возможна ли доставка в выходной?">
-                                Стоимость доставки в пределах МКАД - 300р.<br />
-                                Дата возможной доставки с примеркой согласовывается с менеджером.<br />
-                                Доставка осуществляется в будние дни c 9-00 до 19-00.
-                            </Accordion>
-                            <Accordion title="Возможна ли доставка с примеркой за МКАД и по Московской области?">
-                                Стоимость доставки в пределах МКАД - 300р.<br />
-                                Дата возможной доставки с примеркой согласовывается с менеджером.<br />
-                                Доставка осуществляется в будние дни c 9-00 до 19-00.
-                            </Accordion>
-                            <Accordion title="Не нашли ответ на ваш вопрос?">
-                                Стоимость доставки в пределах МКАД - 300р.<br />
-                                Дата возможной доставки с примеркой согласовывается с менеджером.<br />
-                                Доставка осуществляется в будние дни c 9-00 до 19-00.
-                            </Accordion>
-                        </div>
-                    </div>
-                </div>
+
                 <div>
                     <div className="container">
                         <h1 className="title title_noline">
