@@ -53,7 +53,7 @@ function getPolygon(kmlGeometry) {
 
 async function createArea(req, res) {
     const id = req.token.id
-    const price = req.body.price
+    const { price, shootDate } = req.body
     const filename = req.files.preview[0].filename
     const xmlFile = req.files.xml[0].filename
     const xmlContent = await axios.get(`${process.env.BASE_URL}/uploads/${xmlFile}`)
@@ -72,7 +72,8 @@ async function createArea(req, res) {
                 coordinates: polygon[0]
             },
             price: parseInt(price),
-            date: Date.now()
+            date: Date.now(),
+            shootDate: new Date(shootDate)
         })
         res.status(201).send({
             id: area._id,

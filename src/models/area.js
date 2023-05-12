@@ -27,6 +27,9 @@ const areaSchema = new mongoose.Schema({
     date: {
         type: Date,
         required: true
+    },
+    shootDate: {
+        type: Date
     }
 })
 
