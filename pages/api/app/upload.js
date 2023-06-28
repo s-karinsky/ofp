@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 import multer from 'multer'
-import axios from 'axios'
+import fs from 'fs'
 import kmlParse from 'kml-parse'
 import { DOMParser } from 'xmldom'
 import createHandler from '@lib/handler'
@@ -11,7 +11,7 @@ const handler = createHandler(['db'])
 
 const uploadPreview = multer({
     storage: multer.diskStorage({
-        destination: './public/uploads',
+        destination: './static/uploads',
         filename: (req, file, cb) => {
             const id = req.token.id
             const filename = `${id}${Date.now()}.${file.originalname.split('.').pop()}`
@@ -56,8 +56,8 @@ async function createArea(req, res) {
     const { price, shootDate } = req.body
     const filename = req.files.preview[0].filename
     const xmlFile = req.files.xml[0].filename
-    const xmlContent = await axios.get(`${process.env.BASE_URL}/uploads/${xmlFile}`)
-    const kmlDom = new DOMParser().parseFromString(xmlContent.data)
+    const xmlContent = fs.readFileSync(`./static/uploads/${xmlFile}`, 'utf8')
+    const kmlDom = new DOMParser().parseFromString(xmlContent)
     const kml = kmlParse.parseGeoJSON(kmlDom)
     let polygon = []
     kml.features.map(feature => {

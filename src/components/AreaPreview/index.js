@@ -49,7 +49,7 @@ export default function AreaPreview({ id, title, polygon = [], price }) {
                     {!!area.preview && <div className={styles.preview}>
                         <div className={styles.header}>Миниатюра {area.loaded && polygon.length > 0 && 'исходного'} плана</div>
                         <img
-                            src={`/uploads/${area.preview}`}
+                            src={`/static/uploads/${area.preview}`}
                             className={styles.previewImage}
                         />
                     </div>}

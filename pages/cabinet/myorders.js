@@ -88,7 +88,7 @@ export default function PageMyOrders() {
                         <div className="myorders_details">
                             <div className="myorders_preview">
                                 <b>Миниатюра ортофотоплана</b><br />
-                                <img className="myorders_orderPreview" src={`/uploads/${item.area?.preview}`} />
+                                <img className="myorders_orderPreview" src={`/static/uploads/${item.area?.preview}`} />
                             </div>
                             <div className="myorders_map">
                             <b>На карте</b><br />
