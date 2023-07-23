@@ -12,21 +12,25 @@ export default function OrderSubmit(props) {
             {!isEmpty && <ol className={styles.list}>
                 {items.map(item => (
                     <li className={styles.item} key={item.id}>
-                        <span>{item.name}</span> <span>{item.price}</span>
+                        <span>{item.name}</span> <span>{item.price} руб.</span>
                     </li>
                 ))}
             </ol>}
             <div className={styles.title} style={{ border: 'none' }}>
-                {isEmpty ? 'Товары для заказа не выбраны' : `К оплате ${totalCount}`}
+                {isEmpty ? 'Товары для заказа не выбраны' : `К оплате ${totalCount} руб.`}
             </div>
-            {!isEmpty && <Button
-                color="orange"
-                disabled={isDisabled}
-                onClick={onSubmit}
-                fullSize
-            >
-                Оформить заказ
-            </Button>}
+            {!isEmpty && <form method="POST" action="https://demo.paykeeper.ru/create/">
+                <input type="hidden" name="sum" value={totalCount} />
+                <Button
+                    type="submit"
+                    color="orange"
+                    disabled={isDisabled}
+                    // onClick={onSubmit}
+                    fullSize
+                >
+                    Перейти к оплате
+                </Button>    
+            </form>}
         </div>
     )
 }

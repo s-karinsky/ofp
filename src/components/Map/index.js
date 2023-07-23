@@ -431,7 +431,7 @@ export default class Map extends React.Component {
                 <div className={styles.mapContainer}>
                     <MapContainer
                         center={[53.721152, 91.442396]}
-                        scrollWheelZoom={false}
+                        scrollWheelZoom={true}
                         doubleClickZoom={false}
                         zoomControl={false}
                         zoom={13}
