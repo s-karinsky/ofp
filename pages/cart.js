@@ -52,7 +52,9 @@ export default function CartPage() {
         if (!cart.items || !cart.items.length) return
         setIsSubmitting(true)
         const skipItems = cart.items.filter(item => !cart.checkedById[item.id]).map(({ id }) => id)
-        return axios.post('order', { action: 'send', skipItems, orderDetails: values })
+        const res = await axios.post('order', { action: 'send', skipItems, orderDetails: values })
+        const link = res.data.invoiceLink
+        window.location.href = link
     }
 
     const { handleSubmit, register } = useForm({
@@ -239,8 +241,9 @@ export default function CartPage() {
                     <div className="cart_layout">
                         <div className="cart_submit">
                             <OrderSubmit
+                                isSubmitting={isSubmitting}
                                 items={submitItems}
-                                onSubmit={() => dispatch(showPopup('submit-order'))}
+                                onSubmit={() => sendOrder()}
                             />
                         </div>
                         <div className="cart_details">

@@ -1,6 +1,8 @@
+import axios from 'axios'
 import { polygon as turfPolygon } from '@turf/helpers'
-import Order from '@models/order'
 import Area from '@models/area'
+import Order from '@models/order'
+import User from '@models/user'
 import authorized from '@lib/middleware/authorized'
 import { isValidPolygon, isValidMultipolygon, reversePolygonCoords, getIntersectionPrice } from '@lib/geo'
 import createHandler from '@lib/handler'
@@ -19,7 +21,7 @@ async function addOrderItems(req, res) {
     }
 
     const area = await Area.findById(areaId)
-    console.log(order)
+
     if (!coords) {
         order.items.push({
             areaId,
@@ -89,8 +91,39 @@ async function submitOrder(req, res) {
             resJson.order = await Order.create({ userId: res.userId, status: 'order', items: newOrderItems })
         }
     }
-    await order.updateOne({ status: 'processed', details: orderDetails })
+
+    const orderId = order._id
+    const user = await User.findById(order.userId)
+    const price = order.items.reduce((sum, item) => sum + item.price, 0)
+
+    const payServer = 'https://demo.paykeeper.ru'
+    const payToken = '/info/settings/token/'
+    const payPreview = '/change/invoice/preview/'
+    const base64 = btoa('demo:demo')
+    const headers = {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': `Basic ${base64}`
+    }
+    
+    const resToken = await axios.get(`${payServer}${payToken}`, { headers })
+    const token = resToken.data.token
+    const data = {
+        pay_amount: price,
+        clientid: user.name,
+        orderid: orderId,
+        client_email: user.email,
+        token
+    }
+    const invoiceRes = await axios.post(`${payServer}${payPreview}`, data, { headers })
+    
     resJson.success = true
+    resJson.invoiceId = invoiceRes.data.invoice_id
+    resJson.invoiceLink = `${payServer}/bill/${resJson.invoiceId}`
+    await order.updateOne({
+        status: 'processed',
+        invoiceId: resJson.invoiceId,
+        details: orderDetails
+    })
 
     res.status(200).send(resJson)
 }

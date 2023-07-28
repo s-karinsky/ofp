@@ -65,6 +65,9 @@ const orderSchema = new mongoose.Schema({
             accuracy: String,
             light: String
         }
+    },
+    invoiceId: {
+        type: String
     }
 })
 
