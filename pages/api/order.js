@@ -4,8 +4,12 @@ import Area from '@models/area'
 import Order from '@models/order'
 import User from '@models/user'
 import authorized from '@lib/middleware/authorized'
+import checkPayments from '@lib/middleware/checkPayments'
 import { isValidPolygon, isValidMultipolygon, reversePolygonCoords, getIntersectionPrice } from '@lib/geo'
 import createHandler from '@lib/handler'
+import getPaykeeperHeaders from '@lib/getPaykeeperHeaders'
+
+const { PAYKEEPER_SERVER } = process.env
 
 const handler = createHandler(['db'])
 
@@ -96,16 +100,11 @@ async function submitOrder(req, res) {
     const user = await User.findById(order.userId)
     const price = order.items.reduce((sum, item) => sum + item.price, 0)
 
-    const payServer = 'https://demo.paykeeper.ru'
+    const headers = getPaykeeperHeaders()
     const payToken = '/info/settings/token/'
     const payPreview = '/change/invoice/preview/'
-    const base64 = btoa('demo:demo')
-    const headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': `Basic ${base64}`
-    }
     
-    const resToken = await axios.get(`${payServer}${payToken}`, { headers })
+    const resToken = await axios.get(`${PAYKEEPER_SERVER}${payToken}`, { headers })
     const token = resToken.data.token
     const data = {
         pay_amount: price,
@@ -114,13 +113,14 @@ async function submitOrder(req, res) {
         client_email: user.email,
         token
     }
-    const invoiceRes = await axios.post(`${payServer}${payPreview}`, data, { headers })
-    
+    const invoiceRes = await axios.post(`${PAYKEEPER_SERVER}${payPreview}`, data, { headers })
+
     resJson.success = true
     resJson.invoiceId = invoiceRes.data.invoice_id
-    resJson.invoiceLink = `${payServer}/bill/${resJson.invoiceId}`
+    resJson.invoiceLink = `${PAYKEEPER_SERVER}/bill/${resJson.invoiceId}`
     await order.updateOne({
         status: 'processed',
+        payStatus: 'created',
         invoiceId: resJson.invoiceId,
         details: orderDetails
     })
@@ -171,6 +171,7 @@ async function getOrder(req, res) {
 
 handler
     .use(authorized)
+    .use(checkPayments)
     .post(postOrder)
     .get(getOrder)
 

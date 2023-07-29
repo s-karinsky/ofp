@@ -2,7 +2,8 @@ import mongoose from 'mongoose'
 
 const orderItemSchema = new mongoose.Schema({
     areaId: {
-        type: String
+        type: mongoose.ObjectId,
+        ref: 'Area'
     },
     polygon: {
         type: {
@@ -38,6 +39,10 @@ const orderSchema = new mongoose.Schema({
         type: String,
         enum: ['order', 'processed', 'success'],
         default: 'order'
+    },
+    payStatus: {
+        type: String,
+        enum: ['created', 'sent', 'paid', 'expired']
     },
     items: {
         type: [orderItemSchema]
