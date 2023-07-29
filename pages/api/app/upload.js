@@ -1,4 +1,3 @@
-import jwt from 'jsonwebtoken'
 import multer from 'multer'
 import fs from 'fs'
 import kmlParse from 'kml-parse'
@@ -6,6 +5,7 @@ import { DOMParser } from 'xmldom'
 import createHandler from '@lib/handler'
 import Area from '@models/area'
 import externalApp from '@lib/middleware/externalApp'
+import checkTokenMiddleware from '@lib/middleware/appCheckToken'
 
 const handler = createHandler(['db'])
 
@@ -32,15 +32,6 @@ const uploadPreviewMiddleware = uploadPreview.fields([
         name: 'xml'
     }
 ])
-
-async function checkTokenMiddleware(req, res, next) {
-    const { token } = req.query || {}
-    jwt.verify(token, process.env.APP_API_SECRET, function(error, decoded) {
-        if (error) throw new Error(error)
-        req.token = decoded
-        next()
-    })
-}
 
 function getPolygon(kmlGeometry) {
     if (kmlGeometry.type === 'Polygon') {

@@ -6,6 +6,13 @@ const handler = createHandler(['db'])
 
 async function searchAreas(req, res) {
     const { coords, date_from, date_to } = req.query
+
+    if (!coords) {
+        const areas = await Area.find()
+        res.status(200).json({ result: areas })
+        return
+    }
+
     let points
     try {
         points = JSON.parse(coords)

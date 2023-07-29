@@ -2,8 +2,7 @@ import mongoose from 'mongoose'
 
 const orderItemSchema = new mongoose.Schema({
     areaId: {
-        type: mongoose.ObjectId,
-        ref: 'Area'
+        type: String
     },
     polygon: {
         type: {
