@@ -5,10 +5,9 @@ import externalApp from '@lib/middleware/externalApp'
 import checkTokenMiddleware from '@lib/middleware/appCheckToken'
 import checkPayments from '@lib/middleware/checkPayments'
 
-
 const handler = createHandler(['db'])
 
-async function getPaidOrders(req, res) {
+async function getPaidAreas(req, res) {
     const { id: userId } = req.token
     const areas = await Area.find({ userId })
     const areasId = areas.map(area => String(area._id))
@@ -32,6 +31,6 @@ handler
     .use(externalApp)
     .use(checkTokenMiddleware)
     .use(checkPayments)
-    .get(getPaidOrders)
+    .get(getPaidAreas)
 
-    export default handler
+export default handler
