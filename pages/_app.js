@@ -1,5 +1,6 @@
 import { Provider } from 'react-redux'
 import { SessionProvider } from 'next-auth/react'
+import Head from 'next/head'
 import { store } from '@store'
 import Header from '@components/Header'
 import Footer from '@components/Footer'
@@ -27,6 +28,9 @@ export default function MyApp({
     const subSection = pathname.split('/')[2]
     return (
         <SessionProvider session={session}>
+            <Head>
+                <title>Ортофотоплан</title>
+            </Head>
             <Provider store={store}>
                 <PopupOverlay />
                 <PopupMessage />
