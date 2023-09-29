@@ -30,6 +30,9 @@ const areaSchema = new mongoose.Schema({
     },
     shootDate: {
         type: Date
+    },
+    metadata: {
+        type: Object
     }
 })
 

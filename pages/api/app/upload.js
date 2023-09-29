@@ -44,7 +44,7 @@ function getPolygon(kmlGeometry) {
 
 async function createArea(req, res) {
     const id = req.token.id
-    const { price, shootDate } = req.body
+    const { price, shootDate, meta } = req.body
     const filename = req.files.preview[0].filename
     const xmlFile = req.files.xml[0].filename
     const xmlContent = fs.readFileSync(`./static/uploads/${xmlFile}`, 'utf8')
@@ -54,6 +54,14 @@ async function createArea(req, res) {
     kml.features.map(feature => {
         polygon.push(getPolygon(feature.geometry))
     })
+    let metadata = {}
+    if (meta) {
+        try {
+            metadata = JSON.parse(meta)
+        } catch (e) {
+            console.info('Incorrect json of metadata')
+        }
+    }
     try {
         const area = await Area.create({
             user: id,
@@ -64,7 +72,8 @@ async function createArea(req, res) {
             },
             price: parseInt(price),
             date: Date.now(),
-            shootDate: new Date(shootDate)
+            shootDate: new Date(shootDate),
+            metadata
         })
         res.status(201).send({
             id: area._id,
