@@ -5,7 +5,7 @@
     position: relative;
     background-image: url('/images/home_top.jpg');
     background-size: contain;
-    background-position: center top;
+    background-position: center top -150px;
     background-repeat: no-repeat;
 }
 .homeHow {
@@ -14,7 +14,7 @@
 .homeTopTitle {
     position: absolute;
     left: 40vw;
-    top: 6vw;
+    top: 2vw;
     font-family: $font-ubuntu;
     color: $white;
     font-size: 40px;
@@ -39,10 +39,10 @@
     position: absolute;
     right: 28vw;
     left: 41vw;
-    top: 42vw;
+    top: 32vw;
 
     @include screenMore(1920px) {
-        top: 45vw;
+        top: 37vw;
     }
 }
 .homeTopMapButton {
