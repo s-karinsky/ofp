@@ -253,6 +253,7 @@ export function SignupForm({ showPopup, hidePopup, showMessage }) {
                 <Input
                     placeholder="Телефон"
                     type="phone"
+                    mask="+7 999 999 9999"
                     {...register('phone', {
                         required: true
                     })}

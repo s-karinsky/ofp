@@ -1,6 +1,7 @@
 import React from 'react'
 import pt from 'prop-types'
 import cn from 'classnames'
+import InputMask from 'react-input-mask'
 import IconHide from './hide.svg'
 import IconShow from './show.svg'
 import styles from './Form.module.scss'
@@ -13,7 +14,9 @@ class Input extends React.Component {
         onChange: pt.func,
         required: pt.bool,
         error: pt.oneOfType([pt.string, pt.bool]),
-        placeholder: pt.string
+        placeholder: pt.string,
+        mask: pt.string,
+        maskChar: pt.string
     }
 
     state = {
@@ -56,7 +59,7 @@ class Input extends React.Component {
             <>
                 <label className={cn(styles.input)}>
                     {type === 'password' && this.renderShowPasswordIcon()}
-                    <input
+                    <InputMask
                         type={this.getInputType()}
                         className={cn(styles.inputField, {
                             [styles.inputError]: !!error,

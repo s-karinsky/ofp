@@ -45,6 +45,7 @@ export default function Profile() {
                 <div className={styles.field}>
                     <Input
                         placeholder="Телефон"
+                        mask="+7 999 999 9999"
                         {...register('phone', { required: true })}
                     />
                 </div>
